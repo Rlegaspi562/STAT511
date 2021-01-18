@@ -1,0 +1,173 @@
+---
+title: 'STAT 511: Assignment #1'
+author: "Rumil Legaspi"
+date: "25 January 2021"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    latex_engine: xelatex
+  word_document: default
+---
+
+# Assignment Questions
+
+--------------------
+
+
+
+## __1. KNN 4th Edition End of Chapter 1 Questions__ 
+ *In a regression model, $\beta_{0}$ = 100, $\beta_{1}$ = 20, and $\sigma^2$ = 25. An observation on 𝑌 variable will be made for 𝑋 = 5.*
+
+<div align="center">
+
+$Y_{i}$ = $\beta_{0}$ *(intercept)* + $\beta_{1}$$X_{i}$ _(slope)(independent variable)_ + $\epsilon_{i}$ _(error)_
+
+</div>
+<div align="center">
+
+y = 100 + 20$X_{i}$ + $\epsilon_{i}$
+
+</div>
+#### (a). Can we compute the exact probability that 𝑌 will fall between 195 and 205? Explain
+
+__The probability cannot be calculated because the for a simple linear regression model the mean of $\epsilon_{i}$ should equal 0. Because $\epsilon_{i}$ is unspecified we are missing information and cannot compute the exact probability.__
+
+#### (b). If the normal error regression model is applicable, can we now compute the exact probability that 𝑌 will fall between 195 and 205? If so, compute it.
+
+*note: $\epsilon_{i}$ (error term) = 0 and follows a normal distribution*
+
+For this problem we recall:
+
+* 1. The Z score formula since we are dealing with a normal distribution. 
+$\frac{X - \mu}{\sigma}$
+* 2. How to find the probability between 2 points given a normal distribution.
+
+*(aka find the z score which finds everything from the left and subtract it by the larger number to get the probability between a and b)*
+
+* 3. And that we are also given $\sigma^2 = 25$ *(variance)* and $\sigma = 5$ *(Standard deviation)*
+
+
+<div align="center">
+SO: $P( 195 \leq  Y \leq  205) = P(\frac{195 - 200}{5}\leq \frac{X - \mu}{\sigma} \leq \frac{205 - 200}{5})$
+
+$= P(-1 \leq z\leq 1)$
+
+$= P(z < 1) - P(z<-1)$      _bigger number or b is P(z < 1)_
+
+$= 0.841 - 0.158$           _converting numbers using pos/neg z table_
+
+$= 0.683$
+
+__The probability that Y will fall between the 195 and 205 is roughly 0.683.__
+</div>
+
+
+--------------------
+
+## __2. Grade Point Average Problem (Use R)__
+
+_The director of admissions of a small college selected 120 students at random from the new
+freshman class in a study to determine whether a student's grade point average (GPA) at the end 
+of the freshman year (𝑌) can be predicted from the ACT test score (𝑋). See the dataset “GPA.txt”. The first column is GPA. The second column is ACT._
+
+
+#### (a). Obtain the least squares estimates of $\beta_{0}$ and $\beta_{1}$. Write down the estimated regression equation.
+
+#### (b). Plot the estimated regression line and the data points. Does the estimated regression functionappear to fit the data well?
+
+#### (c). Obtain a point estimate of the mean freshman GPA for students with ACT test score 𝑋 = 30.
+
+#### (d). What is the estimated change in the mean response when the ACT score increases by one point?
+
+---------------------
+
+## __3. Refer to the GPA problem in Question 2. (Use R)__
+
+#### (a). Obtain the residuals $\hat{\epsilon_1}$. Do they sum to zero?
+
+#### (b). Estimate the error variance $\sigma^2$ and standard deviation $\sigma$. In what units is $\sigma$ expressed?
+
+-------------------------
+
+
+## __4. Refer to the GPA problem in Question 2.__
+
+#### (a).  Interpret $\hat{\epsilon_0}$ in your estimated regression function. Does $\hat{\epsilon_0}$ provide any relevant information here? Explain.
+
+#### (b). Interpret $\hat{\epsilon_1}$ in your estimated regression function. 
+
+#### (c). Verify that your fitted regression line goes through the point ($\bar{𝑋}$ , $\bar{𝑌}$). (Use R)
+
+
+-------------------------
+
+## __5. Muscle Mass Problem (Use R)__
+_A person’s muscle mass is expected to decrease with age. To explore this relationship in women,
+a nutritionist randomly selected 15 women from each l0-year age group, beginning with age 40
+and ending with age 79. 𝑋 is age, and 𝑌 is a measure of muscle mass. See the dataset “Muscle.txt”.
+The first column is muscle mass. The second column is women’s age._
+
+#### (a). Obtain the estimated regression equation. 
+
+#### (b). Interpret $\beta_{0}$ in your estimated regression function. Does $\beta_{0}$ provide any relevant information here? Explain.
+
+#### (c). Interpret $\hat{\beta_1}$ in your estimated regression function. 
+
+#### (d). Plot the estimated regression function and the data points. Does a linear regression function appear to give a good fit here? Does your plot support that muscle mass decreases with age?
+
+#### (e).  Obtain a point estimate of the difference in the mean muscle mass for women differing in age by one year.
+
+#### (f). Obtain a point estimate of the mean muscle mass for women aged 𝑋 = 60 years.
+
+#### (g). Find the estimate of error variance $\sigma^2$
+
+-------------------------
+
+## __6. Special regression models__
+
+#### (a). What is the implication for the regression model $Y_{i}$ = $\beta_{0}$ + $\epsilon_{i}$ ? How does it plot on a graph?
+
+#### (b). What is the implication for the regression model $Y_{i}$ = $\beta_{1}$$X_{i}$ + $\epsilon_{i}$ ? How does it plot on a graph?  
+
+
+
+
+
+------------------------
+Latex Notation
+$\sigma$
+$\sigma^2$
+$\beta_{1}$
+$\beta_{0}$
+$\hat{\beta}=1.02$
+$\hat{\beta_1}$
+$\hat{\beta_0}$
+$\hat{\epsilon_1}$
+($\bar{𝑋}$ , $\bar{𝑌}$)
+$Y_{i}$ $\beta_{0}$ $\epsilon_{i}$ $\beta_{i}$ $X_{i}$
+$\frac{X - \mu}{\sigma}$ Z score
+$P( 195 \leq  Y \leq  205) = P(\frac{195 - 200}{5}\leq \frac{X - \mu}{\sigma} \leq \frac{205 - 200}{5})$ more z score
+-------------------------
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+
+```{r}
+
+```
+
