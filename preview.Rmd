@@ -3,11 +3,11 @@ title: 'STAT 511: Assignment #1'
 author: "Rumil Legaspi"
 date: "25 January 2021"
 output:
-  html_document:
-    df_print: paged
-  html_notebook: default
   pdf_document:
     latex_engine: xelatex
+  html_notebook: default
+  html_document:
+    df_print: paged
   word_document: default
 ---
 
@@ -71,11 +71,33 @@ __The probability that Y will fall between the 195 and 205 is roughly 0.683.__
 _The director of admissions of a small college selected 120 students at random from the new
 freshman class in a study to determine whether a student's grade point average (GPA) at the end 
 of the freshman year (𝑌) can be predicted from the ACT test score (𝑋). See the dataset “GPA.txt”. The first column is GPA. The second column is ACT._
+```{r, include=TRUE}
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/R Files/STAT 511")
+
+
+gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
+head(gpa_data)
+#No headers, so we add
+names(gpa_data) <- c("GPA", "ACT Score")
+head(gpa_data)
+
+#scatterplot
+plot(gpa_data)
+
+```
 
 
 #### (a). Obtain the least squares estimates of $\beta_{0}$ and $\beta_{1}$. Write down the estimated regression equation.
+```{r}
+lm(`ACT Score`~ GPA, data = gpa_data)
+gpa_lm = lm(`ACT Score`~ GPA, data = gpa_data)
+summary(gpa_lm)
 
-#### (b). Plot the estimated regression line and the data points. Does the estimated regression functionappear to fit the data well?
+plot(gpa_lm)
+```
+
+#### (b). Plot the estimated regression line and the data points. Does the estimated regression function appear to fit the data well?
 
 #### (c). Obtain a point estimate of the mean freshman GPA for students with ACT test score 𝑋 = 30.
 
