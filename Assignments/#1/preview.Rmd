@@ -1,0 +1,341 @@
+---
+title: 'STAT 511: Assignment #1'
+author: "Rumil Legaspi"
+date: "25 January 2021"
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  html_notebook: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+
+
+
+# Assignment Questions
+
+--------------------
+
+
+
+## __1. KNN 4th Edition End of Chapter 1 Questions__ 
+ *In a regression model, $\beta_{0}$ = 100, $\beta_{1}$ = 20, and $\sigma^2$ = 25. An observation on Y variable will be made for X = 5.*
+
+<div align="center">
+
+$Y_{i}$ = $\beta_{0}$ *(intercept)* + $\beta_{1}$$X_{i}$ _(slope)(independent variable)_ + $\epsilon_{i}$ _(error)_
+
+</div>
+
+<div align="center">
+
+y = 100 + 20$X_{i}$ + $\epsilon_{i}$
+
+</div>
+
+### (a). Can we compute the exact probability that Y will fall between 195 and 205? Explain.
+
+
+__The probability cannot be calculated because the for a simple linear regression model the mean of $\epsilon_{i}$ should equal 0. Because $\epsilon_{i}$ is unspecified we are missing information and cannot compute the exact probability.__
+
+### (b). If the normal error regression model is applicable, can we now compute the exact probability that Y will fall between 195 and 205? If so, compute it.
+
+
+*note: $\epsilon_{i}$ (error term) = 0 and follows a normal distribution*
+
+For this problem we recall:
+
+* 1. The Z score formula since we are dealing with a normal distribution. 
+$\frac{X - \mu}{\sigma}$
+* 2. How to find the probability between 2 points given a normal distribution.
+
+*(aka find the z score which finds everything from the left and subtract it by the larger number to get the probability between a and b)*
+
+* 3. And that we are also given $\sigma^2 = 25$ *(variance)* and $\sigma = 5$ *(Standard deviation)*
+
+
+
+<div align="center">
+SO: $P( 195 \leq  Y \leq  205) = P(\frac{195 - 200}{5}\leq \frac{X - \mu}{\sigma} \leq \frac{205 - 200}{5})$
+
+$= P(-1 \leq z\leq 1)$
+
+$= P(z < 1) - P(z<-1)$      _bigger number or b is P(z < 1)_
+
+$= 0.841 - 0.158$           _converting numbers using pos/neg z table_
+
+$= 0.683$
+
+__The probability that Y will fall between the 195 and 205 is roughly 0.683.__
+
+</div>
+
+
+----------------------
+
+## __2. Grade Point Average Problem (Use R)__
+
+_The director of admissions of a small college selected 120 students at random from the new
+freshman class in a study to determine whether a student's grade point average (GPA) at the end 
+of the freshman year (Y) can be predicted from the ACT test score (X). See the dataset “GPA.txt”. The first column is GPA. The second column is ACT._
+
+```{r, include=TRUE}
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 1/STAT511 Assignment 1 Simple Linear Regression")
+
+
+gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
+
+#Adding headers
+names(gpa_data) <- c("GPA", "ACT Score")
+head(gpa_data)
+
+#Defining dependent and independent vars
+GPA = gpa_data$GPA
+ACT = gpa_data$`ACT Score`
+
+#scatterplot
+plot(gpa_data)
+```
+
+### (a). Obtain the least squares estimates of $\beta_{0}$ and $\beta_{1}$. Write down the estimated regression equation.
+
+```{r}
+lm(`ACT Score`~ GPA, data = gpa_data)
+
+#ACT Score is our response, GPA is our explanatory.
+# in other words `ACT Score`~ GPA says, ACT is explained by GPA
+gpa_lm = lm(`ACT Score`~ GPA, data = gpa_data)
+summary(gpa_lm)
+```
+
+<div align="center">
+From the lm() we get:
+
+__$\beta_{0}$ = 18.9754 _(intercept)_ __
+
+__$\beta_{1}$ = 1.87 _(slope)_ __
+
+and the estimated regression equation to be:
+
+__$\hat{Y}= 18.97 + 2.1X$__
+
+</div>
+
+### (b). Plot the estimated regression line and the data points. Does the estimated regression function appear to fit the data well?
+
+```{r,fig.align='center'}
+
+
+plot(gpa_lm, 
+     col = "blue")
+
+abline(gpa_lm, col = "red")
+```
+
+### (c). Obtain a point estimate of the mean freshman GPA for students with ACT test score 𝑋 = 30.
+
+
+Using $\hat{Y}= 18.97 + 2.1X$ Solve for point estimate when x = 30
+```{r}
+#18.97 + 2.1(30) = Y hat
+18.97 + 2.1*30
+```
+__$\hat{Y}=81.97$__
+
+### (d). What is the estimated change in the mean response when the ACT score increases by one point?
+
+
+In other words, when ACT score goes from 0 to 1 what is the change in $\hat{Y}$ ? Lets try when x =1 minus when x =0
+
+```{r}
+ChangeinYhat <- 18.97 + 2.1*1 - 18.97 + 2.1*0 
+
+ChangeinYhat
+
+#*or is it simply?
+# 1.87 our given slope?
+```
+
+__Estimated change in $\hat{Y}$ (GPA) when ACT score increases by one point is 2.1 .__
+
+
+---------------------
+
+
+## __3. Refer to the GPA problem in Question 2. (Use R)__
+
+### (a). Obtain the residuals $\hat{\epsilon_1}$. Do they sum to zero?
+
+```{r}
+#Gives us each residual for every x value
+residuals(gpa_lm)
+#We then square and sum 
+sum(residuals(gpa_lm)^2)
+
+ SSE <- sum((gpa_lm$residuals)^2)
+```
+
+
+### (b). Estimate the error variance $\sigma^2$ and standard deviation $\sigma$. In what units is $\sigma$ expressed?
+
+
+Using the sum of squared errors from the previous question, we can use it to find the variance of errors, $\sigma^2$. 
+
+We can simply divide by $n - 2$
+
+_n being 120 (total # of observations)_
+
+```{r}
+#Mean squared error (variance of errors)
+MSE <- SSE/ 118 - 2
+MSE
+```
+
+Then square root to get error standard deviation $\sigma$. AKA root mean squared error
+
+```{r}
+#Root mean squared error (Standard deviation of errors)
+RMSE <- sqrt(MSE)
+RMSE
+```
+
+-------------------------
+
+
+## __4. Refer to the GPA problem in Question 2.__
+
+### (a).  Interpret $\hat{\beta_0}$ in your estimated regression function. Does $\hat{\beta_0}$ provide any relevant information here? Explain.
+
+
+$\hat{\beta_0} = 18.97$ is a coefficent, specifically, our y-intercept. It shows us where our response variable (ACT Scores) is located when our predictor(GPA) is 0.
+
+### (b). Interpret $\hat{\beta_1}$ in your estimated regression function. 
+
+
+$\hat{\beta_1}$ is also a coefficient that is the slope. This slope can help us indicate at which direction and what rate our regression line is going.
+
+### (c). Verify that your fitted regression line goes through the point ($\bar{𝑋}$ , $\bar{Y}$). (Use R)
+
+
+We plug in values for x and y in our regression line formula to test. 
+
+First I'll try x = 3.897 to test if the response is 21, which is our the first observation in our dataset
+
+```{r}
+first_obs <- 18.97 + 2.1*3.897
+first_obs
+```
+## *DNE 21?
+
+
+
+
+
+
+
+
+
+-------------------------
+
+## __5. Muscle Mass Problem (Use R)__
+_A person’s muscle mass is expected to decrease with age. To explore this relationship in women, a nutritionist randomly selected 15 women from each l0-year age group, beginning with age 40 and ending with age 79. 𝑋 is age, and Y is a measure of muscle mass. See the dataset “Muscle.txt”. The first column is muscle mass. The second column is women’s age._ _
+
+
+```{r, include=TRUE}
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 1/STAT511 Assignment 1 Simple Linear Regression")
+
+
+muscle_data = read.table(file = "Muscle.txt", header = FALSE, sep = "")
+head(muscle_data)
+#No headers, so we add
+
+names(muscle_data) <- c("Muscle Mass", "Age")
+head(muscle_data)
+
+#scatterplot
+plot(muscle_data)
+```
+
+
+### (a). Obtain the estimated regression equation. 
+```{r}
+lm(`Muscle Mass`~ Age, data = muscle_data)
+
+#Muscle Mass is our response, Age is our explanatory.
+# in other words `Muscle Mass`~ Age says, muscle mass is explained by Age
+muscle_lm = lm(`Muscle Mass`~ Age, data = muscle_data)
+summary(muscle_lm)
+```
+
+
+### (b). Interpret $\beta_{0}$ in your estimated regression function. Does $\beta_{0}$ provide any relevant information here? Explain.
+
+
+In this case $\beta_{0} = 156.35$ is our y-intercept and shows us the where the value of our response variable _(muscle mass)_ is located when X _(age)_ is  0. At the moment the y-intercept looks to be off-chart and is unable to provide any relevant information.
+
+### (c). Interpret $\hat{\beta_1}$ in your estimated regression function. 
+
+
+$\hat{\beta_1} = -1.19$ is our slope and indicates that our estimated line is moving in a downward fashion.
+
+
+### (d). Plot the estimated regression function and the data points. Does a linear regression function appear to give a good fit here? Does your plot support that muscle mass decreases with age?
+
+```{r}
+
+plot(muscle_lm, 
+     col = "blue")
+
+abline(muscle_lm, col = "red")
+
+```
+Yes, the estimated regression function appears to give a good fit with our data. Also, the first plot "Residuals vs Fitted" indicates that the line measuring the fit of residual is somewhat identical to the line measuring fit across our data points. Therefore we can say our regression function supports the case the muscle mass decreases with age.
+
+
+
+### (e).  Obtain a point estimate of the difference in the mean muscle mass for women differing in age by one year.
+
+
+Our slope $\hat{\beta_1} = -1.19$ indicates the change in Muscle Mass when adjusting age by one year
+
+
+### (f). Obtain a point estimate of the mean muscle mass for women aged 𝑋 = 60 years.
+
+$\hat{y}  = 156.35 + -1.19x$
+```{r}
+whenAgeIs60 <- 156.35 + -1.19*60
+whenAgeIs60
+```
+$\hat{y}  = 84.95$ when x = 60
+
+
+
+### (g). Find the estimate of error variance $\sigma^2$
+
+From our summary we are given: 
+Residual standard error as $\sigma={8.173}$ and can conclude that:
+
+
+Point estimate for error variance: $\sigma^2={66.79}$ 
+
+
+-------------------------
+
+## __6. Special regression models__
+
+### (a). What is the implication for the regression model $Y_{i}$ = $\beta_{0}$ + $\epsilon_{i}$ ? How does it plot on a graph?
+
+When $\beta_{1}X_{i}=0$ and not accounted for, this tells us the slope is 0 and there is no change in our response variable.
+
+Furthermore, in this case our dependent variable Y is actually now an independent variable and would make our regression line a straight horizontal line.
+
+
+### (b). What is the implication for the regression model $Y_{i}$ = $\beta_{1}X_{i}$ + $\epsilon_{i}$ ? How does it plot on a graph?  
+
+When $\beta_{0} = 0$ _(y-intercept)_ (the regression line would be would also cross the origin point (0,0). 
+
+
+___________
+
