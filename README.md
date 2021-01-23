@@ -1,7 +1,7 @@
 # STAT511
 ## A place for STAT511 files, assignmnents and projects.
 
-### Im testing out R notebooks so these should be some pretty janky looking rmd files. 
+### Im testing out R notebooks so these should be some pretty janky looking iterations of my rmd files. 
 
 ### Currently just saving the preview.rmd because I knit those into PDF's to turn in.
 
