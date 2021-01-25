@@ -11,12 +11,7 @@ output:
   word_document: default
 ---
 
-
-
-
 # Assignment Questions
-
---------------------
 
 
 
@@ -27,9 +22,6 @@ output:
 
 $Y_{i}$ = $\beta_{0}$ *(intercept)* + $\beta_{1}$$X_{i}$ _(slope)(independent variable)_ + $\epsilon_{i}$ _(error)_
 
-</div>
-
-<div align="center">
 
 y = 100 + 20$X_{i}$ + $\epsilon_{i}$
 
@@ -38,7 +30,7 @@ y = 100 + 20$X_{i}$ + $\epsilon_{i}$
 ### (a). Can we compute the exact probability that Y will fall between 195 and 205? Explain.
 
 
-__The probability cannot be calculated because the for a simple linear regression model the mean of $\epsilon_{i}$ should equal 0. Because $\epsilon_{i}$ is unspecified we are missing information and cannot compute the exact probability.__
+__The probability cannot be calculated because with a simple linear regression model the mean of $\epsilon_{i}$ should equal 0. Because $\epsilon_{i}$ is unspecified we are missing information and cannot compute the exact probability.__
 
 ### (b). If the normal error regression model is applicable, can we now compute the exact probability that Y will fall between 195 and 205? If so, compute it.
 
@@ -69,7 +61,6 @@ $= 0.841 - 0.158$           _converting numbers using pos/neg z table_
 $= 0.683$
 
 __The probability that Y will fall between the 195 and 205 is roughly 0.683.__
-
 </div>
 
 
@@ -88,12 +79,13 @@ setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Anal
 gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
 
 #Adding headers
-names(gpa_data) <- c("GPA", "ACT Score")
+names(gpa_data) <- c("GPA", "ACT")
 head(gpa_data)
 
 #Defining dependent and independent vars
-GPA = gpa_data$GPA
-ACT = gpa_data$`ACT Score`
+ACT = gpa_data$ACT #X
+GPA = gpa_data$GPA #Y
+
 
 #scatterplot
 plot(gpa_data)
@@ -102,63 +94,62 @@ plot(gpa_data)
 ### (a). Obtain the least squares estimates of $\beta_{0}$ and $\beta_{1}$. Write down the estimated regression equation.
 
 ```{r}
-lm(`ACT Score`~ GPA, data = gpa_data)
+lm(GPA ~ ACT, data = gpa_data)
 
-#ACT Score is our response, GPA is our explanatory.
-# in other words `ACT Score`~ GPA says, ACT is explained by GPA
-gpa_lm = lm(`ACT Score`~ GPA, data = gpa_data)
+#GPA Score is our response, ACT is our explanatory.
+# in other words GPA ~ ACT is read as, GPA is explained by ACT
+gpa_lm = lm(GPA ~ ACT, data = gpa_data)
 summary(gpa_lm)
 ```
 
 <div align="center">
 From the lm() we get:
 
-__$\beta_{0}$ = 18.9754 _(intercept)_ __
+__$\beta_{0}$ = 2.11405 _(intercept)_ __
 
-__$\beta_{1}$ = 1.87 _(slope)_ __
+__$\beta_{1}$ = 0.03883 _(slope)_ __
 
 and the estimated regression equation to be:
 
-__$\hat{Y}= 18.97 + 2.1X$__
+__$\hat{Y}= 2.11405 + 0.03883X$__
 
 </div>
 
 ### (b). Plot the estimated regression line and the data points. Does the estimated regression function appear to fit the data well?
 
 ```{r,fig.align='center'}
-
-
-plot(gpa_lm, 
-     col = "blue")
-
+plot(gpa_data$ACT, gpa_data$GPA)
+gpa_lm = lm(GPA ~ ACT, data = gpa_data)
 abline(gpa_lm, col = "red")
 ```
 
 ### (c). Obtain a point estimate of the mean freshman GPA for students with ACT test score 𝑋 = 30.
 
 
-Using $\hat{Y}= 18.97 + 2.1X$ Solve for point estimate when x = 30
+Using $\hat{Y}= 2.11405 + 0.03883X$ Solve for point estimate when x = 30
 ```{r}
-#18.97 + 2.1(30) = Y hat
-18.97 + 2.1*30
+#2.11405 + 0.03883*30 = Y hat
+2.11405 + 0.03883*30
 ```
-__$\hat{Y}=81.97$__
+__$\hat{Y}=3.27895$__
 
 ### (d). What is the estimated change in the mean response when the ACT score increases by one point?
 
-
-In other words, when ACT score goes from 0 to 1 what is the change in $\hat{Y}$ ? Lets try when x =1 minus when x =0
+The change in Y can be found using this formula:
+ $\delta{y}=  \hat{\beta_1} *\delta{x}$
 
 ```{r}
-ChangeinYhat <- 18.97 + 2.1*1 - 18.97 + 2.1*0 
+#Delta_y = beta1_hat * delta_X 
 
-ChangeinYhat
+#Change in y equals the slope multiplied by X in this case x = 1
+DeltaY_gpa <- 0.03883*1  
 
-#*or is it simply?
-# 1.87 our given slope?
+DeltaY_gpa
+
 ```
+__The change in mean response is 0.03883__
 
-__Estimated change in $\hat{Y}$ (GPA) when ACT score increases by one point is 2.1 .__
+__Estimated change in $\hat{Y}$ (GPA) when ACT score increases by one point is 0.03883 .__
 
 
 ---------------------
@@ -169,37 +160,31 @@ __Estimated change in $\hat{Y}$ (GPA) when ACT score increases by one point is 2
 ### (a). Obtain the residuals $\hat{\epsilon_1}$. Do they sum to zero?
 
 ```{r}
-#Gives us each residual for every x value
-residuals(gpa_lm)
-#We then square and sum 
-sum(residuals(gpa_lm)^2)
-
- SSE <- sum((gpa_lm$residuals)^2)
+#Finding predicted values of X using estimated regression equation
+yhat <- 2.11405 + 0.03883*ACT
+ 
+#Finding residual by doing observed minus predicted
+e1_hat <- GPA - yhat
+e1_hat
+ 
+#Summing residuals to see if adds up to 0
+sum(e1_hat)
 ```
+
+
+
+__The residuals do not add up exactly to 0 but instead -0.00861__
 
 
 ### (b). Estimate the error variance $\sigma^2$ and standard deviation $\sigma$. In what units is $\sigma$ expressed?
 
-
-Using the sum of squared errors from the previous question, we can use it to find the variance of errors, $\sigma^2$. 
-
-We can simply divide by $n - 2$
-
-_n being 120 (total # of observations)_
-
 ```{r}
-#Mean squared error (variance of errors)
-MSE <- SSE/ 118 - 2
-MSE
+#Squaring the residual standard error from our summary to get error variance
+err_var <- 0.6231^2
+err_var
 ```
+__$\sigma$ is expressed in units of standard deviation and in this case in terms of grade point averages (GPA). __ 
 
-Then square root to get error standard deviation $\sigma$. AKA root mean squared error
-
-```{r}
-#Root mean squared error (Standard deviation of errors)
-RMSE <- sqrt(MSE)
-RMSE
-```
 
 -------------------------
 
@@ -209,29 +194,34 @@ RMSE
 ### (a).  Interpret $\hat{\beta_0}$ in your estimated regression function. Does $\hat{\beta_0}$ provide any relevant information here? Explain.
 
 
-$\hat{\beta_0} = 18.97$ is a coefficent, specifically, our y-intercept. It shows us where our response variable (ACT Scores) is located when our predictor(GPA) is 0.
+$\hat{\beta_0} = 3.07405$ is a coefficient, specifically, our y-intercept. It shows us where our response variable (GPA) is located when our predictor(ACT Scores) is 0.
 
 ### (b). Interpret $\hat{\beta_1}$ in your estimated regression function. 
 
 
-$\hat{\beta_1}$ is also a coefficient that is the slope. This slope can help us indicate at which direction and what rate our regression line is going.
+$\hat{\beta_1}$ is also a coefficient which indicates the slope. This slope can help us indicate at which direction and what rate our regression line is going.
 
 ### (c). Verify that your fitted regression line goes through the point ($\bar{𝑋}$ , $\bar{Y}$). (Use R)
 
 
 We plug in values for x and y in our regression line formula to test. 
 
-First I'll try x = 3.897 to test if the response is 21, which is our the first observation in our dataset
-
 ```{r}
-first_obs <- 18.97 + 2.1*3.897
-first_obs
+#sample mean of x = 24.725
+mean(ACT)
+
+#sample mean of y = 3.07405
+mean(GPA)
+
+#So then this regression line formula should hold true if it intersects sample mean of x and y
+
+#plugging in sample mean into estimated regression equation
+
+#3.07405 = 2.11405 + 0.03883 * mean(ACT)         
+ 2.11405 + 0.03883 * mean(ACT)
+ mean(GPA)
+
 ```
-## *DNE 21?
-
-
-
-
 
 
 
@@ -249,10 +239,15 @@ setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Anal
 
 muscle_data = read.table(file = "Muscle.txt", header = FALSE, sep = "")
 head(muscle_data)
-#No headers, so we add
 
-names(muscle_data) <- c("Muscle Mass", "Age")
+#No headers, so we add
+names(muscle_data) <- c("Muscle", "Age")
 head(muscle_data)
+
+#Defining dependent and independent vars
+Age = muscle_data$Age #X
+Muscle = muscle_data$Muscle #Y
+
 
 #scatterplot
 plot(muscle_data)
@@ -261,11 +256,12 @@ plot(muscle_data)
 
 ### (a). Obtain the estimated regression equation. 
 ```{r}
-lm(`Muscle Mass`~ Age, data = muscle_data)
+lm(Muscle ~ Age, data = muscle_data)
 
-#Muscle Mass is our response, Age is our explanatory.
-# in other words `Muscle Mass`~ Age says, muscle mass is explained by Age
-muscle_lm = lm(`Muscle Mass`~ Age, data = muscle_data)
+#Muscle is our response, Age is our explanatory.
+#in other words Muscle ~ Age says, muscle mass is explained by Age
+
+muscle_lm = lm(Muscle ~ Age, data = muscle_data)
 summary(muscle_lm)
 ```
 
@@ -273,29 +269,37 @@ summary(muscle_lm)
 ### (b). Interpret $\beta_{0}$ in your estimated regression function. Does $\beta_{0}$ provide any relevant information here? Explain.
 
 
-In this case $\beta_{0} = 156.35$ is our y-intercept and shows us the where the value of our response variable _(muscle mass)_ is located when X _(age)_ is  0. At the moment the y-intercept looks to be off-chart and is unable to provide any relevant information.
+In this case $\beta_{0} = 156.35$ is our y-intercept and shows us the where the value of our response variable _(muscle)_ is located when X _(age)_ is  0. At the moment the y-intercept looks to be off-chart and is unable to provide any relevant information.
 
 ### (c). Interpret $\hat{\beta_1}$ in your estimated regression function. 
 
 
-$\hat{\beta_1} = -1.19$ is our slope and indicates that our estimated line is moving in a downward fashion.
-
+$\hat{\beta_1} = -1.19$ is our slope and indicates that our estimated line is moving in a downward fashion. 
 
 ### (d). Plot the estimated regression function and the data points. Does a linear regression function appear to give a good fit here? Does your plot support that muscle mass decreases with age?
 
 ```{r}
 
-plot(muscle_lm, 
-     col = "blue")
-
+plot(muscle_data$Age, muscle_data$Muscle)
 abline(muscle_lm, col = "red")
 
 ```
-Yes, the estimated regression function appears to give a good fit with our data. Also, the first plot "Residuals vs Fitted" indicates that the line measuring the fit of residual is somewhat identical to the line measuring fit across our data points. Therefore we can say our regression function supports the case the muscle mass decreases with age.
+Yes, the estimated regression function appears to give a good fit with our data. By observing the line, we see that it does support the case that muscle mass decreases with age over time.
 
 
 
 ### (e).  Obtain a point estimate of the difference in the mean muscle mass for women differing in age by one year.
+
+
+
+```{r}
+#Delta_y = beta1_hat * delta_X 
+#Change in y equals the slope multiplied by X in this case x = 1
+DeltaY_muscle <- -1.19*1  
+
+DeltaY_muscle 
+
+```
 
 
 Our slope $\hat{\beta_1} = -1.19$ indicates the change in Muscle Mass when adjusting age by one year
@@ -334,7 +338,7 @@ Furthermore, in this case our dependent variable Y is actually now an independen
 
 ### (b). What is the implication for the regression model $Y_{i}$ = $\beta_{1}X_{i}$ + $\epsilon_{i}$ ? How does it plot on a graph?  
 
-When $\beta_{0} = 0$ _(y-intercept)_ (the regression line would be would also cross the origin point (0,0). 
+When $\beta_{0} = 0$ _(y-intercept)_ (the regression line crosses the origin point (0,0). 
 
 
 ___________
