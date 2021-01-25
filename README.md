@@ -5,4 +5,4 @@
 
 ### Currently just saving the preview.rmd because I knit those into PDF's to turn in.
 
-### I feel like my workflow and process is completely off, so if you are reading this (hello, welcome, and thank you) and _feel free to give out any suggestions :)_
+### My workflow and process definitely needs improvement, so if you are reading this (hello, welcome, and thank you) and _feel free to give out any suggestions :)_
