@@ -1,0 +1,110 @@
+---
+title: 'STAT 511: Assignment #2'
+author: "Rumil Legaspi"
+date: "8 February 2021"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: 
+    latex_engine: xelatex
+  word_document: default
+---
+
+# Assignment Questions
+
+----------------------
+Trying examples
+
+```{r, include=TRUE}
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 1/STAT511 Assignment 1 Simple Linear Regression")
+
+
+gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
+
+#Adding headers
+names(gpa_data) <- c("GPA", "ACT")
+head(gpa_data)
+
+#Defining dependent and independent vars
+ACT = gpa_data$ACT #X
+GPA = gpa_data$GPA #Y
+
+
+#scatterplot
+plot(gpa_data)
+
+
+lm(GPA ~ ACT, data = gpa_data)
+
+#GPA Score is our response, ACT is our explanatory.
+# in other words GPA ~ ACT is read as, GPA is explained by ACT
+gpa_lm = lm(GPA ~ ACT, data = gpa_data)
+summary(gpa_lm)
+
+predict(gpa_lm)
+
+plot(gpa_data$ACT, gpa_data$GPA)
+gpa_lm = lm(GPA ~ ACT, data = gpa_data)
+abline(gpa_lm, col = "red")
+
+```
+
+
+## __1.Refer to the GPA problem in HW#1.
+
+
+
+
+
+
+### (a). Obtain a 99% confidence interval for the Slope $\beta_{1}$ 
+
+```{r}
+confint(gpa_lm, level = 0.99)
+```
+
+### (b). Interpretation of confidence interval
+
+This output reads that within our confidence interval from 0.5% (the lower limit of our interval) to 99.5% (the upper limit of our interval), our intercept and slope are both found within the listed intervals.
+
+In this case if we repeat this experiment many times the true population parameter $\beta_{1}$  will be between the interval 0.0053 and 0.0722 with 99% confidence and $\alpha$ (accepted error) of 1%
+
+0 is not included in our interval, but we are interested in it because if zero was included in our confidence interval then that would indicate no change/relationship and would make ACT a bad predictor for GPA. So in this case there is change despite it being small. 
+
+
+
+### (c). Using t-test between ACT $\X$ and GPA $\Y$ at the end of freshman year
+
+Lets test the null hypothesis that there is a linear relationship between ACT (X) and GPA (Y)
+
+Null hypothesis: H0: B1 = 0 (slope is horizontal/ no relationship)
+Alternative hypothesis: H1: B1 /= 0 (slope exists/ relationship exists)
+### (d). 
+----------------------
+
+## __2. 
+
+### (a). 
+### (b). 
+### (c). 
+
+-------------------------
+
+## __3.
+
+### (a). 
+### (b). 
+### (c). 
+-------------------------
+
+## __4. 
+
+### (a). 
+### (b). 
+### (c). 
+### (d). 
+### (e). 
+### (f).
+
+
