@@ -3,11 +3,11 @@ title: 'STAT 511: Assignment #2'
 author: "Rumil Legaspi"
 date: "8 February 2021"
 output:
-  html_document:
-    df_print: paged
-  html_notebook: default
   pdf_document: 
     latex_engine: xelatex
+  html_notebook: default
+  html_document:
+    df_print: paged
   word_document: default
 ---
 
@@ -51,60 +51,307 @@ abline(gpa_lm, col = "red")
 ```
 
 
-## __1.Refer to the GPA problem in HW#1.
+## __1.Refer to the GPA problem in HW#1__
 
 
 
 
 
 
-### (a). Obtain a 99% confidence interval for the Slope $\beta_{1}$ 
+### __(a). Obtain a 99% confidence interval for the Slope $\beta_{1}$__ 
 
 ```{r}
+#confidence interval with 99% confidence interval
 confint(gpa_lm, level = 0.99)
 ```
 
-### (b). Interpretation of confidence interval
+### __(b). Interpretation of confidence interval__
 
 This output reads that within our confidence interval from 0.5% (the lower limit of our interval) to 99.5% (the upper limit of our interval), our intercept and slope are both found within the listed intervals.
 
 In this case if we repeat this experiment many times the true population parameter $\beta_{1}$  will be between the interval 0.0053 and 0.0722 with 99% confidence and $\alpha$ (accepted error) of 1%
 
-0 is not included in our interval, but we are interested in it because if zero was included in our confidence interval then that would indicate no change/relationship and would make ACT a bad predictor for GPA. So in this case there is change despite it being small. 
+0 is not included in our interval, but we are interested in it because if zero was included in our confidence interval then that would indicate (that there is a chance that) no change/relationship and would make ACT a bad predictor for GPA. So in this case, since 0 is not included, there is change. 
 
 
 
-### (c). Using t-test between ACT $\X$ and GPA $\Y$ at the end of freshman year
+### __(c). Using t-test between ACT $X$ and GPA $Y$ at the end of freshman year with $\alpha$ = 0.01__
 
 Lets test the null hypothesis that there is a linear relationship between ACT (X) and GPA (Y)
 
+<div align="center">
+
 Null hypothesis: H0: B1 = 0 (slope is horizontal/ no relationship)
+
 Alternative hypothesis: H1: B1 /= 0 (slope exists/ relationship exists)
-### (d). 
+      
+</div>
+
+```{r}
+#Looking at t-value
+summary(gpa_lm)
+```
+Using T-table to find critical value:
+ - N = 120, So our degrees of freedom is 118
+ - one tail test with $\alpha$ = 0.01 and with 99% cum. prob
+ 
+ _searching these up on the t table we find_ 
+ 
+ Critical value = 2.364
+```{r}
+#Using qt() in R we get
+qt(0.99, 118)
+```
+ 
+
+Critical value = 2.358365
+
+Now comparing our t-value of 3.040 for $\beta_{1}$ of ACT with our critical value 2.358365 
+
+
+
+<div align="center">
+      
+  |3.040| > 2.358365    
+      
+</div>
+
+we can conclude that because the absolute value of our t statistic is greater than our critical value, we reject the null hypothesis and conclude with our alternative hypothesis that __a relationship exists between ACT(x) and GPA(Y).__
+
+### __(d). What is the p value and how does it support the conclusion from (c)?__
+
+
+The p-value from part c is 0.00292. This supports the same conclusion as part c because the same conclusion can either come from _the absolute value of t-statistic being greater than the critical value._
+
+__OR__
+
+_The p-value being less than our $\alpha$ = 0.01, which is the case._ 
+
+Both scenarios help __verify the same conclusion.__
+
+
 ----------------------
 
-## __2. 
+## __2. For each of the following questions, explain whether a confidence interval for a mean response or a prediction interval for a new observation is appropriate__
 
-### (a). 
-### (b). 
-### (c). 
+### __(a). What will be the humidity level in this greenhouse tomorrow when we set the temperature level at 31°C?__
+
+In this scenario we use a prediction interval because it is giving us a specific x value(temperature) to predict how humidity level will respond
+
+### __(b). How much do families whose disposable income is $23,500 spend, on the average, for meals away from home?__
+
+*** We use a confidence interval here because it is asking _"on average"_, what is the the mean value of our response variable. Confidence intervals help measure the true mean therefore it is appropriate in this question.
+
+
+### __(c). How many kilowatt-hours of electricity will be consumed next month by commercial and industrial users in the Twin Cities service area, given that the index of business activity for the area remains at its present level?__
+
+We use prediction interval here despite our predictor variable (business activity level) being at _"present level"_ there is still a associated x value that is given to help us predict what the response (kilowatt-hours) will be. 
 
 -------------------------
 
-## __3.
+## __3. Refer to the GPA problem in HW#1__
 
-### (a). 
-### (b). 
-### (c). 
+### __(a).  Obtain a 95% interval estimate of the mean freshman GPA for students whose ACT test score is 𝑋 = 28. Interpret your confidence interval__ 
+
+
+```{r}
+# interval with 95% confidence interval
+#confint(gpa_lm, level = 0.95, x = 44)
+
+alpha <- 0.05
+newACTdata = data.frame(ACT=28)
+
+predict(gpa_lm, newACTdata, interval = "confidence", level = 1 - alpha)
+
+
+
+
+#output for x = 28 is 2.968246
+# ***what does the fit output mean? is that just the estimate?
+# ***Is there a level parameter we can tune in predict()?
+```
+When this experiment is repeated multiple times we can conclude that for students whose ACT test score is 28, their GPA will lie within the interval from 3.061384 to 3.341033 with the true population mean at 3.201209 with 95% confidence.
+
+
+### __(b). Mary Jones obtained a score of 𝑋 = 28 on the entrance test. Predict her freshman GPA using a 95% prediction interval. Interpret your prediction interval.__
+
+```{r}
+alpha <- 0.05
+newACTdata = data.frame(ACT=28)
+
+predict(gpa_lm, newACTdata,  interval = "predict", level = 1 - alpha )
+
+
+#checking by plugging into lm
+2.11 + 0.03883 * 28
+
+```
+From an interval with lower limits of 1.959355 to upper limits of 4.443063 we can predict with 95% confidence that when Mary Jones obtained a score of 28 on her entrance test, her freshman GPA would be roughly 3.19.
+
+### __(c). . Is the prediction interval in Part (b) wider than the confidence interval in (a)? Why or why not? __
+
+The prediction interval in part b is wider than the confidence interval in part a. The prediction interval is wider than the confidence interval because it considers 2 things:
+
+- 1. The randomness of the mean (the variability of its mean)
+
+- 2. The random variable y could occur around its mean (the variability around the mean)
+
 -------------------------
 
-## __4. 
+## __4. Refer to the Muscle Mass problem in HW#1__ 
 
-### (a). 
-### (b). 
-### (c). 
-### (d). 
-### (e). 
-### (f).
+### __(a). Conducting a test to decide whether or not there is a negative linear association  between the amount of muscle mass and age. At 𝛼 = 0.05, state the null and alternative hypotheses, conduct the test, and then conclude.__ 
+
+Our null hypothesis is there is no linear relationship 
+
+<div align="center">
+
+Null hypothesis: H0: B1 = 0 (slope is horizontal/ no relationship), in other words there is no linear relationship at all
+
+Alternative hypothesis: H1: B1 /= 0 (slope exists/ relationship exists), there is linear relationship either positive or negative.
+      
+</div>
+
+
+### __(b). The 𝑝-value for the test whether 𝛽0(intercept) = 0 is close to 0. Can it now be concluded that 𝛽0 provides realistically relevant information on the amount of muscle mass at birth for a female with age 0?__
+
+```{r}
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 1/STAT511 Assignment 1 Simple Linear Regression")
+
+
+muscle_data = read.table(file = "Muscle.txt", header = FALSE, sep = "")
+head(muscle_data)
+
+#Adding headers
+names(muscle_data) <- c("Muscle", "Age")
+head(muscle_data)
+
+#Defining dependent and independent vars
+Age = muscle_data$Age #X
+Muscle = muscle_data$Muscle #Y
+
+
+#scatterplot
+plot(muscle_data)
+
+#creating our linear model
+muscle_lm = lm(Muscle ~ Age, data = muscle_data)
+summary(muscle_lm)
+
+
+plot(muscle_data$Age, muscle_data$Muscle)
+abline(muscle_lm, col = "red")
+
+
+#checking the range of age
+range(muscle_data$Age)
+```
+
+
+
+This is not the case because reading the intercept without context can usually lead to misleading conclusions. Realistically, despite having a significant p-value, having a female baby at birth with the weight of 156 lbs. Also with more context, we find that this dataset is only indicative of women between the ages of 41-78.
+
+### __(c).Construct a 95% confidence interval for the difference in expected muscle mass for women whose ages differ by one year. Why is it not necessary to know the specific ages to construct this confidence interval?__
+
+```{r}
+
+#constructing a 95% confidence interval
+alpha <- 0.05
+confint(muscle_lm, level = 1 - alpha )
+
+
+
+
+```
+
+
+***why don't need to know the specific ages to construct this interval because we are looking for the true mean of the difference in expected muscle mass for women whose ages differ by one year, and not a specific response value which is suited for a prediction interval. We can determine the difference in muscle manually by looking at the intercept and 
+
+### __(d).Obtain a 95% confidence interval for the mean muscle mass for women of age 60. Interpret your confidence interval.__ 
+
+```{r}
+#constructing a 95% confidence interval
+alpha <- 0.05
+newagedata <- data.frame(Age = 60)
+
+ci <- predict(muscle_lm, newagedata, interval = "confidence", level = 1 - alpha )
+```
+If this experimented many times we can conclude that the mean muscle mass for women of age 60 lies between the interval 82.83471 to 87.05895 with 95% confidence.
+
+### __(e).Obtain a 95% prediction interval for the muscle mass of a woman whose age is 60. Interpret your prediction interval.__
+
+```{r}
+alpha <- 0.05
+newagedata <- data.frame(Age = 60)
+
+predict(muscle_lm, newagedata, se.fit = TRUE,  interval = "predict", level = 1-alpha )
+
+
+#checking by plugging into lm
+156.3466 + -1.1900 * 60
+
+```
+
+***Given that a woman is 60 years old, we can conclude that the future values of muscle mass would lie within the interval 68.45067 and 101.443 and predict muscle mass to be 84.946 with 95% confidence.
+
+
+### __(f).Find the boundary values of the 95% confidence band for the regression line at age 60. Is the confidence band wider at this point than the confidence interval in Part (d)? Why or why not? __
+
+```{r}
+
+#finding f critical value using quantile function qf()
+df1 <- 2
+df2 <- 58
+w <- sqrt(2*qf(0.95, df1, df2 ))
+
+
+conf.muscle <- predict(muscle_lm, 
+                       newagedata, 
+                       se.fit = TRUE, 
+                       interval = "confidence", 
+                       level = 1 - alpha )
+
+
+band_L = conf.muscle$fit[,1] - w * conf.muscle$se.fit
+band_U = conf.muscle$fit[,1] + w * conf.muscle$se.fit
+
+#comparing Confidence band with COnfidence interval
+
+#CB
+band_L
+band_U
+
+#CI
+ci
+```
+
+
+the confidence band is larger than the confidence interval in part d because our W value in our confidence band formula is larger compared to the t-critical value in the confidence interval formula. Intuitively the band is wider than ci because it proposes an interval that would include the entire regression line. Whereas, ci is only focusing on the mean/center and therefore would be smaller than the confidence band
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
