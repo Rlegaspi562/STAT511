@@ -18,12 +18,10 @@ output:
 ```{r}
 setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/week 4/Week 4")
 
-
 gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
 
 #Adding headers
 names(gpa_data) <- c("GPA", "ACT")
-head(gpa_data)
 
 #Defining dependent and independent vars
 ACT = gpa_data$ACT #X
@@ -47,10 +45,10 @@ anova(size.lm)
 red.lm = lm(hours~1, data = lotdata) #hours~1 is reduced model
 anova(red.lm, size.lm)   
 
-## __1.Refer to the GPA problem in HW#1__
+## __1. Refer to the GPA problem in HW#1__
 
 
-### __(a).Setting up the ANOVA table__ 
+### __(a). Setting up the ANOVA table__ 
 
 ```{r}
 anova(gpa_lm)
@@ -59,7 +57,7 @@ anova(gpa_lm)
 
 ### __(b). What does MSR measure in your ANOVA table? What does MSE measure? Under what condition do MSR and MSE estimate the same quantity?__
 
-To begin with MSR (Mean Squared of Regression) comes from the sum of squares (***of our X values) divided by the degrees of freedom from our regression model. In this case MSR measures our regression model's variability (separate from the variability of our error(MSE)).
+To begin with, the MSR (Mean Squared of Regression) comes from the sum of squares (***of our X values) divided by the degrees of freedom from our regression model. In this case MSR measures our regression model's variability (separate from the variability of our error(MSE)).
 
 MSE is the mean squared error and measures how close our regression line is to the data points. It measures the distances from the data points to our regression line. Those distances are the errors and the MSE is squaring those errors. __Ultimately__ it measures the variability/spread of those errors.
 
@@ -67,7 +65,7 @@ MSE is the mean squared error and measures how close our regression line is to t
 Both the MSR and MSE estimate the same quantity when the slope  $\beta_{1}$ is zero or not.
 (*** from the slide 8/39, the same quantity error is the same quantity measured when slope is zero or not)
 
-### __(c). at $\alpha$ = 0.05, conduct an F-test of whether or not $\beta_{1}$ = 0. State the null and alternative hypotheses, decision rule, and conclusion.__
+### __(c). At $\alpha$ = 0.05, conduct an F-test of whether or not $\beta_{1}$ = 0. State the null and alternative hypotheses, decision rule, and conclusion.__
 
 <div align="center">
 
@@ -84,31 +82,75 @@ __note: 1. If the f statistic is larger than the critical value
 2. or the p value is less than alpha then it is significant and we reject the null__
 ```{r}
 #Using qt() to find our critical value we get
-qt(0.995, 118)
+qt(0.95, 118)
 #*** why do we use 0.995 and not 0.99 here?
 ```
 
-The F-value is greater than our critical value (2.618137) __AND__ our p-value (0.002917) is less than our $\alpha$ = 0.05 we reject our null and therefore a non-zero slope exists and a significant relationship between ACT(X) and GPA(Y) scores.
+The F-value is greater than our critical value (1.65787) __AND__ our p-value (0.002917) is less than our $\alpha$ = 0.05 we reject our null and therefore a non-zero slope exists, as well as a significant relationship between ACT(X) and GPA(Y) scores.
+
+
+### __(d).  Obtain the R-squared from your regression. Interpret this number__
 
 
 
 
-##currently at 1:07:00 in class recording
+--------------------------------------------
+
+## __2. Refer to the Muscle Mass problem in HW#1.__
+
+
+```{r}
+muscle_data = read.table(file = "Muscle.txt", header = FALSE, sep = "")
+
+#Adding headers
+names(muscle_data) <- c("Muscle", "Age")
+
+#Defining dependent and independent vars
+Age = muscle_data$Age #X
+Muscle = muscle_data$Muscle #Y
+
+#creating our linear model
+muscle_lm = lm(Muscle ~ Age, data = muscle_data)
+summary(muscle_lm)
+```
+
+
+### __(a). Setting up ANOVA Table__
+
+```{r}
+anova(muscle_lm)
+```
+
+### __(b). At $\alpha$ = 0.05, conduct an F-test of whether or not $\beta_{1}$ = 0. State the null and alternative hypotheses, decision rule, and conclusion.__
+
+
+<div align="center">
+
+Null hypothesis: H0: $\beta_{1}$ = 0 (slope is horizontal/ no relationship between X and Y)
+
+Alternative hypothesis: H1: $\beta_{1}$ /= 0 (slope is non zero and X is linearly related to Y)
+      
+</div>
+
+```{r}
+#Using qt() to find our critical value we get
+qt(0.95, 58)
+```
+ Our F-statistic = 174.06
+
+The F-value (174.06) is greater than our critical value (1.671553) __AND__ our p-value (2.2e-16) is less than our $\alpha$ = 0.05, we reject our null and therefore a non-zero slope exists, as well as a significant relationship between AGE(X) and MUSCLE(Y).
+
+### __(c). What proportion of the total variation in Muscle Mass remains “unexplained” in the regression with Age? Is this proportion relatively small or large?__
+
+The unexplained variation is the error component of the regression equation. It is the mean squared error (MSE) which is the sum of squares divided by the degrees of freedom.
+
+The ratio  11627.5 (MSR)/ 66.8 (MSE) shows a ratio that is fairly relatively large. We can definitely see that our model is contributing far more to the variance than the error is. Which is also true when we compare our F statistic (174.06) with the critical value (1.671553) and see that our model is a significant in predicting the variance between age and muscle mass. 
+
+
+### __(d).  Obtain the R-squared from your regression. Interpret this number__
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+----------------------------------------------
