@@ -1,0 +1,193 @@
+---
+title: 'A Linear Regression Analysis on The Risk of Infection & Length of Stay in Hospitals'
+author:
+  - Rumil Legaspi, Rumil.legaspi@gmail.com
+  - Mei Leng Lao, Email
+date: "28 February 2021"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 2
+    latex_engine: xelatex
+  html_notebook: 
+    df_print: paged
+  word_document: default
+  theme: cayman
+---
+
+---------------------------------------------------------------------
+
+# __Our Data__
+
+
+```{r}
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Project 1/Project 1")
+
+load(file = "SENIC.rdata")
+
+Infection_data <- data.frame("SENIC.rdata")
+
+#Defining our Explanatory(X) and Response(Y) variables
+infection_risk = SENIC$INFRISK #X
+length_of_stay = SENIC$LOS #Y
+```
+<p style="text-align: center;">
+some interpretations:
+
+- Length of stay is explained by the average estimated probability of acquiring infection in hospital. 
+
+- As the risk of infection increases the average length of stay in the hospital also increases.
+</p>
+
+---------------------------------------------------------------------
+
+# __Part 1: Interpretation and Parameter Inference__
+
+## Estimated Linear Regression Function
+
+```{r}
+#Generating our Linear Model using lm() then summarizing
+infection_lm = lm(length_of_stay ~ infection_risk, data = Infection_data)
+summary(infection_lm)
+
+pretty <- papeR::prettify(summary(infection_lm))
+pretty
+
+knitr::kable(pretty)
+
+```
+
+
+<div align="center">
+From summarizing our Linear Regression model we get:
+
+__$\beta_{0}$ = 6.3368 _(intercept)_ __
+
+__$\beta_{1}$ = 0.7604 _(slope)_ __
+
+and the estimated regression equation to be:
+
+__$\hat{Y}= 6.3368 + 0.7604X$__
+</div>
+
+## Fitting on Scatterplots
+
+```{r fig.align="center"}
+plot(SENIC$INFRISK, SENIC$LOS)
+abline(infection_lm, col = "red")
+```
+## Interpretting Regression Coefficients & $R^2$
+
+__From our model we derive that our intercept, $\beta_{0}$ = 6.3368__:
+
+This indicates where our response output lies when there is no input or when $X$ is 0. In other words, when risk of infection (explanatory variable) is at 0, the average length of stay of patients in a hospital is roughly 6 days. 
+
+Analyzing the intercept on its own might be confusing and at times misleading. In understanding the context of our data we can see that despite patients having an average estimated probability of acquiring an infection in a hospital be 0% we know that this is impossible. Additionally we know that it is possible for patients to be in the hospital for roughly 6 days for other medical reasons.
+
+In other words, although a bit misleading at first glance, when risk of infection is close to zero and almost nonexistent, there is still truth in a patient having a prolonged length of stay in a hospital.
+
+
+__Our slope, $\hat{\beta_1} = 0.7604$__:
+
+Indicates as the risk of infection increases by 1 unit, the average length of stay increases by 0.74 days. This can also be thought of as when the risk of infection increases by 1% the average length of stay in a hospital increases by about 18 hours.
+
+__Our $R^2=0.2846$__:
+
+***The R squared found at $0.2846$ indicates that the risk of infection (input variable) helps explain close to 28% of the variability in our response variable, length of stay. In other words, __the relationship between our model and the dependent variable length of stay is fairly weak.__
+
+
+## Hypothesis Testing on our Slope to Test Significance
+
+Our null hypothesis is that there is no linear relationship 
+
+<div align="center">
+
+Null hypothesis: ${H_0}$: $\beta_{1} = 0$ (slope is horizontal/ no relationship), in other words there is no linear relationship between risk of infection and length of stay
+
+Alternative hypothesis: ${H_1}$: $\beta_{1} \neq 0$ (slope exists/ relationship exists), there is linear relationship either positive or negative between risk of infection and length of stay.
+      
+</div>
+
+### Testing Using the p-value
+
+The slope indicates a positive relationship and the p-value (1.177e-09) is very close to 0 which is less than our $\alpha =0.05$, this indicates that we can reject the null hypothesis and conclude with the alternative hypothesis ***that the linear relationship is significant.
+
+### Conducting a T-test ***(is this even necessary?)
+
+From our summary we have the t-value of the risk of infection(explanatory variable) $t= 6.645$
+
+***Now to compare this with a critical value we must first find it
+ Using T-table to find critical value:
+ - N = 113, So our degrees of freedom is 111
+ - one tail test with $\alpha$ = 0.05 and with 95% prob
+
+
+```{r}
+#Using qt() in R we get
+
+qt(0.975, 111)
+```
+Our critical value is 1.981567
+
+Now comparing the absolute value of the t-statistic of $t= 6.645$ to the slope ($\beta_{1}$) of risk of infection with our critical value 1.981567 
+
+<div align="center">
+      
+  |6.645| > 1.981567    
+      
+</div>
+
+we can conclude that because the absolute value of our t-statistic is greater than our critical value, we reject the null hypothesis and conclude with our alternative hypothesis that __a relationship exists between risk of infection(x) and length of stay(Y).__
+
+
+### Finding the 95% Confidence Interval of the Slope
+
+```{r}
+#alpha at 0.05
+alpha <- 0.05
+
+#constructing our 95% confidence interval
+confint(infection_lm, level = 1 - alpha)
+```
+#### Interpretation
+
+This output reads that within our confidence interval from 2.5% (the lower limit of our interval) to 97.5% (the upper limit of our interval), our intercept and __slope__ are both found within the listed intervals.
+
+In this case if we repeat this experiment many times, the true population parameter of our slope $\beta_{1}$  will be between the interval 0.5336442 and 0.9871976 with 95% confidence and $\alpha$ (accepted error) of 5%
+
+0 is not included in our interval, but we are interested in it because if zero was included in our confidence interval then that would indicate (that there is a chance that) no change/relationship and would make risk of infection(INRFRISK) a bad predictor for length of stay(LOS). So in this case, since 0 is not included, we can conclude that there is change. 
+
+---------------------------------------------------------------------
+
+# __Part 2: Point and interval estimation__
+
+```{r}
+new_infection_data <- data.frame(infection_risk = 5)
+ci <- predict(infection_lm, new_infection_data,  interval = "confidence", level = 1 - alpha )
+ci
+```
+
+
+```{r}
+ci2 <- predict(infection_lm, new_infection_data,  interval = "predict", level = 1 - alpha )
+ci2
+```
+
+
+---------------------------------------------------------------------
+
+# __Part 3: Diagnostics__
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------
+```{r}
+plot(cars)
+```
+
