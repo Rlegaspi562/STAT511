@@ -1,0 +1,165 @@
+---
+title: 'STAT 511: HW #3 Q:3 & 4'
+author: "Rumil Legaspi"
+date: "22 February 2021"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document:
+    toc: yes
+    toc_depth: 2 
+    latex_engine: xelatex
+  word_document: default
+---
+
+## __Workspace Setup__
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/week 4/Week 4")
+#loading gpa data
+gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
+
+#Adding headers
+names(gpa_data) <- c("GPA", "ACT")
+
+#Defining dependent and independent vars
+ACT = gpa_data$ACT #X
+GPA = gpa_data$GPA #Y
+
+gpa_lm = lm(GPA ~ ACT, data = gpa_data)
+
+#loading muscle data
+muscle_data = read.table(file = "Muscle.txt", header = FALSE, sep = "")
+
+#Adding headers
+names(muscle_data) <- c("Muscle", "Age")
+
+#Defining dependent and independent vars
+Age = muscle_data$Age #X
+Muscle = muscle_data$Muscle #Y
+
+#creating our linear model
+muscle_lm = lm(Muscle ~ Age, data = muscle_data)
+```
+# __3. Refer to the GPA problem in HW #1__
+
+
+## __(a). Compute the Pearson correlation coefficient and attach the appropriate sign.__
+
+
+```{r}
+#Computing the sample correlation of two variables
+#Choose any continuous variable, order does not matter
+cor.test(ACT, GPA, method = "pearson")
+```
+The result of our Pearson correlation coefficient is a positive 0.269. 
+
+__$r = +0.27$__
+
+## __(b). Obtain Spearman rank correlation coefficient.__
+
+```{r, warning = FALSE, message = FALSE}
+#spearman correlation
+cor.test(ACT, GPA, method = "spearman")
+```
+The result of our Spearman correlation coefficient is 0.31.
+
+
+__$r_{s}=0.31$__
+
+
+## __(c). Which correlation coefficient is stronger? Why?__
+
+The Spearman correlation coefficient is stronger compared to the Pearson correlation between the variables ACT(X) and GPA(Y). This is because Spearman measures the data __points by ranks__. In other words, ACT and GPA are better suited because they are both __ordinal__ types of data indicating a kind of ranking system, whereas Pearson does not.
+
+
+----------------------------------------------
+
+# __4. Refer to the Muscle Mass problem in HW#1.__
+
+## __(a). Compute the Pearson product-moment correlation coefficient.__
+
+```{r}
+#Age is x, Muscle is Y. But still placement order does not matter
+cor.test(Age, Muscle, method = "pearson")
+```
+The result of our Pearson correlation coefficient is a negative 0.86 indicating a fairly strong negative linear relationship between our variables, age and muscle. 
+
+__$r = -0.86$__
+
+
+## __(b). Based on Part (a), test whether muscle mass and age are significantly correlated in the population at alpha = 0.05. State the null and alternative hypotheses, decision rule, and conclusion.__
+
+- 1. __Pearson Correlation Hypothesis Testing Stating Our Hypotheses:__ 
+  + Null hypothesis: $H_{0}$: $\rho = 0$ (There is no statistically significant linear correlation between Age and Muscle)
+  + Alternative hypothesis: $H_{1}$: $\rho \neq 0$ (There exists a statistically significant linear correlation between Age and Muscle)
+
+
+ 
+```{r}
+summary(muscle_lm)
+
+#Helps us find our T value
+cor.test(Age, Muscle, method = "pearson")
+
+#Gives us our critical value so we can compare with T statistic
+qt(0.975, 58)
+```
+- 2. Calculating t statistic:
+  + $t= -13.193$ 
+  + Critical value = 2.00
+
+- 3. Comparing with critical value and p value
+  + |$t= -13.193$| > 2.00
+  + p value  2.2e-16 < $\alpha$ (0.05)
+- 4. Draw conclusion
+  + Also, since the p value is very small and we can reject the NULL hypothesis that there is no linear correlation between age and muscle.
+  + Therefore we can conclude with the alternative hypothesis that age and muscle are linearly correlated.
+
+## __(c). Compute the Spearman rank correlation coefficient.__
+```{r}
+#Age is x, Muscle is Y. But still placement order does not matter
+cor.test(Age, Muscle, method = "spearman")
+```
+## __(d). Repeat the test in Part (b) using the Spearman rank correlation from Part (c).__
+
+- 1. __Spearman Correlation Hypothesis Testing Stating our Hypotheses:__ 
+  + Null hypothesis: $H_{0}$: $\rho = 0$ (There is no statistically significant rank correlation between Age and Muscle)
+  + Alternative hypothesis: $H_{1}$: $\rho \neq 0$ (There exists a statistically significant rank correlation between Age and Muscle)
+
+```{r, warning = FALSE, message = FALSE}
+#Helps us find our T value
+cor.test(Age, Muscle, method = "spearman")
+
+#Gives us our critical value so we can compare with T statistic
+qt(0.975, 58)
+```
+ 
+- 2. Calculating t statistic:
+  + $t= -13.193$ 
+  + Critical value = 2.00
+
+- 3. Comparing with critical value and p value
+  + |$t= -13.193$| > 2.00
+  + p value  2.2e-16 < $\alpha$ (0.05)
+- 4. Draw conclusion
+  + Similarly, since the p value is very small we can reject the NULL hypothesis that there is no significant rank correlation between age and muscle.
+  + Therefore we can conclude with the alternative hypothesis that there is a significant rank correlation between age and muscle.
+
+
+## __(e). How do your correlation coefficient estimates and test conclusions in Parts (a) and (b) compare to those obtained in Parts (c) and (d)?__
+
+Based on the results from our hypothesis tests on both Pearson and Spearman, both age and muscle hold a significant rank and linear correlation relationship. These two hypothesis help verify our correlation coefficient estimates and allow us to safely conclude that a correlation does exist.
+
+
+
+
+
+
+
+
+
+
+
+
