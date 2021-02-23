@@ -3,13 +3,13 @@ title: 'STAT 511: HW #3 Q:3 & 4'
 author: "Rumil Legaspi"
 date: "22 February 2021"
 output:
-  html_document:
-    df_print: paged
-  html_notebook: default
   pdf_document:
     toc: yes
     toc_depth: 2 
     latex_engine: xelatex
+  html_notebook: default
+  html_document:
+    df_print: paged
   word_document: default
 ---
 
@@ -71,7 +71,7 @@ __$r_{s}=0.31$__
 
 ## __(c). Which correlation coefficient is stronger? Why?__
 
-The Spearman correlation coefficient is stronger compared to the Pearson correlation between the variables ACT(X) and GPA(Y). This is because Spearman measures the data __points by ranks__. In other words, ACT and GPA are better suited because they are both __ordinal__ types of data indicating a kind of ranking system, whereas Pearson does not.
+The Spearman correlation coefficient is stronger compared to the Pearson correlation between the variables ACT(X) and GPA(Y). This is because Spearman measures the data __points by ranks__ and in this case the relationship in terms of ranking makes for a stronger correlation.
 
 
 ----------------------------------------------
@@ -84,7 +84,7 @@ The Spearman correlation coefficient is stronger compared to the Pearson correla
 #Age is x, Muscle is Y. But still placement order does not matter
 cor.test(Age, Muscle, method = "pearson")
 ```
-The result of our Pearson correlation coefficient is a negative 0.86 indicating a fairly strong negative linear relationship between our variables, age and muscle. 
+The result of our Pearson correlation coefficient is a negative 0.86 indicating is a strong negative linear relationship between our variables, age and muscle. 
 
 __$r = -0.86$__
 
@@ -150,7 +150,7 @@ qt(0.975, 58)
 
 ## __(e). How do your correlation coefficient estimates and test conclusions in Parts (a) and (b) compare to those obtained in Parts (c) and (d)?__
 
-Based on the results from our hypothesis tests on both Pearson and Spearman, both age and muscle hold a significant rank and linear correlation relationship. These two hypothesis help verify our correlation coefficient estimates and allow us to safely conclude that a correlation does exist.
+Based on the results from our hypothesis tests on both Pearson and Spearman, both age and muscle hold a significant rank and negative linear correlation relationship. These two hypothesis help verify our correlation coefficient estimates and allow us to safely conclude that a correlation does exist.
 
 
 
