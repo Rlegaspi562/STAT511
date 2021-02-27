@@ -1,0 +1,213 @@
+---
+title: 'STAT 511: HW #4'
+author: "Rumil Legaspi"
+date: "1 March 2021"
+output:
+  word_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document:
+    toc: yes
+    toc_depth: 2 
+    latex_engine: xelatex
+---
+
+## __Workspace Setup__
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+library(nortest)
+library(olsrr)
+library(car)
+library(lmtest)
+library(MASS)
+library(ggplot2)
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 6/Hw 4")
+
+gpa_data = read.table(file = "GPA.txt", header = FALSE, sep = "")
+
+gpa_data_extended = read.table(file = "GPA_Extended.txt", header = FALSE, sep = "")
+
+# #Adding headers
+names(gpa_data) <- c("GPA", "ACT")
+names(gpa_data_extended) <- c("GPA", "ACT", "IQ", "Rank")
+# names(bank_data) <- c("", "")
+
+#Defining dependent and independent vars
+GPA = gpa_data$GPA #Y
+ACT = gpa_data$ACT #X1
+IQ = gpa_data_extended$IQ #X2
+RANK = gpa_data_extended$Rank #X3
+
+gpa_lm = lm(GPA ~ ACT, data = gpa_data)
+summary(gpa_lm)
+```
+
+ _Refer to the GPA problem (GPA.txt) for Questions 1-3_
+
+# __1. Diagnostic plots:__
+
+## __(a). Plot the regression residuals against the predicted values of the 𝑌 variable (residuals on the vertical axis). Check the linearity assumption visually.__
+
+```{r}
+plot(gpa_lm$fitted.values, gpa_lm$residuals)
+```
+
+THe assumption of linearity is __not violated__ because we are __not seeing__ any systemic patterns in the plots.
+
+
+## __(b). Draw the boxplot, histogram, and normal probability plot of the regression residuals. Check the normality assumption visually.__
+
+```{r}
+#boxplot
+boxplot(gpa_lm$residuals)
+
+#histogram
+hist(gpa_lm$residuals)
+
+#Plotting specifically for QQ Plot
+plot(gpa_lm, c(2))
+```
+
+
+
+Based on the outputs, the box plot is asymmetrical as shown by the outliers, the histogram is left skewed similar to what the normal Q-Q plot is indicating. These plots show that the assumption of normality is violated. 
+
+## __(c). Plot the regression residuals against the 𝑋 variable (residuals on the vertical axis). Check the equal variance assumption visually.__
+
+
+```{r}
+plot(gpa_data$ACT, gpa_lm$residuals)
+```
+Based on the plot, we can see no systematic pattern and can therefore conclude visually that our assumption of equal variance
+is not violated.
+
+
+
+# __2. Diagnostic Tests:__
+
+## __(a). Use normality tests to check the normality assumption and draw a conclusion.__
+
+### Stating our Hypothesis
+
+__Null Hypothesis__: ${H_0}$: The data __is__ from a normal distribution
+
+__Alternative Hypothesis__: ${H_1}$: The data is __NOT__ from a normal distribution
+      
+
+### Testing our Hypothesis
+
+__To test these we can use several normality tests using...__
+
+- Shapiro-Wilk normality test
+- Shapiro-Francia normality test
+- Anderson-Darling normality test
+
+```{r}
+#Shapiro-Wilk normality test
+shapiro.test(gpa_lm$residuals)
+
+#Shapiro-Francia normality test
+nortest::sf.test(gpa_lm$residuals)
+
+#Anderson-Darling normality test
+nortest::ad.test(gpa_lm$residuals)
+```
+
+## Interpretation of Normality Tests
+
+Looking at the results of these three tests we can see that the p-values are smaller than our alpha. Therefore we reject our NULL hypothesis and that __there is an issue and a violation of our normality assumption.__
+
+
+## __(b). Use Modified Levene Test and Breusch-Pagan Test to check the equal variance assumption and draw a conclusion.__
+
+## Testing Equal Variance Assumptions
+
+### Stating our Hypothesis
+
+__Null Hypothesis__: ${H_0}$:  The variances in the data __is__ equal
+__Alternative Hypothesis__: ${H_1}$: The variances in the data are __NOT__ equal
+
+### Testing our Hypothesis Using Breusch-Pagan test
+
+
+```{r}
+#Conducting Levene Test splitting into two groups
+
+#obtaining median of X to use as a threshold
+gpa_median = median(gpa_data$ACT)
+#ifelse: spliting X into 2 groups
+  #one group x < gpa_median, another with x >= gpa_median
+  #ifelse( "if this equation is true", "then do this", "else do this")
+gpa_group = ifelse(gpa_data$ACT < gpa_median,
+                   "Group1",
+                   "Group2")
+
+#Levene "Modified" test using median (default in R)
+leveneTest(gpa_lm$residuals, gpa_group)
+
+#bf.test(infection_lm, data = SENIC)
+
+lmtest::bptest(gpa_lm, studentize = FALSE)
+
+```
+
+
+
+Both Modified Levene and Breusch-Pagan test gives us high p values indicating that we cannot __reject the null hypothesis__ and conclude that there is no issue with our equal variance assumption.
+
+
+## __(c). Conduct a lack-of-fit test for the regression model and conclude on the model fitness.__
+
+
+### Stating our Hypothesis
+
+__Null Hypothesis__: ${H_0}$:  The regression line __IS adequate__ in describing the relationship between ACT and GPA
+
+__Alternative Hypothesis__: ${H_1}$: The regression line is __NOT adequate__ in describing the relationship between ACT and GPA
+
+### Testing our Hypothesis by Conducting our Lack of Fit Test (F Test)
+
+```{r}
+#Lack of Fit Test
+ols_pure_error_anova(gpa_lm)
+```
+
+Based on the small p value 0.003243287, we reject the null hypothesis and conclude with the alternative hypothesis that our regression line is __NOT adequate__ in describing the relationship between ACT and GPA.
+
+
+
+# __3. Remediation:__
+
+## __(a). Use Box-Cox method to find the best transformation of 𝑌 based on a range of 𝜆 ∈ [−3, 3], i.e., what is an approximate value of the optimal𝜆in 𝑌𝜆?__
+
+```{r}
+#Applying Box-Cox Method
+MASS::boxcox(gpa_lm, lambda = seq(-3, 3, by = 0.1), plotit = FALSE)
+MASS::boxcox(gpa_lm, lambda = seq(-3, 3, by = 0.1), plotit = TRUE)
+```
+ 
+The graph shows us the most optimal value of $\lambda$ is at roughly 2.1 
+
+## __(b). Plot a smooth curve that best fits the dataset using LOESS method. Is the fitted smooth curve close to linear?__
+
+```{r}
+#LOESS scatterplot and smoothed curve
+smoothplot = qplot(gpa_data$ACT, gpa_data$GPA, geom=c("point", "smooth"))
+smoothplot
+```
+
+***The fitted smooth curve is somewhat linear although the fit it is not a good fit.
+
+# __4. Check for Omitted Predictors__
+
+
+
+
+
+
+
+
+
+
