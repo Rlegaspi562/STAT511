@@ -1,0 +1,302 @@
+---
+title: A Regression Analysis on The Efects of The Risk of Infection and on The Length
+  of Stay in Hospitals
+author:
+- Rumil Legaspi, Rumil.legaspi@gmail.com
+- Mei Leng Lao, Email
+date: "28 February 2021"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+    latex_engine: xelatex
+  html_notebook:
+    df_print: paged
+  word_document: default
+  theme: lumen
+  html_document:
+    toc: yes
+    toc_depth: '2'
+    df_print: paged
+---
+
+---------------------------------------------------------------------
+# __Purpose__
+
+We are conducting a simple linear regression model from the SENIC dataset to analyze the relationship of the explanatory variable, infection of risk(INFRISK) and the response variable, length of stay(LOS).
+
+
+# __Our Data__
+
+## Quick background on Dataset and variable
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+#Setting up our work environment
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Project 1/Project 1")
+
+#Loading in packages
+library(nortest)
+library(car)
+library(lmtest)
+library(formatR)
+
+#Loading in the data
+load(file = "SENIC.rdata")
+
+Infection_data <- data.frame("SENIC.rdata")
+
+#Defining and renaming our Explanatory(X) and Response(Y) variables
+infection_risk = SENIC$INFRISK #X
+length_of_stay = SENIC$LOS #Y
+age = SENIC$AGE #Z
+```
+
+
+# __Part 1: Interpretation and Parameter Inference__
+
+## Estimated Linear Regression Function
+
+```{r, tidy=TRUE}
+#Generating our Linear Model using lm() then summarizing
+infection_lm = lm(length_of_stay ~ infection_risk, data = Infection_data)
+summary(infection_lm)
+```
+
+
+From summarizing our Linear Regression model we can see:
+
+__$\beta_{0}$ = 6.3368 _(intercept)_ __
+
+__$\beta_{1}$ = 0.7604 _(slope)_ __
+
+and the estimated regression equation to be:
+
+__$\hat{Y}= 6.3368 + 0.7604X$__
+
+
+## Fitting on Scatterplots
+
+```{r fig.align="center"}
+plot(SENIC$INFRISK, SENIC$LOS)
+abline(infection_lm, col = "red")
+```
+## Interpretting Regression Coefficients & $R^2$
+
+__From our model we derive that our intercept, $\beta_{0}$ = 6.3368__:
+
+This indicates where our response output lies when there is no input or when $X$ is 0. In other words, when risk of infection (explanatory variable) is at 0, the average length of stay of patients in a hospital is roughly 6 days. 
+
+Analyzing the intercept on its own might be confusing and at times misleading. In understanding the context of our data we can see that despite patients having an average estimated probability of acquiring an infection in a hospital be 0% we know that this is impossible. Additionally we know that it is possible for patients to be in the hospital for roughly 6 days for other medical reasons.
+
+In other words, although a bit misleading at first glance, when risk of infection is close to zero and almost nonexistent, there is still truth in a patient having a prolonged length of stay in a hospital.
+
+
+__Our slope, $\hat{\beta_1} = 0.7604$__:
+
+Indicates as the risk of infection increases by 1 unit, the average length of stay increases by 0.74 days. This can also be thought of as when the risk of infection increases by 1% the average length of stay in a hospital increases by about 18 hours.
+
+__Our $R^2=0.2846$__:
+
+The R squared found at $0.2846$ indicates that the risk of infection (input variable) helps explain close to 28% of the variability in our response variable, length of stay. In other words, __our model explains a small amount of the variability in our response variable, length of stay__.
+
+
+## Hypothesis Testing on our Slope to Test Significance
+
+Our null hypothesis is that there is no linear relationship 
+
+
+
+__Null Hypothesis__: ${H_0}$: $\beta_{1} = 0$ (slope is horizontal/ no relationship), in other words there is no linear relationship between risk of infection and length of stay
+
+__Alternative Hypothesis__: ${H_1}$: $\beta_{1} \neq 0$ (slope exists/ relationship exists), there is linear relationship either positive or negative between risk of infection and length of stay.
+      
+
+
+
+### Testing Using the p-value
+
+The slope indicates a positive relationship and the p-value (1.18e-09) is very close to 0 which is less than our $\alpha = 0.05$, this indicates that we can reject the null hypothesis and conclude with the alternative hypothesis that the slope coefficient and the linear relationship are both significant.
+
+
+### Finding the 95% Confidence Interval of the Slope
+
+```{r}
+#alpha at 0.05
+alpha <- 0.05
+
+#constructing our 95% confidence interval
+confint(infection_lm, level = 1 - alpha)
+```
+#### Interpretation
+
+
+This output reads that within our confidence interval of 95% from 2.5% (the lower limit of our interval) to 97.5% (the upper limit of our interval), our _intercept_ and __slope__ are both found within the listed intervals.
+
+In this case if we repeat this experiment many times, we are 95% confident that our interval captures the true population parameter of our slope $\beta_{1}$ will be between the interval 0.533 and 0.987 with an $\alpha$ (accepted error) of 5%.
+
+0 is not included in our interval, but we are interested in it because if zero was included in our confidence interval then that would indicate (that there is a chance that) no change/relationship exists and would make risk of infection(INRFRISK) a bad predictor for length of stay(LOS). So in this case, since 0 is not included, we can conclude that there is change or a relationship. 
+
+---------------------------------------------------------------------
+
+# __Part 2: Point and interval estimation__
+
+## Conducting 95% Confidence Interval when Length of Stay (Input Variable) is 5 for the Mean Length of Stay (Response Variable)
+
+```{r}
+#Creating a new single observation where risk is 5
+new_infection_data <- data.frame(infection_risk = 5)
+
+#Constructing our prediction interval
+ci_infection_5 <- predict(infection_lm, new_infection_data,
+                          interval = "confidence", level = 1 - alpha )
+
+ci_infection_5
+```
+## Confidence Interval Interpretation when INFRISK = 5
+
+The fitted value of the length of stay variable when the risk of infection __is at 5% is 10.13889 days .__
+
+This 95% confidence interval when risk of infection __is at 5% is from 9.802 to 10.475.__ 
+
+In other words, when the risk of infection is 5%, with 95% confidence we can expect our confidence interval to capture the __average(true mean)__ of the length of stay (response variable) __which is roughly 9 to 10 and a half days.__
+
+## Constructing a Prediction Interval
+
+We can use a prediction interval when trying to find where an individual observation will fall. Lets construct a prediction interval given risk of infection is at 5 percent.
+
+```{r}
+#Constructing prediction interval when INFRISK is 5
+pi_infection_5 <- predict(infection_lm, new_infection_data,  interval = "prediction", level = 1 - alpha )
+
+pi_infection_5
+```
+## Prediction Interval Interpretation
+
+From the results we are 95% confident that when a patient has a risk of infection at 5%, the predicted length of stay response will fall between 6.903 and 13.37 days or about 7 to 13 days.
+
+---------------------------------------------------------------------
+
+# __Part 3: Diagnostics__
+
+## Our Assumptions
+
+A simple linear regression model is appropriate when the linearity, independent, normality and equal
+error variance are satisfied for all our X values (homoskedasticity). In this report we will only be testing
+for normality and homoskedasticity.
+
+```{r}
+#plotting scatterplots to check assumption
+plot(infection_lm , which = c(1,1))
+```
+
+
+## Testing Normality
+
+### Plotting to Check for Normality and Equal Variance Assumptions
+
+```{r}
+#Plotting a boxplot and #histogram
+boxplot(infection_lm$residuals)
+hist(infection_lm$residuals)
+```
+
+## Boxplot and Histogram Interpretation
+We can see that our boxplot is not symmetrical and our histogram shows our residuals as a being right skewed.
+Therefore, our assumption of normality is violated.
+
+### Stating our Hypothesis
+
+
+
+__Null Hypothesis__: ${H_0}$: The data __is__ from a normal distribution
+
+__Alternative Hypothesis__: ${H_1}$: The data is __NOT__ from a normal distribution
+      
+
+### Testing our Hypothesis
+
+__To test these we can use several normality tests using...__
+
+- Shapiro-Wilk normality test
+- Shapiro-Francia normality test
+- Anderson-Darling normality test
+
+These tests focus mainly on the usage of regression residuals with a p-value as an output which is useful for hypothesis testing. __Are main goal is to see if our data truly follows a normal distribution.__
+
+```{r}
+#Shapiro-Wilk normality test
+shapiro.test(infection_lm$residuals)
+
+#Shapiro-Francia normality test
+nortest::sf.test(infection_lm$residuals)
+
+#Anderson-Darling normality test
+nortest::ad.test(infection_lm$residuals)
+```
+
+## Interpretation of Normality Tests
+
+Looking at the results of these three tests we can see that the p-values are smaller than our alpha. Therefore we reject our NULL hypothesis and that __there is an issue with a violation of our normality assumption.__
+
+### Plotting to Check for Equal Variance Assumptions
+
+## Testing Equal Variance Assumptions
+
+### Stating our Hypothesis
+
+
+__Null Hypothesis__: ${H_0}$:  The variances in the data __is__ equal
+__Alternative Hypothesis__: ${H_1}$: The variances in the data are __NOT__ equal
+
+
+### Testing our Hypothesis by plotting and Breusch-Pagan test
+
+We do not want to see fan shapes otherwise they violate equal variance assumption
+
+we want equal and random spread of our scatterplots
+```{r}
+#Residuals vs predictor variable
+plot(infection_lm, c(1,1))
+
+
+#bf.test(infection_lm, data = SENIC)
+
+lmtest::bptest(infection_lm, studentize = FALSE)
+
+```
+Residuals vs predictor variable plot indicates equal spread therefore equal variances of error (homoskedasticity) is not violated.
+
+### Breusch-Pagan test
+
+Also the Breusch-Pagan test gives us a low p value which means we can reject the null hypothesis and that there is an issue with our equal variance assumption
+
+
+## Checking for omitted predictors
+
+```{r}
+#scatterplot
+plot(SENIC$AGE, SENIC$LOS) #plotting the potential omitted variable agaisnt our response variable
+plot(SENIC$INFRISK, SENIC$LOS)#plotting our first predictor risk of infection agaisnt our response variable
+
+#Plotting infection_lm model residuals vs Age
+plot(SENIC$AGE, infection_lm$residuals)
+```
+
+In the residuals vs. the potentially omitted variable (Age) the plots are randomly scattered and show no particular kind of relation between the residuals and Age.
+
+```{r}
+age_lm <- lm(age ~ infection_risk, data = Infection_data)
+summary(age_lm)
+```
+```{r}
+qt(0.975, 111)
+
+```
+After constructing a linear model using Age as our new predictor and looking at our summary, we see that because the absolute value of our critical value is less than our T-value, we fail to reject our NULL
+hypothesis. Age is NOT a potentially omitted variable.
+
+
+
+Age is not a potentially omitted variable.
+
+---------------------------------------------------------------------
