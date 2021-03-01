@@ -3,14 +3,14 @@ title: 'STAT 511: HW #4'
 author: "Rumil Legaspi"
 date: "1 March 2021"
 output:
-  word_document: default
-  html_notebook: default
-  html_document:
-    df_print: paged
   pdf_document:
     toc: yes
     toc_depth: 2 
     latex_engine: xelatex
+  html_notebook: default
+  html_document:
+    df_print: paged
+  word_document: default
 ---
 
 ## __Workspace Setup__
@@ -202,9 +202,30 @@ smoothplot
 
 # __4. Check for Omitted Predictors__
 
+```{r}
+#Running a simple linear regression of GPA on ACT
+lm(GPA ~ ACT, data = gpa_data)
+gpa_lm
+#Plotting gpa_lm
+plot(gpa_data$ACT, gpa_lm$residuals)
+
+#plotting regression residuals of gpa_lm against IQ (X2) and Rank(X3)
+plot(gpa_data_extended$IQ, gpa_lm$residuals)
+plot(gpa_data_extended$Rank, gpa_lm$residuals)
 
 
+summary(lm(GPA ~ IQ, data = gpa_data_extended))
 
+summary(lm(GPA ~ Rank, data = gpa_data_extended))
+```
+
+Based on the outputs, there is a visible pattern when plotting the residuals of our GPA-ACT linear regression model against potentially omitted variable, IQ ($X_{2}$).
+As for Rank it the plots on the graph seem somewhat scattered but more concentration the higher the rank gets.
+
+***What constitutes as a distinct and systematic visible pattern?
+
+IQ is a potentially omitted variable in our GPA-ACT regression model, because the plot shows a linear pattern.
+Rank...
 
 
 
