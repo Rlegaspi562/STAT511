@@ -13,7 +13,7 @@ output:
 
 # Multiple Regression & Brand Preference Dataset
 
-### Setting up data
+### Setting up our workspace
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 library(nortest)
@@ -60,13 +60,15 @@ summary(brand_lm)
 
 From summarizing our multiple linear regression model we can see:
 
-$\beta_{0}$ = 37.6500 *(intercept)*
+**Intercept**
 
-Moisture (Predictor Variable):
+$\beta_{0}$ = 37.6500
+
+**Moisture (Predictor Variable):**
 
 $\beta_{1}$ = 4.4250 *(partial slope)*
 
-Sweetness (Predictor Variable):
+**Sweetness (Predictor Variable):**
 
 $\beta_{2}$ = 4.3750 *(partial slope)*
 
@@ -121,7 +123,7 @@ Additionally, because the p-value for Moisture is 1.78e-09 and is less than our 
 
 #### Testing the significance of Sweetness ($\hat{\beta_2} = 4.3750$)
 
-**t-test:**
+#### **t-test:**
 
 Using the same critical value [1] 1.8317, we see that the absolute value of our critical value (1.8317) is less than our t-value (6.498) for Sweetness, we **fail to reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Sweetness**, shows overall significance in our model.
 
@@ -140,17 +142,17 @@ confint(brand_lm, level = 1 - alpha)
 ##** if alt hypo is not equal to zero then that would be a two tail because its considering both  directions, less than and greater than right? 
 ```
 
-This output reads that within our 95% confidence interval of from 2.5% (the lower limit of our interval) to 97.5% (the upper limit of our interval), our *intercept* and **partial slopes** are both found within the listed intervals.
+This output reads that within our 95% confidence interval from 2.5% (the lower limit of our interval) to 97.5% (the upper limit of our interval), our **intercept** and **partial slopes** are both found within the listed intervals above.
 
-In this case if we repeat this experiment many times, we are 95% confident that our interval captures the true population parameter of our partial slopes $\beta_{1}$ and $\beta_{2}$ will be between the intervals 3.774 to 5.075530 and 2.920 to 5.582 **RESPECTIVELYY**, with an $\alpha$ (accepted error) of 5%.
+In this case if we repeat this experiment many times, we are 95% confident that our interval captures the true population parameter of our partial slopes $\beta_{1}$ and $\beta_{2}$, will be between the intervals 3.774 to 5.075530 and 2.920 to 5.582 **RESPECTIVELY**, with an $\alpha$ (accepted error) of 5%.
 
-\#\#2a. Obtain the ANOVA table for your multiple refression model in Question 1.
+## 2a. Obtain the ANOVA table for your multiple refression model in Question 1.
 
 ```{r}
 anova(brand_lm)
 ```
 
-\#\#2b. Compute the $R^2$ and adjusted $R^2$ using the ANOVA table.
+## 2b. Compute the $R^2$ and adjusted $R^2$ using the ANOVA table.
 
 To compute the $R^2$ we add the Sum of Squares of both of our explanatory variables (SSR) and divide by the Sum of squares of our total model (SST)
 
@@ -162,27 +164,66 @@ R_squared = SSR/SST
 R_squared
 ```
 
-\#\#2c. Interpret the adjusted $R^2$ you computed in Part b.
+We can see here that that our $R^2 = 0.952$ states that about 95% of the variation in the rating of our brand can be explained collectively by the variables, moisture content and sweetness level.
 
-Adjusted R squared is the colectie explainability of taking into account redundant or otherwise useless variables into account.
+## 2c. Interpret the adjusted $R^2$ you computed in Part b.
 
-\#\#2d. Conduct an F-test for overall model significance using the ANOVA table. Write down the null and alternative hypotheses, decision rule, and conclusion. The F-distribution critical value at 5% $F_{0.05,2,13}$
+The adjusted $R^2$ is the collective explainability that has taken into account redundant, or otherwise useless variables and penalized these additional regressors (explanatory variables) by taking into account degrees of freedom. Therefore the adjusted $R^2$ is a better suited statistical measure for multiple regression models.
 
-**Null Hypothesis**: ${H_0}$: $\beta_{1}=\beta_{2} = 0$ (slopes are showing no change), **does not** show overall model significance \*\*between our partial slopes.
+## 2d. Conduct an F-test for overall model significance using the ANOVA table. Write down the null and alternative hypotheses, decision rule, and conclusion. The F-distribution critical value at 5% $F_{0.05,2,13}$
 
-**Alternative Hypothesis**: ${H_1}$: $\beta_{1}=\beta_{2} \neq 0$ (slopes are showing change), **shows** overall model significance \*\*between our partial slopes.
+**Null Hypothesis**: ${H_0}$: $\beta_{1}=\beta_{2} = 0$ (**No** partial slopes are significant). Shows no change, therefore **does not** show overall model significance.
 
-Computing F statistic and comparing with critical value
+**Alternative Hypothesis**: ${H_1}$: $\beta_{1}=\beta_{2} \neq 0$ (**At least one** partial slope is significant). Shows change, therefore **showing** overall model significance
 
-F statistic = Mean squared regression (MSR) / Mean squared error (MSE) MSR and MSE can be found in the ANOVA table
+From looking at our ANOVA table we can see that the T-value of the regressor, sweetness, is 42.219. We notice that when we square root this value it is the **same** as our t-value 6.49 from our summary table. Although these are two separate numbers we can see that these two numbers test the same thing. Therefore knowing this is true, we can conclude that our F-value allows us to see whether Sweetness is a significant predictor given that Moisture is in the model. Additionally, we can safely conclude this due to our p-value being less than alpha (accepted error/significance level)
 
-**recall:**
+Thus, we can adjust our model to see if the Moisture value is significant **GIVEN** the sweetness variable.
+
+```{r}
+#Adjust to have Moisture variable GIVEN Sweetness variable
+brand_lm_rearranged <- lm(Rating ~ Sweetness + Moisture, data = brand_data)
+
+#Checking out test statistic, t value
+summary(brand_lm_rearranged)
+
+#Checking our test statistic, F value
+anova(brand_lm_rearranged)
+
+```
+
+Similar to what we concluded with explanatory variable, Sweetness, and with the information given to us from the summary linear model and ANOVA table, we can safely concluded that Moisture is also a significant predictor in the overall significance of our model given Sweetness is already in our model. Additionally, this can safely be concluded because our p-value tells us we can reject our NULL hypothesis and conclude with our alternative hypothesis that **at least one** of our predictor variables shows overall model significance.
+
+------------------------------------------------------------------------
+
+\*\*Computing F statistic and comparing with critical value
+
+F-statistic = Mean squared regression (MSR) / Mean squared error (MSE) MSR and MSE can be found in the ANOVA table
+
+![](pic3.PNG)
+
+**recall: In a multiple regression model adding for MSR is conditional**
 
 ![](pic2.PNG)
 
 ```{r}
+#Calculating SSR
+SSRX1 <- 1566.45
+SSRX2X1 <- 306.25
+
+#calculating degrees of freedom
+df1 = 1
+df2 = 1
+df12 = df1 + df2
+
+SSR <- SSRX1 + SSRX2X1
+MSR = SSR/df12
+MSR
+
+MSE <- 7.25
+f <- MSR/MSE
+f
+
 
 
 ```
-
-P-value:
