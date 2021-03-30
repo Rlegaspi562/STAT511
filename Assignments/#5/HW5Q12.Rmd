@@ -13,7 +13,7 @@ output:
 
 # Multiple Regression & Brand Preference Dataset
 
-### Setting up our workspace
+### Setting up workspace
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 library(nortest)
@@ -40,10 +40,13 @@ Moisture = brand_data$Moisture #X1
 Sweetness = brand_data$Sweetness #X2
 ```
 
++-----------------------------------+----------------------------------------------+-----------------------------------------+
 | Response Variable (Y)             | Explanatory Variable 1 ($X_{1}$)             | Explanatory Variable 2 ($X_{2}$)        |
-|-----------------------------------|----------------------------------------------|-----------------------------------------|
++===================================+==============================================+=========================================+
 | "Rating" = Degree of Brand liking | "Moisture" = Moisture content of the product | "Sweetness" = Sweetness of the product. |
++-----------------------------------+----------------------------------------------+-----------------------------------------+
 |                                   |                                              |                                         |
++-----------------------------------+----------------------------------------------+-----------------------------------------+
 
 ## 1a. Fit a multiple regression model to this dataset. Write down the estimated regression function.
 
@@ -81,7 +84,7 @@ The intercept $\hat{\beta_0} = 37.6500$ tells us when both explanatory variables
 
 In other words, when both moisture and sweetness are at 0, our brand rating is 37.65%
 
-Assuming our product might have other features, then a rating (intercept) of 37.65 is very much possible and not entirely unrealistic. Although in this scenario, the usefulness of the intercept alone is not very helpful.
+Assuming our product might have other features, then a rating (intercept) of 37.65 is very much possible and not entirely unrealistic. Although in this scenario, the usefulness of the intercept alone is not helpful.
 
 ### Interpretation of $\hat{\beta_1} = 4.4250$
 
@@ -93,7 +96,7 @@ Assuming our product might have other features, then a rating (intercept) of 37.
 
 ## 1c. Test if **each of each of the two predictors** (partial slopes) in this regression are significant. Write down the null and alternative hypotheses, decision rule, and conclusion.
 
-### Testing for Individual Paramter Significance Using t-test and p-value
+### Testing for Individual Parameter Significance Using t-test and p-value
 
 **Null Hypothesis**: ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ **is not** linearly associated with Y, therefore the partial slope is not significant.
 
@@ -102,31 +105,29 @@ Assuming our product might have other features, then a rating (intercept) of 37.
 #### Testing the significance of Moisture ($\hat{\beta_1} = 4.4250$)
 
 ```{r}
-#**We can use the qt() to find our critical value and compare with our t-value (test statistic)
-# We use 0.95 Because of our **95% confidence interval
-qt(0.95, 13)
+#We can use the qt() to find our critical value and compare with our t-value (test statistic)
+# We use 0.95 Because of our 95% confidence interval
+qt(0.975, 13)
 
 ```
 
-\*\* review on examples when to use two sided tests and to set qt at 0.975 with alpha at 0.05
-
 **t-test:**
 
-We see that because the absolute value of our critical value (1.8317) is less than our t-value (14.695) for Moisture, we **fail to reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Moisture**, shows overall significance in our model.
+We see that because the absolute value of our t-value (14.695) is greater than the critical value (2.160) for Moisture, we **reject** our NULL hypothesis and conclude with our alternative hypothesis, that our partial slope, **Moisture**, shows overall significance in our model.
 
 **p-value:**
 
-Additionally, because the p-value for Moisture is 1.78e-09 and is less than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Moisture**, shows overall significance in our model.
+Additionally, because the p-value for Moisture is 1.78e-09 and is less than our alpha (accepted error/significance level) of 0.05 we **reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Moisture**, shows overall significance in our model.
 
 #### Testing the significance of Sweetness ($\hat{\beta_2} = 4.3750$)
 
 #### **t-test:**
 
-Using the same critical value [1] 1.8317, we see that the absolute value of our critical value (1.8317) is less than our t-value (6.498) for Sweetness, we **fail to reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Sweetness**, shows overall significance in our model.
+We see that because the absolute value of our t-value (14.695) is greater than the critical value (6.498) for Sweetness, we **reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Sweetness**, shows overall significance in our model.
 
 **p-value:**
 
-Additionally, because the p-value for Sweetness is 2.01e-05 and is less than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Sweetness**, shows overall significance in our model.
+Additionally, because the p-value for Sweetness is 2.01e-05 and is less than our alpha (accepted error/significance level) of 0.05 we **reject** our NULL hypothesis and conclude with our alternative hypothesis, that there our partial slope, **Sweetness**, shows overall significance in our model.
 
 ## 1d. Find the 95% confidence intervals of the regression model coefficients $\hat{\beta_1}$, $\hat{\beta_2}$.
 
@@ -136,14 +137,14 @@ alpha <- 0.05
 
 #constructing our 95% confidence interval
 confint(brand_lm, level = 1 - alpha)
-##** if alt hypo is not equal to zero then that would be a two tail because its considering both  directions, less than and greater than right? 
+
 ```
 
 This output reads that within our 95% confidence interval from 2.5% (the lower limit of our interval) to 97.5% (the upper limit of our interval), our **intercept** and **partial slopes** are both found within the listed intervals above.
 
 In this case if we repeat this experiment many times, we are 95% confident that our interval captures the true population parameter of our partial slopes $\beta_{1}$ and $\beta_{2}$, will be between the intervals 3.774 to 5.075530 and 2.920 to 5.582 **RESPECTIVELY**, with an $\alpha$ (accepted error) of 5%.
 
-## 2a. Obtain the ANOVA table for your multiple refression model in Question 1.
+## 2a. Obtain the ANOVA table for your multiple regression model in Question 1.
 
 ```{r}
 anova(brand_lm)
@@ -167,60 +168,19 @@ We can see here that that our $R^2 = 0.952$ states that about 95% of the variati
 
 The adjusted $R^2$ is the collective explainability that has taken into account redundant, or otherwise useless variables and penalized these additional regressors (explanatory variables) by taking into account degrees of freedom. Therefore the adjusted $R^2$ is a better suited statistical measure for multiple regression models.
 
+The adjusted $R^2$ explains 95% of the variation in our model.
+
 ## 2d. Conduct an F-test for overall model significance using the ANOVA table. Write down the null and alternative hypotheses, decision rule, and conclusion. The F-distribution critical value at 5% $F_{0.05,2,13}$
 
 **Null Hypothesis**: ${H_0}$: $\beta_{1}=\beta_{2} = 0$ (**No** partial slopes are significant). Shows no change, therefore **does not** show overall model significance.
 
 **Alternative Hypothesis**: ${H_1}$: $\beta_{1}=\beta_{2} \neq 0$ (**At least one** partial slope is significant). Shows change, therefore **showing** overall model significance
 
-From looking at our ANOVA table we can see that the T-value of the regressor, sweetness, is 42.219. We notice that when we square root this value it is the **same** as our t-value 6.49 from our summary table. Although these are two separate numbers we can see that these two numbers test the same thing. Therefore knowing this is true, we can conclude that our F-value allows us to see whether Sweetness is a significant predictor given that Moisture is in the model. Additionally, we can safely conclude this due to our p-value being less than alpha (accepted error/significance level)
-
-Thus, we can adjust our model to see if the Moisture value is significant **GIVEN** the sweetness variable.
-
 ```{r}
-#Adjust to have Moisture variable GIVEN Sweetness variable
-brand_lm_rearranged <- lm(Rating ~ Sweetness + Moisture, data = brand_data)
-
-#Checking out test statistic, t value
-summary(brand_lm_rearranged)
-
-#Checking our test statistic, F value
-anova(brand_lm_rearranged)
-
+summary(brand_lm)
+anova(brand_lm)
 ```
 
-Similar to what we concluded with explanatory variable, Sweetness, and with the information given to us from the summary linear model and ANOVA table, we can safely concluded that Moisture is also a significant predictor in the overall significance of our model given Sweetness is already in our model. Additionally, this can safely be concluded because our p-value tells us we can reject our NULL hypothesis and conclude with our alternative hypothesis that **at least one** of our predictor variables shows overall model significance.
+Our p-value of 2.658e-09 being less than our alpha and our F values being larger then our critical value tells us we can reject our NULL hypothesis and conclude with our alternative hypothesis, that **at least one** of our predictor variables **shows** overall model significance.
 
 ------------------------------------------------------------------------
-
-\*\*Computing F statistic and comparing with critical value
-
-F-statistic = Mean squared regression (MSR) / Mean squared error (MSE) MSR and MSE can be found in the ANOVA table
-
-![](pic3.PNG)
-
-**recall: In a multiple regression model adding for MSR is conditional**
-
-![](pic2.PNG)
-
-```{r}
-#Calculating SSR
-SSRX1 <- 1566.45
-SSRX2X1 <- 306.25
-
-#calculating degrees of freedom
-df1 = 1
-df2 = 1
-df12 = df1 + df2
-
-SSR <- SSRX1 + SSRX2X1
-MSR = SSR/df12
-MSR
-
-MSE <- 7.25
-f <- MSR/MSE
-f
-
-
-
-```
