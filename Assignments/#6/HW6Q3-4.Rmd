@@ -40,3 +40,92 @@ Moisture = brand_data$Moisture #X1
 Sweetness = brand_data$Sweetness #X2
 ```
 
+
+
+```{r}
+#Regressing Rating (response) on Moisture (explanatory) and Sweetness (explanatory).
+#Then summarizing our model
+brand_lm <- lm(Rating ~ Moisture + Sweetness, data = brand_data)
+summary(brand_lm)
+
+```
+
+## 3a. What is the fitted value of the degree of brand liking when moisture content is at 5 and sweetness is at 4?
+
+```{r}
+new_brand_data <- data.frame(Moisture = 5, Sweetness = 4)
+
+ci_brand <- predict(brand_lm, new_brand_data, interval = "confidence", level = 0.95)
+pi_brand <- predict(brand_lm, new_brand_data, interval = "prediction", level = 0.95)
+
+ci_brand
+pi_brand
+```
+The following results show us that the when moisture content is at 5 and sweetness level is at 4, our fitted value will be 77.275 with a 95% confidence level.
+
+
+
+
+
+
+## 3b. Obtain a 95% interval estimate of the average degree of brand liking when moisture content 
+is at 5 and sweetness is at 4. Interpret this interval.
+
+```{r}
+#Printing ci_brand 
+ci_brand
+```
+
+
+### Confidence Interval Interpretation when Moisture = 5 and Sweetness = 4:
+
+
+This 95% confidence interval when Moisture = 5 and Sweetness = 4 __is from 74.84094 to 79.70906.__ 
+
+When the Moisture = 5 and Sweetness = 4, with 95% confidence we can expect our confidence interval to capture the __average(true mean)__ of Rating (response variable) __which is roughly 77%.__
+
+## 3c. Obtain a 95% interval estimate of a future degree of brand liking when moisture content is at 
+5 and sweetness is at 4. Interpret this interval
+
+```{r}
+pi_brand
+```
+
+From the results we can predict with 95% confidence that when the moisture content of the product is at 5 and the sweetness level is 4, the future rating will fall somewhere between 70.96 and 83.58 days. In other words, somewhere between a rating of roughly 71% to 84%.
+
+
+## 4. Analyzing the residuals from the MLR in Question 1
+
+## 4a. Use the “Component Plus Residual” (CPR) plots to conclude on linearity assumption.
+```{r, warning = FALSE, message = FALSE}
+car::crPlots(brand_lm)
+```
+From these plots, we can say that the smoothed pink lines don't seem to be straying to far from the blue dashed lines indicating that the these plots are __approximately linear__ and thereby satisfying the linearity assumption. **Is linearity only validated visually? 
+
+## 4b. Draw boxplot and histogram of residuals to conclude on normality assumption.
+
+```{r}
+#Plotting a boxplot and histogram
+
+boxplot(brand_lm$residuals)
+hist(brand_lm$residuals)
+
+
+
+```
+
+After looking at these plots we see two things:
+- The boxplot is symmetrical and do not see any outliers
+- The histograms fairly resembles a normal distribution for our residuals.
+Knowing these, we can conclude our assumption of normality is not violated.
+
+## 4c. Conduct the Breusch-Pagan test to check if the equal variance assumption is satisfied.
+
+```{r}
+bptest(brand_lm, studentize = FALSE)
+```
+***The Breusch-Pagan test gives us a high p value which means we fail reject the null hypothesis and that there is __no__ issue with our equal variance assumption.
+
+
+
+
