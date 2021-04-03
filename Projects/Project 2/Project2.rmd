@@ -21,7 +21,7 @@ output:
 
 # **Purpose**
 
-We are conducting a multiple linear regression model from the Real Estate Sales (APPENC07) dataset to analyze the relationship of the given features, bedrooms, bathrooms, and garage size, with the outcome variable, house sales price.
+We are conducting a multiple linear regression model from the Real Estate Sales (APPENC07) dataset to analyze the relationship of the given features, bedrooms, bathrooms, and garage size, with the outcome variable, house sales price in a midwestern city.
 
 # **Our Data**
 
@@ -29,10 +29,13 @@ We are conducting a multiple linear regression model from the Real Estate Sales 
 
 Our dataset is comprised of 522 total transactions from home sales during the year 2002.
 
-| Response Variable (Y)                                 | Explanatory Variable 1 ($X_{1}$) | Explanatory Variable 2 ($X_{2}$) | Explanatory Variable 3 ($X_{3}$)                   |
-|-------------------------------------------------------|----------------------------------|----------------------------------|----------------------------------------------------|
-| "house_price" = sales price of residence (in dollars) | "beds" = Number of bedrooms      | "baths" = Number of bathrooms    | "garage_size" = Number of cars the garage can hold |
-|                                                       |                                  |                                  |                                                    |
++---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
+| Response Variable (Y)                 | Explanatory Variable 1 ($X_{1}$) | Explanatory Variable 2 ($X_{2}$) | Explanatory Variable 3 ($X_{3}$)   |
++=======================================+==================================+==================================+====================================+
+| "house_price"                         | "beds"                           | "baths"                          | "garage_size"                      |
++---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
+| sales price of residence (in dollars) | Number of bedrooms               | Number of bathrooms              | Number of cars the garage can hold |
++---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 
@@ -67,3 +70,104 @@ baths <- house_data %>% select(baths) #X2
 garage_size <- house_data %>% select(garage_size) #X3
 
 ```
+
+# Part 1 - Model Estimation and Interpretation
+
+## Fitting a regression model estimating sales price using predictors
+
+```{r}
+#Using the lm function to fit a multiple regression model
+house_lm <- lm(house_price ~ beds + baths + garage_size, data = house_data)
+
+#Regression summary
+summary(house_lm)
+```
+
+## Interpretation of coefficients
+
+### Intercept & Partial Slopes
+
+From summarizing our multiple linear regression model we can see:
+
+| **Intercept** | Bedrooms    | Bathrooms   | Garage Size |
+|---------------|-------------|-------------|-------------|
+| $\beta_{0}$   | $\beta_{1}$ | $\beta_{2}$ | $\beta_{3}$ |
+| -45886.3      | 935.4       | 67818.9     | 67332.3     |
+
+and the estimated regression equation to be:
+
+$\hat{Y}= -45886.3 + 935.4X + 67818.9X + 67332.3X$
+
+The partial slopes in our summary indicate that when any one of the partial slopes **Increase by 1 unit** and other explanatory variables held constant and unchanged we can expect:
+
+-   When holding our other explanatory variables Bathrooms and Garage Size constant and unchanged, when **Bedrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$935.4**.
+
+-   When holding our other explanatory variables Bedrooms and Garage Size constant and unchanged, when **Bathrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,818.9.**
+
+-   When holding our other explanatory variables Bedrooms and Bathrooms constant and unchanged, when **Garage size** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67332.3**.
+
+### Adjusted R-Squared = 0.54
+
+A adjusted R squared value similar to the R square value tells us how much of the variability in our model is explained by our predictor variables, but also penalizes redundant or otherwise useless predictor variables helping us to resist urges of adding too many variables into our model.
+
+In this case our adjusted \$R\^2\$ of 0.54 tells us that about 54% of the variation in our response variable is explained by our 3 explanatory variables.
+
+# Part 2 - Prediction
+
+## Predicting the house sales price for a house with 3 bedrooms, 3 bathrooms, and a 2-car garage
+
+```{r}
+#Creating a observation where a given house has 
+#3 Bedrooms, 3 Bathrooms, and a 2 car garage
+new_house_data <- data.frame(beds = 3, baths = 3, garage_size = 2)
+```
+
+### Calculating the 95% confidence interval
+
+```{r}
+#confidence interval
+ci_house <- predict(house_lm, new_house_data, interval = "confidence", level = 0.95)
+ci_house
+```
+
+### Calculating the 95% prediction interval
+
+```{r}
+#prediction interval
+pi_house <- predict(house_lm, new_house_data, interval = "prediction", level = 0.95)
+pi_house
+```
+
+# Part 3 - Hypothesis Testing
+
+Testing if **each of the individual predictors** (partial slopes) in this regression to see if they hold significance.
+
+### Testing for Individual Parameter Significance Using p-value significance level ($\alpha = 0.05$)
+
+**Null Hypothesis**: ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ **is not** linearly associated with Y, therefore the partial slope **is not significant.**
+
+**Alternative Hypothesis**: ${H_1}$: $\beta_{j} \neq 0$ (slopes are showing change), $X_{j}$ **is** linearly associated with Y, therefore the partial slope **is significant.**
+
+**Bedrooms variable:**
+
+The p-value of Bedroom is 0.8507 and is greater than our $\alpha$ (accepted error) of 0.05 we **fail to reject** our NULL hypothesis and must conclude with our NULL hypothesis. Stating that our partial slope, **Bedrooms**, does not show overall significance in our model.
+
+**Bathrooms & Garage Size variables:**
+
+On the other hand because the p-value of Bathroom and Garage size are both \<2e-16 and are incredibly smaller than our $\alpha$ (accepted error) of 0.05 we **reject** our NULL hypothesis and conclude with our alternative hypothesis. Our alternative hypothesis states that our partial slopes, **Bathroom and Garage Size**, shows overall significance in our model.
+
++--------------------------------+---------------------------------+---------------------------------+
+| Bedrooms ($X_{1}$)             | Bathrooms ($X_{2}$)             | Garage Size ($X_{3}$)           |
++--------------------------------+---------------------------------+---------------------------------+
+| 0.8507 **\>** $\alpha = 0.05%$ | \<2e-16 **\<** $\alpha = 0.05%$ | \<2e-16 **\<** $\alpha = 0.05%$ |
++--------------------------------+---------------------------------+---------------------------------+
+| Fail to reject ${H_0}$         | Reject ${H_0}$                  | Reject ${H_0}$                  |
++--------------------------------+---------------------------------+---------------------------------+
+| Not Significant                | Significant                     | Significant                     |
++--------------------------------+---------------------------------+---------------------------------+
+|                                |                                 |                                 |
++--------------------------------+---------------------------------+---------------------------------+
+
+: Table Representation of Hypothesis Testing
+
+# Part 4 - Multicolinearity
