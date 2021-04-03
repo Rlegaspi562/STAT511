@@ -41,15 +41,13 @@ Our dataset is comprised of 522 total transactions from home sales during the ye
 
 #Setting up our work environment
 setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Project 2")
-
 library(nortest)
 library(olsrr)
 library(car)
 library(lmtest)
 library(MASS)
 library(tidyverse)
-library(dplyr)
-
+library(ggcorrplot)
 #Loading in the text data
 raw_data = read.table(file = "APPENC07.txt", header = FALSE, sep = "")
 #Converting into tibble data frame for easier data analysis
@@ -171,3 +169,29 @@ On the other hand because the p-value of Bathroom and Garage size are both \<2e-
 : Table Representation of Hypothesis Testing
 
 # Part 4 - Multicolinearity
+
+## Creating scatterplot and correlation matrices
+
+```{r}
+#Plotting a scatterplot matrix **(why does it look symmterical?)
+scat_matrix <- c(beds, baths, garage_size) %>% data.frame() %>%
+  plot()
+scat_matrix
+
+#Correlation Matrix
+corr_matrix <- c(beds, baths, garage_size) %>% data.frame() %>%
+  cor()
+corr_matrix
+
+ggcorr_matrix <- ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = TRUE,
+   outline.col = "white",
+   ggtheme = ggplot2::theme_gray,
+   colors = c("#6D9EC1", "white", "#E46726"))
+
+#Printing both matrices
+scat_matrix
+ggcorr_matrix
+
+```
+
+The correlation coefficient shows a moderately positive relationship between our predictor variables except for\_\_\_\_
