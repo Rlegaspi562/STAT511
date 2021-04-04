@@ -168,19 +168,23 @@ On the other hand because the p-value of Bathroom and Garage size are both \<2e-
 
 : Table Representation of Hypothesis Testing
 
-# Part 4 - Multicolinearity
+# \*\*Part 4 - Multicolinearity
 
-## Creating scatterplot and correlation matrices
+## Creating scatterplots and correlation matrices
 
 ```{r}
 #Plotting a scatterplot matrix **(why does it look symmterical?)
-scat_matrix <- c(beds, baths, garage_size) %>% data.frame() %>%
+scat_matrix <- c(beds, baths, garage_size) %>% 
+  data.frame() %>%
   plot()
+
 scat_matrix
 
 #Correlation Matrix
-corr_matrix <- c(beds, baths, garage_size) %>% data.frame() %>%
+corr_matrix <- c(beds, baths, garage_size) %>% 
+  data.frame() %>% 
   cor()
+
 corr_matrix
 
 ggcorr_matrix <- ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = TRUE,
@@ -194,4 +198,26 @@ ggcorr_matrix
 
 ```
 
-The correlation coefficient shows a moderately positive relationship between our predictor variables except for\_\_\_\_
+The correlation coefficient shows a moderately positive relationship between most of our predictor variables. Moreover, it does not necessarily look like
+
+Having multicolinearity is problematic because by having multiple predictor variables, it becomes harder for our model to attribute significance to. It creates reduNdant information and thereby negatively affecting the results of our regression model.
+
+A way to combat this is by removing a highly correlated predictor.
+
+```{r}
+vif(house_lm)
+
+#summary
+summary(house_lm)
+
+#removing baths
+nobath_lm <- lm(house_price ~ beds + garage_size, data = house_data)
+
+summary(nobath_lm)
+
+nogarage_lm <- lm(house_price ~ beds + baths, data = house_data)
+
+summary(nogarage_lm)
+```
+
+\*\*By putting myself in the shoes of a home buyer, a garage size might not hold as much priority over bedrooms and bathrooms when in the process of buying a home. Additionally, By removing garage size we have adjusted for multicolinearity and are now able to see the
