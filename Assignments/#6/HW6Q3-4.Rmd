@@ -124,6 +124,3 @@ Alternative Hypothesis: Equal variance assumption is violated
 
 The Breusch-Pagan test gives us a high p value which means we fail reject the null hypothesis and that there is **no** issue with our equal variance assumption.
 
-```{r}
-
-```

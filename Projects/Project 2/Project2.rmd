@@ -29,13 +29,10 @@ We are conducting a multiple linear regression model from the Real Estate Sales 
 
 Our dataset is comprised of 522 total transactions from home sales during the year 2002.
 
-+---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 | Response Variable (Y)                 | Explanatory Variable 1 ($X_{1}$) | Explanatory Variable 2 ($X_{2}$) | Explanatory Variable 3 ($X_{3}$)   |
-+=======================================+==================================+==================================+====================================+
+|---------------------------------------|----------------------------------|----------------------------------|------------------------------------|
 | "house_price"                         | "beds"                           | "baths"                          | "garage_size"                      |
-+---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 | sales price of residence (in dollars) | Number of bedrooms               | Number of bathrooms              | Number of cars the garage can hold |
-+---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 
@@ -185,15 +182,11 @@ qt(0.975, 518)
 anova(house_lm)
 ```
 
-+------------------------------+--------------------+---------------------+-----------------------+
 | Test Statistic Type & Result | Bedrooms ($X_{1}$) | Bathrooms ($X_{2}$) | Garage Size ($X_{3}$) |
-+==============================+====================+=====================+=======================+
+|------------------------------|--------------------|---------------------|-----------------------|
 | F-value                      | 194.515 \> 1.96    | 338.057 \> 1.96     | 88.032 \> 1.96        |
-+------------------------------+--------------------+---------------------+-----------------------+
 | P-value                      | 2.2e-16 \< 0.05    | 2.2e-16 \< 0.05     | 2.2e-16 \< 0.05       |
-+------------------------------+--------------------+---------------------+-----------------------+
 | Result                       | Significant        | Significant         | Significant           |
-+------------------------------+--------------------+---------------------+-----------------------+
 
 : Table Representation of F-test Hypothesis Testing
 
@@ -201,8 +194,7 @@ Our p-value of \< 2.2e-16 being less than our alpha and our F values being large
 
 ### Partial F tests
 
-\*\*Are the number of bathrooms (𝑋2) and garage size (𝑋3) jointly significant in the
-MLR model? Conduct a partial F-test and conclude. Choose your own 𝛼.
+\*\*Are the number of bathrooms (𝑋2) and garage size (𝑋3) jointly significant in the MLR model? Conduct a partial F-test and conclude. Choose your own 𝛼.
 
 We will be conducting partial F tests to see if the number of bathrooms (X2) and garage size(X3) are jointly significant using a significance level of 0.05.
 
@@ -213,7 +205,7 @@ We will be conducting partial F tests to see if the number of bathrooms (X2) and
 THIS ONE \^\^\^
 
 ```{r}
-**#full model
+##**#full model
 #house_lm
 
 #reduced model bathrooms and garage size (w/o bath a)
@@ -223,7 +215,7 @@ THIS ONE \^\^\^
 or comparing full model (y=b0+b1X1+b2X2+b3X3) to (y=b0+b1x1+b2X2) and (y=b0+b1x1+b3X3)?
 
 ```{r}
-**#full model
+##**#full model
 #house_lm
 
 #model without garage size only
@@ -236,7 +228,7 @@ or comparing full model (y=b0+b1X1+b2X2+b3X3) to (y=b0+b1x1+b2X2) and (y=b0+b1x1
 We now compare our reduced model with our complete model
 
 ```{r}
-**#anova(house_lm,)
+#**#anova(house_lm,)
 
 ```
 
@@ -269,7 +261,7 @@ ggcorr_matrix <- ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = 
 #Printing both matrices
 scat_matrix
 ggcorr_matrix
-
+summary(house_lm)
 ```
 
 The correlation coefficient shows a moderately positive relationship between most of our predictor variables. Moreover, it does not necessarily look like are
@@ -278,18 +270,25 @@ Having multicolinearity is problematic because by having multiple correlated pre
 
 A way to combat this is by removing a highly correlated predictor.
 
+\*\* we keep the variable we are most interested in and remove the other. we know there is some kind of multicolinearity issue with bed and baths, I am more interested in beds than baths.
+
 ```{r}
-vif(house_lm)
-
-#summary
+#summary of original predictor
 summary(house_lm)
+```
 
-#removing baths
+We notice beds it no significant when in fact the reality is it SHOULD be significant
+
+```{r}
+#removing beds
 nobeds_lm <- lm(house_price ~ baths + garage_size, data = house_data)
-
 summary(nobeds_lm)
+```
 
+```{r}
+#removing baths
 nobaths_lm <- lm(house_price ~ garage_size + beds, data = house_data)
-
 summary(nobaths_lm)
 ```
+
+\`\`\`
