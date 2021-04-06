@@ -110,13 +110,13 @@ The partial slopes in our summary indicate that when any one of the partial slop
 
 -   When holding our other explanatory variables Bedrooms and Garage Size constant and unchanged, when **Bathrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,818.9.**
 
--   When holding our other explanatory variables Bedrooms and Bathrooms constant and unchanged, when **Garage size** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67332.3**.
+-   When holding our other explanatory variables Bedrooms and Bathrooms constant and unchanged, when **Garage size** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,332.3**.
 
 ### Adjusted R-Squared = 0.54
 
 A adjusted R squared value similar to the R square value tells us how much of the variability in our model is explained by our predictor variables, but also penalizes redundant or otherwise useless predictor variables helping us to resist urges of adding too many variables into our model.
 
-In this case our adjusted \$R\^2\$ of 0.54 tells us that about 54% of the variation in our response variable is explained by our 3 explanatory variables.
+In this case our adjusted \$R\^2\$ of 0.54 Tells us that about 54% of the variation in our response variable is explained by our 3 explanatory variables.
 
 # Part 2 - Prediction
 
@@ -152,17 +152,13 @@ pi_house
 
 **Alternative Hypothesis**: ${H_1}$: $\beta_{j} \neq 0$ (slopes are showing change), $X_{j}$ **is** linearly associated with Y, therefore the partial slope **is significant.**
 
-+--------------------------------+---------------------------------+---------------------------------+
-| Bedrooms ($X_{1}$)             | Bathrooms ($X_{2}$)             | Garage Size ($X_{3}$)           |
-+--------------------------------+---------------------------------+---------------------------------+
-| 0.8507 **\>** $\alpha = 0.05%$ | \<2e-16 **\<** $\alpha = 0.05%$ | \<2e-16 **\<** $\alpha = 0.05%$ |
-+--------------------------------+---------------------------------+---------------------------------+
-| Fail to reject ${H_0}$         | Reject ${H_0}$                  | Reject ${H_0}$                  |
-+--------------------------------+---------------------------------+---------------------------------+
-| Not Significant                | Significant                     | Significant                     |
-+--------------------------------+---------------------------------+---------------------------------+
 |                                |                                 |                                 |
-+--------------------------------+---------------------------------+---------------------------------+
+|--------------------------------|---------------------------------|---------------------------------|
+| Bedrooms ($X_{1}$)             | Bathrooms ($X_{2}$)             | Garage Size ($X_{3}$)           |
+| 0.8507 **\>** $\alpha = 0.05%$ | \<2e-16 **\<** $\alpha = 0.05%$ | \<2e-16 **\<** $\alpha = 0.05%$ |
+| Fail to reject ${H_0}$         | Reject ${H_0}$                  | Reject ${H_0}$                  |
+| Not Significant                | Significant                     | Significant                     |
+|                                |                                 |                                 |
 
 : Table Representation of Hypothesis Testing
 
@@ -205,27 +201,43 @@ Our p-value of \< 2.2e-16 being less than our alpha and our F values being large
 
 ### Partial F tests
 
+\*\*Are the number of bathrooms (𝑋2) and garage size (𝑋3) jointly significant in the
+MLR model? Conduct a partial F-test and conclude. Choose your own 𝛼.
+
 We will be conducting partial F tests to see if the number of bathrooms (X2) and garage size(X3) are jointly significant using a significance level of 0.05.
 
 \*\* In other words is there significance in adding bathrooms and garage size into our model?
 
 \*\* is it comparing full model (y=b0+b1X1+b2X2+b3X3) to (y=b0+b1X1)
 
+THIS ONE \^\^\^
+
+```{r}
+**#full model
+#house_lm
+
+#reduced model bathrooms and garage size (w/o bath a)
+#bed_lm(house_lm ~ beds, data = house_data)
+```
+
 or comparing full model (y=b0+b1X1+b2X2+b3X3) to (y=b0+b1x1+b2X2) and (y=b0+b1x1+b3X3)?
 
 ```{r}
-#Performing partial f-tests
-#Creating our reduced models
+**#full model
+#house_lm
 
-#model without 
-bed_lm(house_lm ~ beds, data = house_data)
-full_lm <- house_lm
+#model without garage size only
+#bed_bath_lm <- lm(house_lm ~ beds, baths, data = house_data)
+#model without bath only
+#bed_garage_lm <- lm(house_lm ~ beds, garage_size, data = house_data)
+
 ```
 
 We now compare our reduced model with our complete model
 
 ```{r}
-anova()
+**#anova(house_lm,)
+
 ```
 
 In effect, we are concluding that these predictors do contribute information in the prediction of house sales price and therefore should be retained in the model.
@@ -260,9 +272,9 @@ ggcorr_matrix
 
 ```
 
-The correlation coefficient shows a moderately positive relationship between most of our predictor variables. Moreover, it does not necessarily look like
+The correlation coefficient shows a moderately positive relationship between most of our predictor variables. Moreover, it does not necessarily look like are
 
-Having multicolinearity is problematic because by having multiple predictor variables, it becomes harder for our model to attribute significance to. It creates reduNdant information and thereby negatively affecting the results of our regression model.
+Having multicolinearity is problematic because by having multiple correlated predictor variables, it becomes harder for our model to attribute significance to our predicts. It creates redundant information and thereby negatively affecting the results of our regression model.
 
 A way to combat this is by removing a highly correlated predictor.
 
@@ -273,13 +285,11 @@ vif(house_lm)
 summary(house_lm)
 
 #removing baths
-nobath_lm <- lm(house_price ~ beds + garage_size, data = house_data)
+nobeds_lm <- lm(house_price ~ baths + garage_size, data = house_data)
 
-summary(nobath_lm)
+summary(nobeds_lm)
 
-nogarage_lm <- lm(house_price ~ beds + baths, data = house_data)
+nobaths_lm <- lm(house_price ~ garage_size + beds, data = house_data)
 
-summary(nogarage_lm)
+summary(nobaths_lm)
 ```
-
-\*\*By putting myself in the shoes of a home buyer, a garage size might not hold as much priority over bedrooms and bathrooms when in the process of buying a home. Additionally, By removing garage size we have adjusted for multicolinearity and are now able to see the
