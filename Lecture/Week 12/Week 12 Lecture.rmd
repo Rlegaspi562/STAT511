@@ -25,7 +25,14 @@ library(tidyverse)
 
 setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 12")
 
+#reading in a csv
 #brand_data = read.table(file = "Brand.txt", header = FALSE, sep = "")
+
+#reading in a r data file
+load(file = "bodyfat.Rdata")
+
+bodyfat <- data.frame(data)
+
 
 #View(brand_data)
 
@@ -39,3 +46,100 @@ setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Anal
 #Moisture = _data$ #X1
 #Sweetness = _data$ #X2
 ```
+ 
+ 
+ to what extend is the sum of sqaure errors reduction or increase (of r^2?). We want to test on that amount. (watch video)
+ 
+Setting up regression models before plugging into anova function for f test
+```{r}
+
+
+#Defining dependent and independent vars
+fat = bodyfat$bodyfat #Y
+triceps = bodyfat$triceps #X1
+thigh = bodyfat$thigh #X2
+arm = bodyfat$arm
+
+triceps_lm <- lm(fat ~ triceps, data = bodyfat)
+thigh_lm <- lm(fat ~ thigh, data = bodyfat)
+triceps_thigh_lm <- lm(fat ~ triceps + thigh, data = bodyfat)
+arm_lm <- lm(fat ~ arm, data = bodyfat)
+full_lm <- lm(fat ~ triceps + thigh + arm, data = bodyfat)
+
+```
+Doing Partial F test
+stating null and alternative
+
+null: there is no change when adding certain predictors to the significance of our model
+h
+alt: there is change when adding certain predictors towards the significance of our model
+
+
+```{r}
+#Comparing tricep only with tricep + thigh (thigh missing)
+anova(triceps_lm, triceps_thigh_lm)
+```
+tricep is significant and we reject null hypothesis indicating that when thigh is missing and we are left with tricep only our model remains significant with a alpha of 0.05. aka thigh is a significant variable
+
+whichever variable is extra that means its that variable that is being tested
+
+```{r}
+#Comparing thigh only with tricep + thigh (tricep missing)
+anova(thigh_lm, triceps_thigh_lm)
+```
+We fail to reject null hpothesis since p value is greater than our alpha indicating when tricep is missing our model is not significant with an accepted error(alpha) pf 0.05. suggesting thigh is not significant predictor variable
+
+```{r}
+#comparing
+anova(arm_lm, full_lm)
+```
+since this is very significant means tricep and thigh are jointly significant
+
+
+# Scaled Regression
+```{r}
+#Scaling coefficients
+scaled_fat <- scale(fat)
+scaled_triceps <- scale(triceps)
+scaled_thigh<-scale(thigh)
+scaled_arm<-scale(arm)
+```
+```{r}
+#putting scaled coeffs into lm now the results are scaled, w/o intercept
+scaled_lm <- lm(scaled_fat ~ 0 + scaled_triceps + scaled_thigh + scaled_arm, data = bodyfat)
+scaled_lm
+summary(scaled_lm)
+```
+Therefore when holding outher variables constant/unchanged when _____ variable increases by ____ standard deviations we can expect _____ to increase by _____ standard deviations.
+
+
+▪ Regress fat on all three predictors
+```{r}
+fat_lm <- lm(fat ~ triceps + thigh + arm, data = bodyfat)
+fat_lm
+summary(fat_lm)
+```
+notice how above there are no significant predictors but overall model test is highly significant
+
+
+
+
+▪ Regress scaled fat on scaled three predictors
+```{r}
+scaled_fat_lm <- lm(scaled_fat ~  scaled_triceps + scaled_thigh + scaled_arm, data = bodyfat)
+fat_lm
+summary(fat_lm)
+```
+
+ Regress scaled fat on scaled three predictors without the intercept
+To exclude intercept in a regression model, use lm(y ~ 0 + x1+ x2).
+
+```{r}
+scaled_lm <- lm(scaled_fat ~ 0 + scaled_triceps + scaled_thigh + scaled_arm, data = bodyfat)
+scaled_lm
+summary(scaled_lm)
+```
+
+ 
+ 
+ 

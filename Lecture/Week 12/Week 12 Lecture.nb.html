@@ -225,35 +225,220 @@ pre code {
 <h3>Setting up workspace</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShub3J0ZXN0KVxubGlicmFyeShvbHNycilcbmxpYnJhcnkoY2FyKVxubGlicmFyeShsbXRlc3QpXG5saWJyYXJ5KE1BU1MpXG5saWJyYXJ5KHRpZHl2ZXJzZSlcblxuc2V0d2QoXCJDOi9Vc2Vycy9SVU1JTC9EZXNrdG9wL0FQVS9TVEFUIDUxMSAtIE1pbGxpZSBNYW8gKEFwcGxpZWQgUmVncmVzc2lvbiBBbmFseXNpcykvV2VlayAxMlwiKVxuXG4jYnJhbmRfZGF0YSA9IHJlYWQudGFibGUoZmlsZSA9IFwiQnJhbmQudHh0XCIsIGhlYWRlciA9IEZBTFNFLCBzZXAgPSBcIlwiKVxuXG4jVmlldyhicmFuZF9kYXRhKVxuXG4jICNBZGRpbmcgaGVhZGVyc1xuI25hbWVzKGJyYW5kX2RhdGEpIDwtIGMoXCJSYXRpbmdcIiwgXCJNb2lzdHVyZVwiLCBcIlN3ZWV0bmVzc1wiKVxuXG4jIG5hbWVzKGJhbmtfZGF0YSkgPC0gYyhcIlwiLCBcIlwiKVxuXG4jRGVmaW5pbmcgZGVwZW5kZW50IGFuZCBpbmRlcGVuZGVudCB2YXJzXG4jUmF0aW5nID0gX2RhdGEkICNZXG4jTW9pc3R1cmUgPSBfZGF0YSQgI1gxXG4jU3dlZXRuZXNzID0gX2RhdGEkICNYMlxuYGBgIn0= -->
-<pre class="r"><code>library(nortest)
-library(olsrr)
-library(car)
-library(lmtest)
-library(MASS)
-library(tidyverse)
-
-setwd(&quot;C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 12&quot;)
-
-#brand_data = read.table(file = &quot;Brand.txt&quot;, header = FALSE, sep = &quot;&quot;)
-
-#View(brand_data)
-
-# #Adding headers
-#names(brand_data) &lt;- c(&quot;Rating&quot;, &quot;Moisture&quot;, &quot;Sweetness&quot;)
-
-# names(bank_data) &lt;- c(&quot;&quot;, &quot;&quot;)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9hZChmaWxlID0gXCJib2R5ZmF0LlJkYXRhXCIpXG5cbmBgYCJ9 -->
+<pre class="r"><code>load(file = &quot;bodyfat.Rdata&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gcmVhZENoYXIoY29uLCA1TCwgdXNlQnl0ZXMgPSBUUlVFKSA6IGNhbm5vdCBvcGVuIHRoZSBjb25uZWN0aW9uXG4ifQ== -->
+<pre><code>Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>to what extend is the sum of sqaure errors reduction or increase (of r^2?). We want to test on that amount. (watch video)</p>
+<p>Setting up regression models before plugging into anova function for f test</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbiNEZWZpbmluZyBkZXBlbmRlbnQgYW5kIGluZGVwZW5kZW50IHZhcnNcbmZhdCA9IGJvZHlmYXQkYm9keWZhdCAjWVxudHJpY2VwcyA9IGJvZHlmYXQkdHJpY2VwcyAjWDFcbnRoaWdoID0gYm9keWZhdCR0aGlnaCAjWDJcbmFybSA9IGJvZHlmYXQkYXJtXG5cbnRyaWNlcHNfbG0gPC0gbG0oZmF0IH4gdHJpY2VwcywgZGF0YSA9IGJvZHlmYXQpXG50aGlnaF9sbSA8LSBsbShmYXQgfiB0aGlnaCwgZGF0YSA9IGJvZHlmYXQpXG50cmljZXBzX3RoaWdoX2xtIDwtIGxtKGZhdCB+IHRyaWNlcHMgKyB0aGlnaCwgZGF0YSA9IGJvZHlmYXQpXG5hcm1fbG0gPC0gbG0oZmF0IH4gYXJtLCBkYXRhID0gYm9keWZhdClcbmZ1bGxfbG0gPC0gbG0oZmF0IH4gdHJpY2VwcyArIHRoaWdoICsgYXJtLCBkYXRhID0gYm9keWZhdClcblxuYGBgIn0= -->
+<pre class="r"><code>
 
 #Defining dependent and independent vars
-#Rating = _data$ #Y
-#Moisture = _data$ #X1
-#Sweetness = _data$ #X2</code></pre>
+fat = bodyfat$bodyfat #Y
+triceps = bodyfat$triceps #X1
+thigh = bodyfat$thigh #X2
+arm = bodyfat$arm
+
+triceps_lm &lt;- lm(fat ~ triceps, data = bodyfat)
+thigh_lm &lt;- lm(fat ~ thigh, data = bodyfat)
+triceps_thigh_lm &lt;- lm(fat ~ triceps + thigh, data = bodyfat)
+arm_lm &lt;- lm(fat ~ arm, data = bodyfat)
+full_lm &lt;- lm(fat ~ triceps + thigh + arm, data = bodyfat)
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Doing Partial F test stating null and alternative</p>
+<p>null: there is no change when adding certain predictors to the significance of our model h alt: there is change when adding certain predictors towards the significance of our model</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NvbXBhcmluZyB0cmljZXAgb25seSB3aXRoIHRyaWNlcCArIHRoaWdoICh0aGlnaCBtaXNzaW5nKVxuYW5vdmEodHJpY2Vwc19sbSwgdHJpY2Vwc190aGlnaF9sbSlcbmBgYCJ9 -->
+<pre class="r"><code>#Comparing tricep only with tricep + thigh (thigh missing)
+anova(triceps_lm, triceps_thigh_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQW5hbHlzaXMgb2YgVmFyaWFuY2UgVGFibGVcblxuTW9kZWwgMTogZmF0IH4gdHJpY2Vwc1xuTW9kZWwgMjogZmF0IH4gdHJpY2VwcyArIHRoaWdoXG4gIFJlcy5EZiAgICBSU1MgRGYgU3VtIG9mIFNxICAgICAgRiBQcig+RikgIFxuMSAgICAgMTggMTQzLjEyICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbjIgICAgIDE3IDEwOS45NSAgMSAgICAzMy4xNjkgNS4xMjg0IDAuMDM2OSAqXG4tLS1cblNpZ25pZi4gY29kZXM6ICAwIOKAmCoqKuKAmSAwLjAwMSDigJgqKuKAmSAwLjAxIOKAmCrigJkgMC4wNSDigJgu4oCZIDAuMSDigJgg4oCZIDFcbiJ9 -->
+<pre><code>Analysis of Variance Table
+
+Model 1: fat ~ triceps
+Model 2: fat ~ triceps + thigh
+  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)  
+1     18 143.12                             
+2     17 109.95  1    33.169 5.1284 0.0369 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>tricep is significant and we reject null hypothesis indicating that when thigh is missing and we are left with tricep only our model remains significant with a alpha of 0.05. aka thigh is a significant variable</p>
+<p>whichever variable is extra that means its that variable that is being tested</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NvbXBhcmluZyB0aGlnaCBvbmx5IHdpdGggdHJpY2VwICsgdGhpZ2ggKHRyaWNlcCBtaXNzaW5nKVxuYW5vdmEodGhpZ2hfbG0sIHRyaWNlcHNfdGhpZ2hfbG0pXG5gYGAifQ== -->
+<pre class="r"><code>#Comparing thigh only with tricep + thigh (tricep missing)
+anova(thigh_lm, triceps_thigh_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQW5hbHlzaXMgb2YgVmFyaWFuY2UgVGFibGVcblxuTW9kZWwgMTogZmF0IH4gdGhpZ2hcbk1vZGVsIDI6IGZhdCB+IHRyaWNlcHMgKyB0aGlnaFxuICBSZXMuRGYgICAgUlNTIERmIFN1bSBvZiBTcSAgICAgRiBQcig+RilcbjEgICAgIDE4IDExMy40MiAgICAgICAgICAgICAgICAgICAgICAgICAgXG4yICAgICAxNyAxMDkuOTUgIDEgICAgMy40NzI5IDAuNTM3IDAuNDczN1xuIn0= -->
+<pre><code>Analysis of Variance Table
+
+Model 1: fat ~ thigh
+Model 2: fat ~ triceps + thigh
+  Res.Df    RSS Df Sum of Sq     F Pr(&gt;F)
+1     18 113.42                          
+2     17 109.95  1    3.4729 0.537 0.4737</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>We fail to reject null hpothesis since p value is greater than our alpha indicating when tricep is missing our model is not significant with an accepted error(alpha) pf 0.05. suggesting thigh is not significant predictor variable</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2NvbXBhcmluZ1xuYW5vdmEoYXJtX2xtLCBmdWxsX2xtKVxuYGBgIn0= -->
+<pre class="r"><code>#comparing
+anova(arm_lm, full_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQW5hbHlzaXMgb2YgVmFyaWFuY2UgVGFibGVcblxuTW9kZWwgMTogZmF0IH4gYXJtXG5Nb2RlbCAyOiBmYXQgfiB0cmljZXBzICsgdGhpZ2ggKyBhcm1cbiAgUmVzLkRmICAgIFJTUyBEZiBTdW0gb2YgU3EgICAgICBGICAgIFByKD5GKSAgICBcbjEgICAgIDE4IDQ4NS4zNCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbjIgICAgIDE2ICA5OC40MCAgMiAgICAzODYuOTMgMzEuNDU2IDIuODU2ZS0wNiAqKipcbi0tLVxuU2lnbmlmLiBjb2RlczogIDAg4oCYKioq4oCZIDAuMDAxIOKAmCoq4oCZIDAuMDEg4oCYKuKAmSAwLjA1IOKAmC7igJkgMC4xIOKAmCDigJkgMVxuIn0= -->
+<pre><code>Analysis of Variance Table
+
+Model 1: fat ~ arm
+Model 2: fat ~ triceps + thigh + arm
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1     18 485.34                                  
+2     16  98.40  2    386.93 31.456 2.856e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>since this is very significant means tricep and thigh are jointly significant</p>
 </div>
+</div>
+<div id="scaled-regression" class="section level1">
+<h1>Scaled Regression</h1>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI1NjYWxpbmcgY29lZmZpY2llbnRzXG5zY2FsZWRfZmF0IDwtIHNjYWxlKGZhdClcbnNjYWxlZF90cmljZXBzIDwtIHNjYWxlKHRyaWNlcHMpXG5zY2FsZWRfdGhpZ2g8LXNjYWxlKHRoaWdoKVxuc2NhbGVkX2FybTwtc2NhbGUoYXJtKVxuYGBgIn0= -->
+<pre class="r"><code>#Scaling coefficients
+scaled_fat &lt;- scale(fat)
+scaled_triceps &lt;- scale(triceps)
+scaled_thigh&lt;-scale(thigh)
+scaled_arm&lt;-scale(arm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3B1dHRpbmcgc2NhbGVkIGNvZWZmcyBpbnRvIGxtIG5vdyB0aGUgcmVzdWx0cyBhcmUgc2NhbGVkXG5zY2FsZWRfbG0gPC0gbG0oc2NhbGVkX2ZhdCB+IDAgKyBzY2FsZWRfdHJpY2VwcyArIHNjYWxlZF90aGlnaCArIHNjYWxlZF9hcm0sIGRhdGEgPSBib2R5ZmF0KVxuc2NhbGVkX2xtXG5gYGAifQ== -->
+<pre class="r"><code>#putting scaled coeffs into lm now the results are scaled
+scaled_lm &lt;- lm(scaled_fat ~ 0 + scaled_triceps + scaled_thigh + scaled_arm, data = bodyfat)
+scaled_lm</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IHNjYWxlZF9mYXQgfiAwICsgc2NhbGVkX3RyaWNlcHMgKyBzY2FsZWRfdGhpZ2ggKyBcbiAgICBzY2FsZWRfYXJtLCBkYXRhID0gYm9keWZhdClcblxuQ29lZmZpY2llbnRzOlxuc2NhbGVkX3RyaWNlcHMgICAgc2NhbGVkX3RoaWdoICAgICAgc2NhbGVkX2FybSAgXG4gICAgICAgICA0LjI2NCAgICAgICAgICAtMi45MjkgICAgICAgICAgLTEuNTYxICBcbiJ9 -->
+<pre><code>
+Call:
+lm(formula = scaled_fat ~ 0 + scaled_triceps + scaled_thigh + 
+    scaled_arm, data = bodyfat)
+
+Coefficients:
+scaled_triceps    scaled_thigh      scaled_arm  
+         4.264          -2.929          -1.561  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShzY2FsZWRfbG0pXG5gYGAifQ== -->
+<pre class="r"><code>summary(scaled_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IHNjYWxlZF9mYXQgfiAwICsgc2NhbGVkX3RyaWNlcHMgKyBzY2FsZWRfdGhpZ2ggKyBcbiAgICBzY2FsZWRfYXJtLCBkYXRhID0gYm9keWZhdClcblxuUmVzaWR1YWxzOlxuICAgICBNaW4gICAgICAgMVEgICBNZWRpYW4gICAgICAgM1EgICAgICBNYXggXG4tMC43Mjk3NiAtMC4zMTU1MiAgMC4wNzY4MyAgMC4yODcwMiAgMC44MDgzNyBcblxuQ29lZmZpY2llbnRzOlxuICAgICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciB0IHZhbHVlIFByKD58dHwpXG5zY2FsZWRfdHJpY2VwcyAgICA0LjI2NCAgICAgIDIuODc4ICAgMS40ODEgICAgMC4xNTdcbnNjYWxlZF90aGlnaCAgICAgLTIuOTI5ICAgICAgMi41NjggIC0xLjE0MCAgICAwLjI3MFxuc2NhbGVkX2FybSAgICAgICAtMS41NjEgICAgICAxLjEwNiAgLTEuNDEyICAgIDAuMTc2XG5cblJlc2lkdWFsIHN0YW5kYXJkIGVycm9yOiAwLjQ3MTIgb24gMTcgZGVncmVlcyBvZiBmcmVlZG9tXG5NdWx0aXBsZSBSLXNxdWFyZWQ6ICAwLjgwMTQsXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAwLjc2NjMgXG5GLXN0YXRpc3RpYzogMjIuODYgb24gMyBhbmQgMTcgREYsICBwLXZhbHVlOiAzLjM2M2UtMDZcbiJ9 -->
+<pre><code>
+Call:
+lm(formula = scaled_fat ~ 0 + scaled_triceps + scaled_thigh + 
+    scaled_arm, data = bodyfat)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.72976 -0.31552  0.07683  0.28702  0.80837 
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)
+scaled_triceps    4.264      2.878   1.481    0.157
+scaled_thigh     -2.929      2.568  -1.140    0.270
+scaled_arm       -1.561      1.106  -1.412    0.176
+
+Residual standard error: 0.4712 on 17 degrees of freedom
+Multiple R-squared:  0.8014,    Adjusted R-squared:  0.7663 
+F-statistic: 22.86 on 3 and 17 DF,  p-value: 3.363e-06</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Therefore when holding outher variables constant/unchanged when _____ variable increases by ____ standard deviations we can expect _____ to increase by _____ standard deviations.</p>
+<p>▪ Regress fat on all three predictors</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmF0X2xtIDwtIGxtKGZhdCB+IHRyaWNlcHMgKyB0aGlnaCArIGFybSwgZGF0YSA9IGJvZHlmYXQpXG5mYXRfbG1cbmBgYCJ9 -->
+<pre class="r"><code>fat_lm &lt;- lm(fat ~ triceps + thigh + arm, data = bodyfat)
+fat_lm</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IGZhdCB+IHRyaWNlcHMgKyB0aGlnaCArIGFybSwgZGF0YSA9IGJvZHlmYXQpXG5cbkNvZWZmaWNpZW50czpcbihJbnRlcmNlcHQpICAgICAgdHJpY2VwcyAgICAgICAgdGhpZ2ggICAgICAgICAgYXJtICBcbiAgICAxMTcuMDg1ICAgICAgICA0LjMzNCAgICAgICAtMi44NTcgICAgICAgLTIuMTg2ICBcbiJ9 -->
+<pre><code>
+Call:
+lm(formula = fat ~ triceps + thigh + arm, data = bodyfat)
+
+Coefficients:
+(Intercept)      triceps        thigh          arm  
+    117.085        4.334       -2.857       -2.186  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShmYXRfbG0pXG5gYGAifQ== -->
+<pre class="r"><code>summary(fat_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IGZhdCB+IHRyaWNlcHMgKyB0aGlnaCArIGFybSwgZGF0YSA9IGJvZHlmYXQpXG5cblJlc2lkdWFsczpcbiAgICBNaW4gICAgICAxUSAgTWVkaWFuICAgICAgM1EgICAgIE1heCBcbi0zLjcyNjMgLTEuNjExMSAgMC4zOTIzICAxLjQ2NTYgIDQuMTI3NyBcblxuQ29lZmZpY2llbnRzOlxuICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciB0IHZhbHVlIFByKD58dHwpXG4oSW50ZXJjZXB0KSAgMTE3LjA4NSAgICAgOTkuNzgyICAgMS4xNzMgICAgMC4yNThcbnRyaWNlcHMgICAgICAgIDQuMzM0ICAgICAgMy4wMTYgICAxLjQzNyAgICAwLjE3MFxudGhpZ2ggICAgICAgICAtMi44NTcgICAgICAyLjU4MiAgLTEuMTA2ICAgIDAuMjg1XG5hcm0gICAgICAgICAgIC0yLjE4NiAgICAgIDEuNTk1ICAtMS4zNzAgICAgMC4xOTBcblxuUmVzaWR1YWwgc3RhbmRhcmQgZXJyb3I6IDIuNDggb24gMTYgZGVncmVlcyBvZiBmcmVlZG9tXG5NdWx0aXBsZSBSLXNxdWFyZWQ6ICAwLjgwMTQsXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAwLjc2NDEgXG5GLXN0YXRpc3RpYzogMjEuNTIgb24gMyBhbmQgMTYgREYsICBwLXZhbHVlOiA3LjM0M2UtMDZcbiJ9 -->
+<pre><code>
+Call:
+lm(formula = fat ~ triceps + thigh + arm, data = bodyfat)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7263 -1.6111  0.3923  1.4656  4.1277 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  117.085     99.782   1.173    0.258
+triceps        4.334      3.016   1.437    0.170
+thigh         -2.857      2.582  -1.106    0.285
+arm           -2.186      1.595  -1.370    0.190
+
+Residual standard error: 2.48 on 16 degrees of freedom
+Multiple R-squared:  0.8014,    Adjusted R-squared:  0.7641 
+F-statistic: 21.52 on 3 and 16 DF,  p-value: 7.343e-06</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>notice how above there are no significant predictors but overall model test is highly significant</p>
+<p>▪ Regress scaled fat on scaled three predictors</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2NhbGVkX2ZhdF9sbSA8LSBsbShzY2FsZWRfZmF0IH4gIHNjYWxlZF90cmljZXBzICsgc2NhbGVkX3RoaWdoICsgc2NhbGVkX2FybSwgZGF0YSA9IGJvZHlmYXQpXG5mYXRfbG1cbnN1bW1hcnkoZmF0X2xtKVxuYGBgIn0= -->
+<pre class="r"><code>scaled_fat_lm &lt;- lm(scaled_fat ~  scaled_triceps + scaled_thigh + scaled_arm, data = bodyfat)
+fat_lm
+summary(fat_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Regress scaled fat on scaled three predictors without the intercept To exclude intercept in a regression model, use lm(y ~ 0 + x1+ x2).</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2NhbGVkX2xtIDwtIGxtKHNjYWxlZF9mYXQgfiAwICsgc2NhbGVkX3RyaWNlcHMgKyBzY2FsZWRfdGhpZ2ggKyBzY2FsZWRfYXJtLCBkYXRhID0gYm9keWZhdClcbnNjYWxlZF9sbVxuc3VtbWFyeShzY2FsZWRfbG0pXG5gYGAifQ== -->
+<pre class="r"><code>scaled_lm &lt;- lm(scaled_fat ~ 0 + scaled_triceps + scaled_thigh + scaled_arm, data = bodyfat)
+scaled_lm
+summary(scaled_lm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogJ1NUQVQgNTExOiBXZWVrIDEyIExlY3R1cmUgJw0KYXV0aG9yOiAiUnVtaWwgTGVnYXNwaSINCmRhdGU6ICI1IEFwcmlsIDIwMjEiDQpvdXRwdXQ6DQogIHBkZl9kb2N1bWVudDogDQogICAgbGF0ZXhfZW5naW5lOiB4ZWxhdGV4DQogIGh0bWxfbm90ZWJvb2s6IGRlZmF1bHQNCiAgaHRtbF9kb2N1bWVudDoNCiAgICBkZl9wcmludDogcGFnZWQNCiAgd29yZF9kb2N1bWVudDogZGVmYXVsdA0KLS0tDQoNCiMgTXVsdGlwbGUgUmVncmVzc2lvbiAmIEJyYW5kIFByZWZlcmVuY2UgRGF0YXNldA0KDQojIyMgU2V0dGluZyB1cCB3b3Jrc3BhY2UNCg0KYGBge3IsIGNvbGxhcHNlID0gVFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0V9DQpsaWJyYXJ5KG5vcnRlc3QpDQpsaWJyYXJ5KG9sc3JyKQ0KbGlicmFyeShjYXIpDQpsaWJyYXJ5KGxtdGVzdCkNCmxpYnJhcnkoTUFTUykNCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQpzZXR3ZCgiQzovVXNlcnMvUlVNSUwvRGVza3RvcC9BUFUvU1RBVCA1MTEgLSBNaWxsaWUgTWFvIChBcHBsaWVkIFJlZ3Jlc3Npb24gQW5hbHlzaXMpL1dlZWsgMTIiKQ0KDQojYnJhbmRfZGF0YSA9IHJlYWQudGFibGUoZmlsZSA9ICJCcmFuZC50eHQiLCBoZWFkZXIgPSBGQUxTRSwgc2VwID0gIiIpDQoNCiNWaWV3KGJyYW5kX2RhdGEpDQoNCiMgI0FkZGluZyBoZWFkZXJzDQojbmFtZXMoYnJhbmRfZGF0YSkgPC0gYygiUmF0aW5nIiwgIk1vaXN0dXJlIiwgIlN3ZWV0bmVzcyIpDQoNCiMgbmFtZXMoYmFua19kYXRhKSA8LSBjKCIiLCAiIikNCg0KI0RlZmluaW5nIGRlcGVuZGVudCBhbmQgaW5kZXBlbmRlbnQgdmFycw0KI1JhdGluZyA9IF9kYXRhJCAjWQ0KI01vaXN0dXJlID0gX2RhdGEkICNYMQ0KI1N3ZWV0bmVzcyA9IF9kYXRhJCAjWDINCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogJ1NUQVQgNTExOiBXZWVrIDEyIExlY3R1cmUgJw0KYXV0aG9yOiAiUnVtaWwgTGVnYXNwaSINCmRhdGU6ICI1IEFwcmlsIDIwMjEiDQpvdXRwdXQ6DQogIHBkZl9kb2N1bWVudDogDQogICAgbGF0ZXhfZW5naW5lOiB4ZWxhdGV4DQogIGh0bWxfbm90ZWJvb2s6IGRlZmF1bHQNCiAgaHRtbF9kb2N1bWVudDoNCiAgICBkZl9wcmludDogcGFnZWQNCiAgd29yZF9kb2N1bWVudDogZGVmYXVsdA0KLS0tDQoNCiMgTXVsdGlwbGUgUmVncmVzc2lvbiAmIEJyYW5kIFByZWZlcmVuY2UgRGF0YXNldA0KDQojIyMgU2V0dGluZyB1cCB3b3Jrc3BhY2UNCg0KYGBge3IsIGNvbGxhcHNlID0gVFJVRSwgd2FybmluZyA9IEZBTFNFLCBtZXNzYWdlID0gRkFMU0V9DQpsaWJyYXJ5KG5vcnRlc3QpDQpsaWJyYXJ5KG9sc3JyKQ0KbGlicmFyeShjYXIpDQpsaWJyYXJ5KGxtdGVzdCkNCmxpYnJhcnkoTUFTUykNCmxpYnJhcnkodGlkeXZlcnNlKQ0KDQpzZXR3ZCgiQzovVXNlcnMvUlVNSUwvRGVza3RvcC9BUFUvU1RBVCA1MTEgLSBNaWxsaWUgTWFvIChBcHBsaWVkIFJlZ3Jlc3Npb24gQW5hbHlzaXMpL1dlZWsgMTIiKQ0KDQojcmVhZGluZyBpbiBhIGNzdg0KI2JyYW5kX2RhdGEgPSByZWFkLnRhYmxlKGZpbGUgPSAiQnJhbmQudHh0IiwgaGVhZGVyID0gRkFMU0UsIHNlcCA9ICIiKQ0KDQojcmVhZGluZyBpbiBhIHIgZGF0YSBmaWxlDQpsb2FkKGZpbGUgPSAiYm9keWZhdC5SZGF0YSIpDQoNCmJvZHlmYXQgPC0gZGF0YS5mcmFtZShkYXRhKQ0KDQoNCiNWaWV3KGJyYW5kX2RhdGEpDQoNCiMgI0FkZGluZyBoZWFkZXJzDQojbmFtZXMoYnJhbmRfZGF0YSkgPC0gYygiUmF0aW5nIiwgIk1vaXN0dXJlIiwgIlN3ZWV0bmVzcyIpDQoNCiMgbmFtZXMoYmFua19kYXRhKSA8LSBjKCIiLCAiIikNCg0KI0RlZmluaW5nIGRlcGVuZGVudCBhbmQgaW5kZXBlbmRlbnQgdmFycw0KI1JhdGluZyA9IF9kYXRhJCAjWQ0KI01vaXN0dXJlID0gX2RhdGEkICNYMQ0KI1N3ZWV0bmVzcyA9IF9kYXRhJCAjWDINCmBgYA0KIA0KIA0KIHRvIHdoYXQgZXh0ZW5kIGlzIHRoZSBzdW0gb2Ygc3FhdXJlIGVycm9ycyByZWR1Y3Rpb24gb3IgaW5jcmVhc2UgKG9mIHJeMj8pLiBXZSB3YW50IHRvIHRlc3Qgb24gdGhhdCBhbW91bnQuICh3YXRjaCB2aWRlbykNCiANClNldHRpbmcgdXAgcmVncmVzc2lvbiBtb2RlbHMgYmVmb3JlIHBsdWdnaW5nIGludG8gYW5vdmEgZnVuY3Rpb24gZm9yIGYgdGVzdA0KYGBge3J9DQoNCg0KI0RlZmluaW5nIGRlcGVuZGVudCBhbmQgaW5kZXBlbmRlbnQgdmFycw0KZmF0ID0gYm9keWZhdCRib2R5ZmF0ICNZDQp0cmljZXBzID0gYm9keWZhdCR0cmljZXBzICNYMQ0KdGhpZ2ggPSBib2R5ZmF0JHRoaWdoICNYMg0KYXJtID0gYm9keWZhdCRhcm0NCg0KdHJpY2Vwc19sbSA8LSBsbShmYXQgfiB0cmljZXBzLCBkYXRhID0gYm9keWZhdCkNCnRoaWdoX2xtIDwtIGxtKGZhdCB+IHRoaWdoLCBkYXRhID0gYm9keWZhdCkNCnRyaWNlcHNfdGhpZ2hfbG0gPC0gbG0oZmF0IH4gdHJpY2VwcyArIHRoaWdoLCBkYXRhID0gYm9keWZhdCkNCmFybV9sbSA8LSBsbShmYXQgfiBhcm0sIGRhdGEgPSBib2R5ZmF0KQ0KZnVsbF9sbSA8LSBsbShmYXQgfiB0cmljZXBzICsgdGhpZ2ggKyBhcm0sIGRhdGEgPSBib2R5ZmF0KQ0KDQpgYGANCkRvaW5nIFBhcnRpYWwgRiB0ZXN0DQpzdGF0aW5nIG51bGwgYW5kIGFsdGVybmF0aXZlDQoNCm51bGw6IHRoZXJlIGlzIG5vIGNoYW5nZSB3aGVuIGFkZGluZyBjZXJ0YWluIHByZWRpY3RvcnMgdG8gdGhlIHNpZ25pZmljYW5jZSBvZiBvdXIgbW9kZWwNCmgNCmFsdDogdGhlcmUgaXMgY2hhbmdlIHdoZW4gYWRkaW5nIGNlcnRhaW4gcHJlZGljdG9ycyB0b3dhcmRzIHRoZSBzaWduaWZpY2FuY2Ugb2Ygb3VyIG1vZGVsDQoNCg0KYGBge3J9DQojQ29tcGFyaW5nIHRyaWNlcCBvbmx5IHdpdGggdHJpY2VwICsgdGhpZ2ggKHRoaWdoIG1pc3NpbmcpDQphbm92YSh0cmljZXBzX2xtLCB0cmljZXBzX3RoaWdoX2xtKQ0KYGBgDQp0cmljZXAgaXMgc2lnbmlmaWNhbnQgYW5kIHdlIHJlamVjdCBudWxsIGh5cG90aGVzaXMgaW5kaWNhdGluZyB0aGF0IHdoZW4gdGhpZ2ggaXMgbWlzc2luZyBhbmQgd2UgYXJlIGxlZnQgd2l0aCB0cmljZXAgb25seSBvdXIgbW9kZWwgcmVtYWlucyBzaWduaWZpY2FudCB3aXRoIGEgYWxwaGEgb2YgMC4wNS4gYWthIHRoaWdoIGlzIGEgc2lnbmlmaWNhbnQgdmFyaWFibGUNCg0Kd2hpY2hldmVyIHZhcmlhYmxlIGlzIGV4dHJhIHRoYXQgbWVhbnMgaXRzIHRoYXQgdmFyaWFibGUgdGhhdCBpcyBiZWluZyB0ZXN0ZWQNCg0KYGBge3J9DQojQ29tcGFyaW5nIHRoaWdoIG9ubHkgd2l0aCB0cmljZXAgKyB0aGlnaCAodHJpY2VwIG1pc3NpbmcpDQphbm92YSh0aGlnaF9sbSwgdHJpY2Vwc190aGlnaF9sbSkNCmBgYA0KV2UgZmFpbCB0byByZWplY3QgbnVsbCBocG90aGVzaXMgc2luY2UgcCB2YWx1ZSBpcyBncmVhdGVyIHRoYW4gb3VyIGFscGhhIGluZGljYXRpbmcgd2hlbiB0cmljZXAgaXMgbWlzc2luZyBvdXIgbW9kZWwgaXMgbm90IHNpZ25pZmljYW50IHdpdGggYW4gYWNjZXB0ZWQgZXJyb3IoYWxwaGEpIHBmIDAuMDUuIHN1Z2dlc3RpbmcgdGhpZ2ggaXMgbm90IHNpZ25pZmljYW50IHByZWRpY3RvciB2YXJpYWJsZQ0KDQpgYGB7cn0NCiNjb21wYXJpbmcNCmFub3ZhKGFybV9sbSwgZnVsbF9sbSkNCmBgYA0Kc2luY2UgdGhpcyBpcyB2ZXJ5IHNpZ25pZmljYW50IG1lYW5zIHRyaWNlcCBhbmQgdGhpZ2ggYXJlIGpvaW50bHkgc2lnbmlmaWNhbnQNCg0KDQojIFNjYWxlZCBSZWdyZXNzaW9uDQpgYGB7cn0NCiNTY2FsaW5nIGNvZWZmaWNpZW50cw0Kc2NhbGVkX2ZhdCA8LSBzY2FsZShmYXQpDQpzY2FsZWRfdHJpY2VwcyA8LSBzY2FsZSh0cmljZXBzKQ0Kc2NhbGVkX3RoaWdoPC1zY2FsZSh0aGlnaCkNCnNjYWxlZF9hcm08LXNjYWxlKGFybSkNCmBgYA0KYGBge3J9DQojcHV0dGluZyBzY2FsZWQgY29lZmZzIGludG8gbG0gbm93IHRoZSByZXN1bHRzIGFyZSBzY2FsZWQsIHcvbyBpbnRlcmNlcHQNCnNjYWxlZF9sbSA8LSBsbShzY2FsZWRfZmF0IH4gMCArIHNjYWxlZF90cmljZXBzICsgc2NhbGVkX3RoaWdoICsgc2NhbGVkX2FybSwgZGF0YSA9IGJvZHlmYXQpDQpzY2FsZWRfbG0NCnN1bW1hcnkoc2NhbGVkX2xtKQ0KYGBgDQpUaGVyZWZvcmUgd2hlbiBob2xkaW5nIG91dGhlciB2YXJpYWJsZXMgY29uc3RhbnQvdW5jaGFuZ2VkIHdoZW4gX19fX18gdmFyaWFibGUgaW5jcmVhc2VzIGJ5IF9fX18gc3RhbmRhcmQgZGV2aWF0aW9ucyB3ZSBjYW4gZXhwZWN0IF9fX19fIHRvIGluY3JlYXNlIGJ5IF9fX19fIHN0YW5kYXJkIGRldmlhdGlvbnMuDQoNCg0K4paqIFJlZ3Jlc3MgZmF0IG9uIGFsbCB0aHJlZSBwcmVkaWN0b3JzDQpgYGB7cn0NCmZhdF9sbSA8LSBsbShmYXQgfiB0cmljZXBzICsgdGhpZ2ggKyBhcm0sIGRhdGEgPSBib2R5ZmF0KQ0KZmF0X2xtDQpzdW1tYXJ5KGZhdF9sbSkNCmBgYA0Kbm90aWNlIGhvdyBhYm92ZSB0aGVyZSBhcmUgbm8gc2lnbmlmaWNhbnQgcHJlZGljdG9ycyBidXQgb3ZlcmFsbCBtb2RlbCB0ZXN0IGlzIGhpZ2hseSBzaWduaWZpY2FudA0KDQoNCg0KDQrilqogUmVncmVzcyBzY2FsZWQgZmF0IG9uIHNjYWxlZCB0aHJlZSBwcmVkaWN0b3JzDQpgYGB7cn0NCnNjYWxlZF9mYXRfbG0gPC0gbG0oc2NhbGVkX2ZhdCB+ICBzY2FsZWRfdHJpY2VwcyArIHNjYWxlZF90aGlnaCArIHNjYWxlZF9hcm0sIGRhdGEgPSBib2R5ZmF0KQ0KZmF0X2xtDQpzdW1tYXJ5KGZhdF9sbSkNCmBgYA0KDQogUmVncmVzcyBzY2FsZWQgZmF0IG9uIHNjYWxlZCB0aHJlZSBwcmVkaWN0b3JzIHdpdGhvdXQgdGhlIGludGVyY2VwdA0KVG8gZXhjbHVkZSBpbnRlcmNlcHQgaW4gYSByZWdyZXNzaW9uIG1vZGVsLCB1c2UgbG0oeSB+IDAgKyB4MSsgeDIpLg0KDQpgYGB7cn0NCnNjYWxlZF9sbSA8LSBsbShzY2FsZWRfZmF0IH4gMCArIHNjYWxlZF90cmljZXBzICsgc2NhbGVkX3RoaWdoICsgc2NhbGVkX2FybSwgZGF0YSA9IGJvZHlmYXQpDQpzY2FsZWRfbG0NCnN1bW1hcnkoc2NhbGVkX2xtKQ0KYGBgDQoNCiANCiANCiA=</div>
 
 
 
