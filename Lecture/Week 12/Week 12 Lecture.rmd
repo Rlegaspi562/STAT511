@@ -1,0 +1,41 @@
+---
+title: 'STAT 511: Week 12 Lecture '
+author: "Rumil Legaspi"
+date: "5 April 2021"
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  html_notebook: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+# Multiple Regression & Brand Preference Dataset
+
+### Setting up workspace
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+library(nortest)
+library(olsrr)
+library(car)
+library(lmtest)
+library(MASS)
+library(tidyverse)
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 12")
+
+#brand_data = read.table(file = "Brand.txt", header = FALSE, sep = "")
+
+#View(brand_data)
+
+# #Adding headers
+#names(brand_data) <- c("Rating", "Moisture", "Sweetness")
+
+# names(bank_data) <- c("", "")
+
+#Defining dependent and independent vars
+#Rating = _data$ #Y
+#Moisture = _data$ #X1
+#Sweetness = _data$ #X2
+```
