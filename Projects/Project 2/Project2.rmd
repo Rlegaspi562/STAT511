@@ -23,16 +23,21 @@ output:
 
 We are conducting a multiple linear regression model from the Real Estate Sales (APPENC07) dataset to analyze the relationship of the given features, bedrooms, bathrooms, and garage size, with the outcome variable, house sales price in a midwestern city.
 
+\newpage
+
 # **Our Data**
 
 ## Background on dataset and variables
 
 Our dataset is comprised of 522 total transactions from home sales during the year 2002.
 
++---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 | Response Variable (Y)                 | Explanatory Variable 1 ($X_{1}$) | Explanatory Variable 2 ($X_{2}$) | Explanatory Variable 3 ($X_{3}$)   |
-|---------------------------------------|----------------------------------|----------------------------------|------------------------------------|
++=======================================+==================================+==================================+====================================+
 | "house_price"                         | "beds"                           | "baths"                          | "garage_size"                      |
++---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 | sales price of residence (in dollars) | Number of bedrooms               | Number of bathrooms              | Number of cars the garage can hold |
++---------------------------------------+----------------------------------+----------------------------------+------------------------------------+
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 
@@ -47,6 +52,7 @@ library(tidyverse)
 library(ggcorrplot)
 #Loading in the text data
 raw_data = read.table(file = "APPENC07.txt", header = FALSE, sep = "")
+
 #Converting into tibble data frame for easier data analysis
 house_data <- as_tibble(raw_data)
 ```
@@ -68,15 +74,7 @@ garage_size <- house_data %>% select(garage_size) #X3
 
 # Part 1 - Model Estimation and Interpretation
 
-## Fitting a regression model estimating sales price using predictors
-
-```{r}
-#test
-test_lm <- lm(house_price ~ baths + beds + garage_size, data = house_data)
-test2_lm <- lm(house_price ~ garage_size +baths + beds, data = house_data)
-summary(test_lm)
-summary(test2_lm)
-```
+## 1a. Fitting a regression model estimating sales price using beds, baths, and garage size as predicting variables
 
 ```{r}
 #Using the lm function to fit a multiple regression model
@@ -86,7 +84,7 @@ house_lm <- lm(house_price ~ beds + baths + garage_size, data = house_data)
 summary(house_lm)
 ```
 
-## Interpretation of coefficients
+## 1b. Interpretation of coefficients
 
 ### Intercept & Partial Slopes
 
@@ -103,21 +101,21 @@ $\hat{Y}= -45886.3 + 935.4X + 67818.9X + 67332.3X$
 
 The partial slopes in our summary indicate that when any one of the partial slopes **Increase by 1 unit** and other explanatory variables held constant and unchanged we can expect:
 
--   When holding our other explanatory variables Bathrooms and Garage Size constant and unchanged, when **Bedrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$935.4**.
+-   While holding our other explanatory variables Bathrooms and Garage Size constant and unchanged, when **Bedrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$935.4**.
 
--   When holding our other explanatory variables Bedrooms and Garage Size constant and unchanged, when **Bathrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,818.9.**
+-   While holding our other explanatory variables Bedrooms and Garage Size constant and unchanged, when **Bathrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,818.9.**
 
--   When holding our other explanatory variables Bedrooms and Bathrooms constant and unchanged, when **Garage size** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,332.3**.
+-   While holding our other explanatory variables Bedrooms and Bathrooms constant and unchanged, when **Garage size** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,332.3**.
 
-### Adjusted R-Squared = 0.54
+## 1c. Adjusted R-Squared = 0.54
 
-A adjusted R squared value similar to the R square value tells us how much of the variability in our model is explained by our predictor variables, but also penalizes redundant or otherwise useless predictor variables helping us to resist urges of adding too many variables into our model.
+A adjusted R squared value, similar to the R square value, tells us how much of the variability in our model is explained by our predictor variables, while also penalizing redundant or otherwise useless predictor variables helping us to resist urges of adding too many variables into our model.
 
-In this case our adjusted \$R\^2\$ of 0.54 Tells us that about 54% of the variation in our response variable is explained by our 3 explanatory variables.
+In this case our adjusted \$R\^2\$ of 0.54 tells us that about 54% of the variation in our response variable is explained by our 3 explanatory variables.
 
 # Part 2 - Prediction
 
-## Predicting the house sales price for a house with 3 bedrooms, 3 bathrooms, and a 2-car garage
+## 2a. Predicting the house sales price for a house with 3 bedrooms, 3 bathrooms, and a 2-car garage
 
 ```{r}
 #Creating a observation where a given house has 
@@ -143,7 +141,9 @@ pi_house
 
 # Part 3 - Hypothesis Testing
 
-### 3a. Conducting a hypothesis test for each individual partial slope (independent variable) to check for significance using a significance level of $\alpha = 0.05$
+## 3a. Checking the significance for each individual partial slope (independent variable)
+
+### Using a significance level of $\alpha = 0.05$
 
 **Null Hypothesis**: ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ **is not** linearly associated with Y, therefore the partial slope **is not significant.**
 
@@ -167,7 +167,9 @@ The p-value of Bedroom is 0.8507 and is greater than our $\alpha$ (accepted erro
 
 On the other hand because the p-value of Bathroom and Garage size are both \<2e-16 and are incredibly smaller than our $\alpha$ (accepted error) of 0.05, so we **reject** our NULL hypothesis and conclude with our alternative hypothesis. Our alternative hypothesis states that our partial slopes, **Bathroom and Garage Size**, shows overall significance in our model.
 
-### 3b. Conducting an F-test to check overall model significance with a significance level of $\alpha = 0.05$
+## 3b. Conducting an F-test to check overall model significance 
+
+### Using a significance level of $\alpha = 0.05$
 
 **Null Hypothesis**: ${H_0}$: $\beta_{1}=\beta_{2} = 0$ (**No** partial slopes are significant). Shows no change, therefore **does not** show overall model significance.
 
@@ -182,59 +184,56 @@ qt(0.975, 518)
 anova(house_lm)
 ```
 
++------------------------------+--------------------+---------------------+-----------------------+
 | Test Statistic Type & Result | Bedrooms ($X_{1}$) | Bathrooms ($X_{2}$) | Garage Size ($X_{3}$) |
-|------------------------------|--------------------|---------------------|-----------------------|
++==============================+====================+=====================+=======================+
 | F-value                      | 194.515 \> 1.96    | 338.057 \> 1.96     | 88.032 \> 1.96        |
++------------------------------+--------------------+---------------------+-----------------------+
 | P-value                      | 2.2e-16 \< 0.05    | 2.2e-16 \< 0.05     | 2.2e-16 \< 0.05       |
++------------------------------+--------------------+---------------------+-----------------------+
 | Result                       | Significant        | Significant         | Significant           |
++------------------------------+--------------------+---------------------+-----------------------+
 
 : Table Representation of F-test Hypothesis Testing
 
-Our p-value of \< 2.2e-16 being less than our alpha and our F values being larger then our critical value tells us we can reject our NULL hypothesis and conclude with our alternative hypothesis, that **at least one** of our predictor variables **shows** overall model significance.
+Our p-value of \< 2.2e-16 being less than our alpha and our F values being larger then our critical value tells us we can **reject** our NULL hypothesis and conclude with our alternative hypothesis, that **at least one** of our predictor variables **shows** overall model significance.
 
-### Partial F tests
+## Partial F tests
 
-\*\*Are the number of bathrooms (𝑋2) and garage size (𝑋3) jointly significant in the MLR model? Conduct a partial F-test and conclude. Choose your own 𝛼.
+### Which variable is actually contributing?
 
-We will be conducting partial F tests to see if the number of bathrooms (X2) and garage size(X3) are jointly significant using a significance level of 0.05.
+We will be conducting partial F tests to see if the number of bathrooms (X2) and garage size(X3) are **jointly significant** using a significance level of 0.05.
 
-\*\* In other words is there significance in adding bathrooms and garage size into our model?
+stating null and alternative:
 
-\*\* is it comparing full model (y=b0+b1X1+b2X2+b3X3) to (y=b0+b1X1)
+null: there is no change when adding certain predictors to the significance of our model
 
-THIS ONE \^\^\^
-
-```{r}
-##**#full model
-#house_lm
-
-#reduced model bathrooms and garage size (w/o bath a)
-#bed_lm(house_lm ~ beds, data = house_data)
-```
-
-or comparing full model (y=b0+b1X1+b2X2+b3X3) to (y=b0+b1x1+b2X2) and (y=b0+b1x1+b3X3)?
+alt: there is change when adding certain predictors towards the significance of our model
 
 ```{r}
-##**#full model
-#house_lm
+#full model
+house_lm
 
-#model without garage size only
-#bed_bath_lm <- lm(house_lm ~ beds, baths, data = house_data)
-#model without bath only
-#bed_garage_lm <- lm(house_lm ~ beds, garage_size, data = house_data)
-
+#reduced model without bathrooms and garage size
+bed_lm <- lm(house_price ~ beds, data = house_data)
 ```
 
 We now compare our reduced model with our complete model
 
 ```{r}
-#**#anova(house_lm,)
+anova(bed_lm, house_lm)
 
 ```
 
-In effect, we are concluding that these predictors do contribute information in the prediction of house sales price and therefore should be retained in the model.
+We see that bathroom and garage size are both jointly significant and therefore reject the null hypothesis, indicating there is significance in keeping both bathroom and garage size in our model. extra is the variable that is being tested
+
+In effect, we are concluding that bathroom and garage size are predictors that do contribute information in the prediction of house sales price and therefore should be retained in the model.
 
 # \*\*Part 4 - Multicolinearity
+
+## Why bother with multicolinearity?
+
+Having multicolinearity is problematic because by having multiple correlated predictor variables, it becomes harder for our model to attribute significance to our predictor variables. It creates redundant and duplicate information, thereby negatively affecting the results of our regression model.
 
 ## Creating scatterplots and correlation matrices
 
@@ -264,20 +263,16 @@ ggcorr_matrix
 summary(house_lm)
 ```
 
-The correlation coefficient shows a moderately positive relationship between most of our predictor variables. Moreover, it does not necessarily look like are
+A way to combat this is by removing a highly correlated predictor. From the correlation matrix and by looking at our correlation coefficient, we can see moderately positive relationship between bedrooms and bathrooms which might be worth further investigating.
 
-Having multicolinearity is problematic because by having multiple correlated predictor variables, it becomes harder for our model to attribute significance to our predicts. It creates redundant information and thereby negatively affecting the results of our regression model.
-
-A way to combat this is by removing a highly correlated predictor.
-
-\*\* we keep the variable we are most interested in and remove the other. we know there is some kind of multicolinearity issue with bed and baths, I am more interested in beds than baths.
+\*\* we keep the variable we are most interested in and remove the other. we know there is some kind of multicolinearity issue with bed and baths, I am more interested in beds than baths. So I can remove baths from our model thereby correcting our multicolinearity issue.\*\*
 
 ```{r}
 #summary of original predictor
 summary(house_lm)
 ```
 
-We notice beds it no significant when in fact the reality is it SHOULD be significant
+We notice bedrooms is not a significant variable from looking at the p-value, when in fact, the reality is it **should** be significant. Knowing this, we can check to see how well our model performs when removing bathroom since there is a multicolinearity issue.
 
 ```{r}
 #removing beds
@@ -291,4 +286,4 @@ nobaths_lm <- lm(house_price ~ garage_size + beds, data = house_data)
 summary(nobaths_lm)
 ```
 
-\`\`\`
+In both cases we can see that by either removing bedroom or bathroom in our model, the predictors still remain significant but more importantly we can now see that bedrooms is in fact a significant predictor when removing the bathroom variable in our model concluding that we have addressed our issue of multicolinearity.

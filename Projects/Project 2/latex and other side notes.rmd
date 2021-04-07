@@ -1,0 +1,59 @@
+Latex Notation
+
+$\sigma$
+  $\sigma^2$
+  $\beta_{1}$
+  $\beta_{0}$
+  $\hat{\beta}=1.02$
+    $\hat{\beta_1}$
+    $\hat{\beta_0}$
+    $\hat{\epsilon_1}$
+    ($\bar{𝑋}$ , $\bar{𝑌}$)
+  $Y_{i}$ $\beta_{0}$ $\epsilon_{i}$ $\beta_{i}$ $X_{i}$
+    $\frac{X - \mu}{\sigma}$ Z score
+  $P( 195 \leq  Y \leq  205) = P(\frac{195 - 200}{5}\leq \frac{X - \mu}{\sigma} \leq \frac{205 - 200}{5})$ more z score
+    -------------------------
+      
+      For centering
+    
+    
+    <div align="center">
+      
+      </div>
+      
+      -------------------------
+For new page 
+\newpage
+      
+      
+      1. find the f distribution 
+    - first find std error "Residual standard error: 8.173 on 58 degrees of freedom"
+    - finding the f critical value
+    
+    
+    
+    
+    
+    
+    ```{r}
+    
+    
+    #constructing lines
+    
+    
+    x.vals = data.frame(ACT = seq(14,35,0.1))
+    
+    lines(x.vals$ACT, band_L, col = "red", lwd = 1.5, lty = 4) #band lower limit
+    lines(muscle_data, band_U, col = "red", lwd = 1.5, lty = 4)
+    plot(Age, Muscle, main = "TITLE", xlab = "xlabel", ylab = "ylabel")
+    
+    lines(Age, Muscle, lty = 1, lwd = 1.5)
+    ```
+    
+    
+    
+    ```{r}
+    #constructing a confidence interval using ggplot
+    library(ggplot2)
+    library(dplyr)
+    ```       
