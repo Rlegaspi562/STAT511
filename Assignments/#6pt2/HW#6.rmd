@@ -16,6 +16,7 @@ library(car)
 library(lmtest)
 library(MASS)
 library(tidyverse)
+library(ggcorrplot)
 
 setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10")
 
@@ -66,11 +67,46 @@ While holding other variables constant and unchanged, when the Moisture variable
 ## c. Find the correlation matrix of this dataset. Is there any multicollinearity issue?
 
 ```{r}
+#Correlation Matrix
+#corr_matrix <- c(Rating, Moisture, Sweetness) %>% cor()
+corr_matrix <- cor(brand_data,use = "everything")
 
+ggcorr_matrix <- ggcorrplot(corr_matrix, type = "lower", lab = TRUE,
+   outline.col = "white",
+   ggtheme = ggplot2::theme_gray,
+   colors = c("#6D9EC1", "white", "#E46726"))
+
+#Printing results and visual
+corr_matrix
+ggcorr_matrix
 ```
+
+Moisture and Rating are highly correlated here, but since Rating is our response variable there is no issue with multicolinearity since we can attribute our predictor variable Moisture to having a strong linear relationship with our response variable, Rating.
 
 ## d. Use the anova() function in R to test if sweetness ($X_{2}$) should be removed from the multiple linear regression, i.e., test the difference between the full model and the reduced model.
 
-```{r}
+### Which variable is actually contributing?
 
+Conducting partial F tests to see if the number of bathrooms (X2) **significant.**
+
+### Using a significance level of 0.05
+
+**Null Hypothesis**: ${H_0}$: ***There is no*** change when adding certain predictors to the significance of our model
+
+**Alternative Hypothesis**: ${H_1}$: ***There is*** change when adding certain predictors towards the significance of our model
+
+
+```{r}
+#full model
+brand_lm
+
+#reduced model
+Moisture_lm <- lm(Rating ~ Moisture, data = brand_data)
+
+#comparing
+anova(Moisture_lm, brand_lm)
 ```
+
+Since the p-value is **2.011e-05** and is less than our significance level of 0.05 we see that Sweetness is significant and therefore we can reject the null hypothesis, indicating there is significance in keeping Sweetness in our model.
+
+In effect, we are concluding that Sweetness is a predictors that does contribute information in the prediction of brand rating and should be retained in the model.
