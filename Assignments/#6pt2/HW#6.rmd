@@ -55,7 +55,7 @@ scaled_lm <- lm(scaled_Rating ~ 0 + scaled_Moisture + scaled_Sweetness, data = b
 summary(scaled_lm)
 ```
 
-The estimated intercept coefficient will be zero if all standardized, so we can remove it from the model.
+The estimated intercept coefficient will be zero if all standardized, so we can remove it from our model.
 
 ## b. Interpret the partial slope coefficient $\hat{\beta_1}$ in the standardized regression model.
 
