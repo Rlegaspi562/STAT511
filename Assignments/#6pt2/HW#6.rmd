@@ -59,8 +59,18 @@ The estimated intercept coefficient will be zero if all standardized, so we can 
 
 ## b. Interpret the partial slope coefficient $\hat{\beta_1}$ in the standardized regression model.
 
+The partial slope coefficient Moisture ($\hat{\beta_1}$) in our standardized regression model can be interpreted like so:
+
+While holding other variables constant and unchanged, when the Moisture variable increases by 1 standard deviation we can expect our response variable, Ratings to increase by 0.89239 standard deviations.
+
 ## c. Find the correlation matrix of this dataset. Is there any multicollinearity issue?
 
-## d. Use the anova() function in R to test if sweetness ($X_{2}$) should be removed from the multiple
+```{r}
 
-linear regression, i.e., test the difference between the full model and the reduced model.
+```
+
+## d. Use the anova() function in R to test if sweetness ($X_{2}$) should be removed from the multiple linear regression, i.e., test the difference between the full model and the reduced model.
+
+```{r}
+
+```
