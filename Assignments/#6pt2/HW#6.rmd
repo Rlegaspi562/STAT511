@@ -1,0 +1,66 @@
+---
+title: 'STAT 511: Assignment #6'
+author: "Rumil Legaspi"
+date: "4/10/2021"
+output: pdf_document
+---
+
+# Multiple Regression & Brand Preference Dataset
+
+### Setting up workspace
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+library(nortest)
+library(olsrr)
+library(car)
+library(lmtest)
+library(MASS)
+library(tidyverse)
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10")
+
+brand_data = read.table(file = "Brand.txt", header = FALSE, sep = "")
+
+View(brand_data)
+
+# #Adding headers
+names(brand_data) <- c("Rating", "Moisture", "Sweetness")
+
+# names(bank_data) <- c("", "")
+
+#Defining dependent and independent vars
+Rating = brand_data$Rating #Y
+Moisture = brand_data$Moisture #X1
+Sweetness = brand_data$Sweetness #X2
+```
+
+```{r}
+#Regressing Rating (response) on Moisture (explanatory) and Sweetness (explanatory).
+#Then summarizing our model
+brand_lm <- lm(Rating ~ Moisture + Sweetness, data = brand_data)
+summary(brand_lm)
+```
+
+## a. Fit a standardized multiple regression model where all variables are centered and scaled.
+
+```{r}
+#Scaling coefficients
+scaled_Rating <- scale(Rating)
+scaled_Moisture <- scale(Moisture)
+scaled_Sweetness<-scale(Sweetness)
+
+#putting scaled coefficients into a lm, now the results are scaled, 
+scaled_lm <- lm(scaled_Rating ~ 0 + scaled_Moisture + scaled_Sweetness, data = brand_data)
+
+summary(scaled_lm)
+```
+
+The estimated intercept coefficient will be zero if all standardized, so we can remove it from the model.
+
+## b. Interpret the partial slope coefficient $\hat{\beta_1}$ in the standardized regression model.
+
+## c. Find the correlation matrix of this dataset. Is there any multicollinearity issue?
+
+## d. Use the anova() function in R to test if sweetness ($X_{2}$) should be removed from the multiple
+
+linear regression, i.e., test the difference between the full model and the reduced model.
