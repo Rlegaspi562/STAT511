@@ -48,7 +48,7 @@ summary(brand_lm)
 #Scaling coefficients
 scaled_Rating <- scale(Rating)
 scaled_Moisture <- scale(Moisture)
-scaled_Sweetness<-scale(Sweetness)
+scaled_Sweetness <- scale(Sweetness)
 
 #putting scaled coefficients into a lm, now the results are scaled, 
 scaled_lm <- lm(scaled_Rating ~ 0 + scaled_Moisture + scaled_Sweetness, data = brand_data)
@@ -87,14 +87,13 @@ Moisture and Rating are highly correlated here, but since Rating is our response
 
 ### Which variable is actually contributing?
 
-Conducting partial F tests to see if the number of bathrooms (X2) **significant.**
+Conducting partial F tests to see if the number of Sweetness (X2) **significant.**
 
 ### Using a significance level of 0.05
 
 **Null Hypothesis**: ${H_0}$: ***There is no*** change when adding certain predictors to the significance of our model
 
 **Alternative Hypothesis**: ${H_1}$: ***There is*** change when adding certain predictors towards the significance of our model
-
 
 ```{r}
 #full model
@@ -107,6 +106,6 @@ Moisture_lm <- lm(Rating ~ Moisture, data = brand_data)
 anova(Moisture_lm, brand_lm)
 ```
 
-Since the p-value is **2.011e-05** and is less than our significance level of 0.05 we see that Sweetness is significant and therefore we can reject the null hypothesis, indicating there is significance in keeping Sweetness in our model.
+Since the p-value is **2.011e-05** and is less than our significance level of 0.05 we see that Sweetness is significant and therefore we can reject the null hypothesis, concluding that there is significance in keeping Sweetness in our model.
 
 In effect, we are concluding that Sweetness is a predictors that does contribute information in the prediction of brand rating and should be retained in the model.
