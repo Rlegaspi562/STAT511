@@ -1,0 +1,86 @@
+---
+title: 'STAT 511: HW #7'
+author: "Rumil Legaspi"
+date: "4/19/2021"
+output: pdf_document
+---
+
+# Multiple Regression & Brand Preference Dataset
+
+### Setting up workspace
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+library(nortest)
+library(olsrr)
+library(car)
+library(lmtest)
+library(MASS)
+library(tidyverse)
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10")
+
+brand_data = read.table(file = "Brand.txt", header = FALSE, sep = "")
+
+View(brand_data)
+
+# #Adding headers
+names(brand_data) <- c("Rating", "Moisture", "Sweetness")
+
+# names(bank_data) <- c("", "")
+
+#Defining dependent and independent vars
+Rating = brand_data$Rating #Y
+Moisture = brand_data$Moisture #X1
+Sweetness = brand_data$Sweetness #X2
+```
+
+# 1a. Regress degree of brand liking on sweetness only. Write down the estimated regression model.
+
+```{r}
+#Coding Sweetness as a dummy variable
+cat_sweetness <- as.factor(Sweetness)
+
+#Regressing Rating on new Sweetness dummy variable
+Sweetness_only <- lm(Rating ~ cat_sweetness, data = brand_data)
+
+summary(Sweetness_only)
+```
+
+Estimated Regression model:
+
+$\hat{Y}= 77.375 + 8.750X$
+
+```{r}
+#Checking how many levels there are in sweetness as a dummy
+levels(cat_sweetness)
+typeof(cat_sweetness)
+attributes(cat_sweetness)
+```
+
+So in this case since sweetness is a category with only 2 level (sweetness level 2 and sweetness level 4) we can think of our regression model like so:
+
+We will use sweetness level 2 as our reference group
+
+```{r}
+#the "2" indicates the level marked as "2" given from our level() function and now setting sweetness level 2 as our reference group
+cat_sweetness_new <- relevel(cat_sweetness, ref = "2")
+
+#Regressing
+Sweetness_only2 <- lm(Rating ~ cat_sweetness_new, data = brand_data)
+
+summary(Sweetness_only2)
+```
+
+After doing so we can now say
+
+| $\hat{Y}= B_{0} + B_{1}X_{1}$ | Sweetness = Level 2          | Sweetness = Level 4          |
+|-------------------------------|------------------------------|------------------------------|
+| $\hat{Y}= 77.375 + 8.750X$    | $\hat{Y}= 77.375 + 8.750(0)$ | $\hat{Y}= 77.375 + 8.750(1)$ |
+|                               | = 77.375                     | = 77.375 + 8.750             |
+|                               | 77.375                       | 86.125                       |
+
+: Mean Rating at Level 2 or Level 4 Sweetness
+
+```{r}
+warnings()
+```
