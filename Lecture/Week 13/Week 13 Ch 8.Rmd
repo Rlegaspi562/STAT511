@@ -1,0 +1,108 @@
+---
+title: "Week 13 Ch 8"
+author: "Rumil Legaspi"
+date: "4/12/2021"
+output: pdf_document
+---
+
+# Multiple Regression & Dataset
+
+### Setting up workspace
+
+```{r, collapse = TRUE, warning = FALSE, message = FALSE}
+library(nortest)
+library(olsrr)
+library(car)
+library(lmtest)
+library(MASS)
+library(tidyverse)
+
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 13")
+
+#reading in a csv
+#brand_data = read.table(file = "Brand.txt", header = FALSE, sep = "")
+
+#reading in a r data file
+load(file = "Drug.Rdata")
+load(file = "Prodlines.Rdata")
+
+drug <- data.frame(Drugdata)
+prod <- data.frame(ProdLines)
+
+#View(brand_data)
+
+# #Adding headers
+#names(brand_data) <- c("Rating", "Moisture", "Sweetness")
+
+# names(bank_data) <- c("", "")
+
+#Defining dependent and independent vars
+FevRed = drug$FevRed #Y
+Drug = drug$Drug #X1
+Child = drug$Child #X2
+```
+
+Drug Example: Regression with Dummies
+
+```{r}
+drugname = as.factor(drug)
+drug.lm1 <- lm(FevRed ~ as.factor(Drug))
+summary(drug.lm1)
+
+Drugname = as.factor(Drug)
+drug.lm2 = lm(FevRed ~ Drugname)
+summary(drug.lm2)
+
+```
+
+![](images/pic1.PNG)
+
+Change the Reference Group
+
+```{r}
+#Change Reference group
+#use drug B ("2") as reference group
+#Use relevel() function
+Drugname_new = relevel(Drugname, ref = "2")
+drug.lm3 = lm(FevRed ~ Drugname_new)
+summary(drug.lm3)
+```
+
+Interpreting what is the mean fever reduction for DRUG A,B and C?
+
+The mean of our response variable (fever reduction) after using drug A is 1.5 (plug in: B = 0, C = 0 is how we get our estimates?)
+
+the mean change of Y when comparing drug B and drug A (for 1 unit increase in B, holding C constant) is -1.48 (plug in: B = 1, C = 0 is how we get our estimates?)
+
+The mean change of Y when comparing drug C with drug A (for 1 unit increase in C, holding B constant) is -1.16 (plug in: B = 0, C = 1 is how we get our estimates?)
+
+We have to plug in zeros here into the formula and look at response.
+
+![](images/pic2.PNG)
+
+Now Interpret Above:
+
+After changing the reference group from drug a to drug b
+
+1.  we plug in here to see if anything has changed
+
+    ```{r}
+    #when b is reference group
+    #for drug a
+    y = 0.1 +
+      1.48*1 + 0
+    #for drug b
+    y = 0.1 + 1.48*0 + 0.43*0
+    #for drug c
+    y = 0.1 + 1.48(0)
+    ```
+
+\*Still a lot to fix in these notes
+
+![](images/pic3.PNG)
+
+(we see that these results above are the same as when drug A was reference group)
+
+ie. no matter whichever group is chosen for reference group, no matter how dummy variables are allocated to represent the groups or hwichever group to be the reference gorup, the estimation for eahc group should not change.
+
+interpretting p value:
