@@ -71,16 +71,33 @@ Sweetness_only2 <- lm(Rating ~ cat_sweetness_new, data = brand_data)
 summary(Sweetness_only2)
 ```
 
-After doing so we can now say
+## 1b. Compute the estimated mean degree of brand liking at each level of sweetness, i.e., what is 
+the estimated mean degree of brand liking at sweetness level 2? At sweetness level 4?
 
+After reading the summary we can now say the estimated means when Sweetness level is 2 and 4 to be.
+
++-------------------------------+------------------------------+------------------------------+
 | $\hat{Y}= B_{0} + B_{1}X_{1}$ | Sweetness = Level 2          | Sweetness = Level 4          |
-|-------------------------------|------------------------------|------------------------------|
++===============================+==============================+==============================+
 | $\hat{Y}= 77.375 + 8.750X$    | $\hat{Y}= 77.375 + 8.750(0)$ | $\hat{Y}= 77.375 + 8.750(1)$ |
++-------------------------------+------------------------------+------------------------------+
 |                               | = 77.375                     | = 77.375 + 8.750             |
++-------------------------------+------------------------------+------------------------------+
 |                               | 77.375                       | 86.125                       |
++-------------------------------+------------------------------+------------------------------+
 
 : Mean Rating at Level 2 or Level 4 Sweetness
 
-```{r}
-warnings()
-```
+# 1c. Interpret the intercept coefficient.
+
+$B_{0}$ = 77.375
+
+The estimated mean Y-value when X = 0 which is our reference/baseline group. When put in context, this is the mean Rating when the brand's sweetness level is 2.
+
+# 1d. Interpret the slope coefficient.
+
+The change in mean Rating for Sweetness level 4 relative to sweetness level 2.
+
+The estimated
+
+## 1e. Is the slope coefficient significant? State the null, alternative, decision rule and conclusion.
