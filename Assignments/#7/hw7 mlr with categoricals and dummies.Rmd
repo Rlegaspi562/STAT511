@@ -134,12 +134,18 @@ $\hat{Y}= 46.40 + 8.75X + 4.425X$
 ## ***2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
 
 $X_{2}$ = 8.750:
-The change in mean Rating for Sweetness level 4 relative to sweetness level 2 and keeping Moisture constant is 55.15.
+The change in mean Rating for Sweetness level 4 relative to sweetness level 2 while keeping Moisture constant is 55.15.
 
 $X_{3}$ = 4.4250:
 The change in mean Rating for a 1 unit increase in Moisture while keeping Sweetness constant is 4.4250
 
 ## 2d. Is the interaction coefficient significant at 𝛼 = 5%? State the null, alternative, decision rule, conclusion.
+
+## ***2e. your answer is NO in Part (d), drop the interaction term and rerun the model. Write down 
+the new estimated regression equation at each sweetness level.
+
+
+# 3. Refer to the “Assessed Valuations” dataset (Value.txt)
 
 
 
