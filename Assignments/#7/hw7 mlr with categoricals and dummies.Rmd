@@ -97,7 +97,7 @@ The estimated mean Y-value when X = 0 which is our reference/baseline group. Whe
 
 # 1d. Interpret the slope coefficient.
 
-The change in mean Rating for Sweetness level 4 relative to sweetness level 2.
+The change in mean Rating for Sweetness level 4 relative to sweetness level 2 is 86.125 (77.375 + 8.750(1)). 
 
 ## 1e. Is the slope coefficient significant? State the null, alternative, decision rule and conclusion.
 
@@ -114,3 +114,34 @@ Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our al
 ```{r}
 #***t.test(Sweetness, cat_sweetness_new)
 ```
+
+# 2. Refer to the “Brand Preference” dataset. Code sweetness ($X_{2}$) as a dummy variable.
+
+## 2a. Fit a multiple regression model with moisture content, sweetness, and their interaction.
+
+```{r}
+#Regressing Rating on Moisture and with Sweetness still as a dummy variable
+full_lm <- lm(Rating ~ cat_sweetness + Moisture, data = brand_data)
+
+summary(full_lm)
+```
+
+## 2b. Write down the estimated regression equation at each sweetness level
+
+$\hat{Y}= 46.40 + 8.75X + 4.425X$
+
+
+## ***2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
+
+$X_{2}$ = 8.750:
+The change in mean Rating for Sweetness level 4 relative to sweetness level 2 and keeping Moisture constant is 55.15.
+
+$X_{3}$ = 4.4250:
+The change in mean Rating for a 1 unit increase in Moisture while keeping Sweetness constant is 4.4250
+
+## 2d. Is the interaction coefficient significant at 𝛼 = 5%? State the null, alternative, decision rule, conclusion.
+
+
+
+
+
