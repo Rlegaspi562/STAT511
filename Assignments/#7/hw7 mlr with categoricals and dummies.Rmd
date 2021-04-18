@@ -71,7 +71,8 @@ Sweetness_only2 <- lm(Rating ~ cat_sweetness_new, data = brand_data)
 summary(Sweetness_only2)
 ```
 
-## 1b. Compute the estimated mean degree of brand liking at each level of sweetness, i.e., what is 
+## 1b. Compute the estimated mean degree of brand liking at each level of sweetness, i.e., what is
+
 the estimated mean degree of brand liking at sweetness level 2? At sweetness level 4?
 
 After reading the summary we can now say the estimated means when Sweetness level is 2 and 4 to be.
@@ -98,6 +99,18 @@ The estimated mean Y-value when X = 0 which is our reference/baseline group. Whe
 
 The change in mean Rating for Sweetness level 4 relative to sweetness level 2.
 
-The estimated
-
 ## 1e. Is the slope coefficient significant? State the null, alternative, decision rule and conclusion.
+
+**Null Hypothesis**: ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ **is not** linearly associated with Y, therefore the partial slope is not significant.
+
+**Alternative Hypothesis**: ${H_1}$: $\beta_{j} \neq 0$ (slopes are showing change), $X_{j}$ **is** linearly associated with Y, therefore the partial slope is significant.
+
+#### Testing the significance of Sweetness Level 4 ($\hat{\beta_1} = 8.750$)
+
+**p-value:**
+
+Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance (\*\*\*in our model).
+
+```{r}
+#***t.test(Sweetness, cat_sweetness_new)
+```
