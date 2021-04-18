@@ -173,11 +173,11 @@ From the results we can predict with 95% confidence that when their are 3 bedroo
 
 **Bedroom variable:**
 
-The p-value of Bedroom is 0.8507 and is greater than our $\alpha$ (accepted error) of 0.05, so we **fail to reject** our NULL hypothesis and must conclude with our NULL hypothesis. Stating that our partial slope, **Bedrooms**, does not show overall significance in our model.
+The p-value of Bedroom is 0.8507 and is greater than our $\alpha$ (accepted error) of 0.05, so we **fail to reject** our NULL hypothesis and must conclude with our NULL hypothesis. Stating that our partial slope, **Bedrooms**, does not show significance in our model.
 
 **Bathroom & Garage Size variables:**
 
-On the other hand because the p-value of Bathroom and Garage size are both \<2e-16 and are incredibly smaller than our $\alpha$ (accepted error) of 0.05, so we **reject** our NULL hypothesis and conclude with our alternative hypothesis. Our alternative hypothesis states that our partial slopes, **Bathroom and Garage Size**, shows overall significance in our model.
+On the other hand because the p-value of Bathroom and Garage size are both \<2e-16 and are incredibly smaller than our $\alpha$ (accepted error) of 0.05, so we **reject** our NULL hypothesis and conclude with our alternative hypothesis. Our alternative hypothesis states that our partial slopes, **Bathroom and Garage Size**, shows significance in our model.
 
 ## 3b. Conducting an F-test to check overall model significance
 
