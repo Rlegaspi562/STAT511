@@ -192,3 +192,31 @@ Estimated mean selling price for non-corner lots:
 For corner lots:
 
 **The estimated mean selling price for corner lots is roughly \$72.5k, which is taken by 81k - 8.5k.**
+
+## 3c. Based on your regression result in Part (a), what is the estimated difference in selling price
+
+between corner and non-corner lots? Is this difference statistically significant?
+
+\*\*\*he estimated mean selling price between corner and non-corner lots is \$8.5k. Looking at the p-value of 0.000728 we can see that the difference is statistically significant.
+
+## 3d. Regress selling price on assessed valuation, lot location, and their interaction. Write down the estimated regression equation for corner lots, and for non-corner lots respectively
+
+```{r}
+#regressing on valuation, lot location, plus their interaction
+val_lot_interlm <- lm(Price ~ Corner_lot + Valuation + Corner_lot*Valuation, data = value_data)
+summary(val_lot_interlm)
+```
+
+C - Corner or non corner lots
+
+V - Valuation
+
+Estimated regression equation for non corner lots:
+
+$\hat{Y}= -126.9052 + 2.7759V + -1.1075(V*X)$
+
+and for corner lots respectively:
+
+$\hat{Y}= -126.9052 + 76.0215C +2.7759V + 4.425(V*X)$
+
+## 3e. Plot the estimated regression lines for the two groups and describe their differences
