@@ -2,7 +2,11 @@
 title: 'STAT 511: HW #7'
 author: "Rumil Legaspi"
 date: "4/19/2021"
-output: pdf_document
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+    latex_engine: xelatex
 ---
 
 # Multiple Regression & Brand Preference Dataset
@@ -17,7 +21,7 @@ library(lmtest)
 library(MASS)
 library(tidyverse)
 
-setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10")
+setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10/")
 
 brand_data = read.table(file = "Brand.txt", header = FALSE, sep = "")
 
@@ -97,7 +101,7 @@ The estimated mean Y-value when X = 0 which is our reference/baseline group. Whe
 
 # 1d. Interpret the slope coefficient.
 
-The change in mean Rating for Sweetness level 4 relative to sweetness level 2 is 86.125 (77.375 + 8.750(1)). 
+The change in mean Rating for Sweetness level 4 relative to sweetness level 2 is 86.125 (77.375 + 8.750(1)).
 
 ## 1e. Is the slope coefficient significant? State the null, alternative, decision rule and conclusion.
 
@@ -115,7 +119,7 @@ Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our al
 #***t.test(Sweetness, cat_sweetness_new)
 ```
 
-# 2. Refer to the “Brand Preference” dataset. Code sweetness ($X_{2}$) as a dummy variable.
+# 2. Refer to the "Brand Preference" dataset. Code sweetness ($X_{2}$) as a dummy variable.
 
 ## 2a. Fit a multiple regression model with moisture content, sweetness, and their interaction.
 
@@ -130,24 +134,61 @@ summary(full_lm)
 
 $\hat{Y}= 46.40 + 8.75X + 4.425X$
 
+Sweetness level 2: $\hat{Y}= 46.40 + 4.425X$
 
-## ***2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
+Sweetness level 4: $\hat{Y}= 46.40 + 8.75X + 4.425X$
 
-$X_{2}$ = 8.750:
-The change in mean Rating for Sweetness level 4 relative to sweetness level 2 while keeping Moisture constant is 55.15.
+## \*\*\*2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
 
-$X_{3}$ = 4.4250:
-The change in mean Rating for a 1 unit increase in Moisture while keeping Sweetness constant is 4.4250
+$X_{2}$ = 8.750: The change in mean Rating for Sweetness level 4 relative to sweetness level 2 while keeping Moisture constant is 55.15.
+
+$X_{3}$ = 4.4250: The change in mean Rating for a 1 unit increase in Moisture while keeping Sweetness constant is 4.4250
 
 ## 2d. Is the interaction coefficient significant at 𝛼 = 5%? State the null, alternative, decision rule, conclusion.
 
-## ***2e. your answer is NO in Part (d), drop the interaction term and rerun the model. Write down 
+## \*\*\*2e. your answer is NO in Part (d), drop the interaction term and rerun the model. Write down
+
 the new estimated regression equation at each sweetness level.
 
+# 3. Refer to the "Assessed Valuations" dataset (Value.txt)
 
-# 3. Refer to the “Assessed Valuations” dataset (Value.txt)
+```{r}
+value_data = read.table(file = "C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10/Value.txt", sep= "")
 
+View(value_data)
 
+# #Adding headers
+names(value_data) <- c("Price", "Valuation", "Corner_lot")
 
+# names(bank_data) <- c("", "")
 
+#Defining dependent and independent vars
+Price = value_data$Price #Y
+Valuation = value_data$Valuation #X1
+Corner_lot = value_data$Corner_lot #X2
+```
 
+## 3a. Regress selling price on lot location only. Write down the estimated regression equation.
+
+```{r}
+#Coding Corner Location as a dummy variable
+cat_corner_lot <- as.factor(Corner_lot)
+
+#For good measure I set 0 as base reference group
+cat_corner_lot <- relevel(cat_corner_lot, ref = "0")
+
+location_onlylm <- lm(Price ~ Corner_lot, data = value_data)
+summary(location_onlylm)
+```
+
+## 3b. Based on your regression result in Part (a), what is the estimated mean selling price for corner lots? For non-corner lots?
+
+R uses alpha-numeric ordering as the reference group by default so either 'a' or '0' as the base reference group.
+
+Estimated mean selling price for non-corner lots:
+
+**The estimated mean selling price for non-corner lots is roughly \$81K**
+
+For corner lots:
+
+**The estimated mean selling price for corner lots is roughly \$72.5k, which is taken by 81k - 8.5k.**
