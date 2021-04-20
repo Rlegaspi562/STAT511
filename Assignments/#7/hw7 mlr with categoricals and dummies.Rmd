@@ -61,7 +61,7 @@ typeof(cat_sweetness)
 attributes(cat_sweetness)
 ```
 
-So in this case since sweetness is a category with only 2 level (sweetness level 2 and sweetness level 4) we can think of our regression model like so:
+So in this case since sweetness is a category with only 2 levels (sweetness level 2 and sweetness level 4) we can think of our regression model like so:
 
 We will use sweetness level 2 as our reference group
 
@@ -113,7 +113,7 @@ The change in mean Rating for Sweetness level 4 relative to sweetness level 2 is
 
 **p-value:**
 
-Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance (\*\*\*in our model).
+Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance in our model.
 
 ```{r}
 #***t.test(Sweetness, cat_sweetness_new)
@@ -125,30 +125,44 @@ Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our al
 
 ```{r}
 #Regressing Rating on Moisture and with Sweetness still as a dummy variable
-full_lm <- lm(Rating ~ cat_sweetness + Moisture, data = brand_data)
+full_lm <- lm(Rating ~ cat_sweetness + Moisture + cat_sweetness*Moisture, data = brand_data)
 
 summary(full_lm)
 ```
 
 ## 2b. Write down the estimated regression equation at each sweetness level
 
-$\hat{Y}= 46.40 + 8.75X + 4.425X$
+S = Sweetness M = Moisture
 
-Sweetness level 2: $\hat{Y}= 46.40 + 4.425X$
+$\hat{Y}= 42.90 + 15.75S + 4.925M - S*M$
 
-Sweetness level 4: $\hat{Y}= 46.40 + 8.75X + 4.425X$
+Sweetness level 2: $\hat{Y}= 42.90 + 4.925M$
+
+Sweetness level 4: $\hat{Y}= 58.68 + 3.925M$
 
 ## \*\*\*2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
 
-$X_{2}$ = 8.750: The change in mean Rating for Sweetness level 4 relative to sweetness level 2 while keeping Moisture constant is 55.15.
+$M$ = 4.925: The change in mean Rating for sweetness level 2 for a 1 unit increase in Moisture content is 4.925.
 
-$X_{3}$ = 4.4250: The change in mean Rating for a 1 unit increase in Moisture while keeping Sweetness constant is 4.4250
+$M$ = 3.925: The change in mean Rating for sweetness level 2 for a 1 unit increase in Moisture content is 4.925.
 
 ## 2d. Is the interaction coefficient significant at 𝛼 = 5%? State the null, alternative, decision rule, conclusion.
+
+\*\*\*0.0975 . not significant fail to reject.
+
+Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance in our model.
 
 ## \*\*\*2e. your answer is NO in Part (d), drop the interaction term and rerun the model. Write down
 
 the new estimated regression equation at each sweetness level.
+
+```{r}
+no_inter_lm <- lm(Rating ~ cat_sweetness + Moisture, data = brand_data)
+
+summary(no_inter_lm)
+```
+
+y = 46.4 + 8.75S + 4.425M
 
 # 3. Refer to the "Assessed Valuations" dataset (Value.txt)
 
@@ -181,6 +195,8 @@ location_onlylm <- lm(Price ~ Corner_lot, data = value_data)
 summary(location_onlylm)
 ```
 
+y = 81.154 - 8.5C
+
 ## 3b. Based on your regression result in Part (a), what is the estimated mean selling price for corner lots? For non-corner lots?
 
 R uses alpha-numeric ordering as the reference group by default so either 'a' or '0' as the base reference group.
@@ -193,11 +209,9 @@ For corner lots:
 
 **The estimated mean selling price for corner lots is roughly \$72.5k, which is taken by 81k - 8.5k.**
 
-## 3c. Based on your regression result in Part (a), what is the estimated difference in selling price
+## 3c. Based on your regression result in Part (a), what is the estimated difference in selling price between corner and non-corner lots? Is this difference statistically significant?
 
-between corner and non-corner lots? Is this difference statistically significant?
-
-\*\*\*he estimated mean selling price between corner and non-corner lots is \$8.5k. Looking at the p-value of 0.000728 we can see that the difference is statistically significant.
+The estimated mean selling price between corner and non-corner lots is \$8.5k. Looking at the p-value of 0.000728 we can see that the difference is statistically significant.
 
 ## 3d. Regress selling price on assessed valuation, lot location, and their interaction. Write down the estimated regression equation for corner lots, and for non-corner lots respectively
 
@@ -211,12 +225,54 @@ C - Corner or non corner lots
 
 V - Valuation
 
-Estimated regression equation for non corner lots:
+Estimated regression equation for **non corner lots**:
 
-$\hat{Y}= -126.9052 + 2.7759V + -1.1075(V*X)$
+$\hat{Y}= -126.9052 + 2.7759V$
 
-and for corner lots respectively:
+and for **corner lots** respectively:
 
-$\hat{Y}= -126.9052 + 76.0215C +2.7759V + 4.425(V*X)$
+$\hat{Y}= -50.8837 + 1.67V$
 
 ## 3e. Plot the estimated regression lines for the two groups and describe their differences
+
+```{r}
+#***delete
+library(lattice)
+plotlegend = list(space="right", text = list(c("Line2","Line1")), 
+points =list(pch=c(1,3), col = c("red","blue")))
+
+xyplot(Price ~ Corner_lot + Valuation, groups = Corner_lot, data = value_data,
+       pch = c(1,3), col=c("red","blue"), type = "p",
+       main = "Plot of Two Selling Price Lines", key = plotlegend)
+```
+
+Plotting Fitted Regression Lines
+
+```{r}
+#plot fitted regression lines
+#Save estimated coefficients
+Coef = val_lot_interlm$coefficients
+Coef
+
+#Non corner lots: When Corner lots takes value 0
+price1 = Coef[1] + Coef[2] * Valuation
+
+#corner lots: When Corner lots takes value 1
+price2 = Coef[1] + Coef[2] * Valuation + Coef[3] +Coef[4] * Valuation
+
+#plottinf plot()
+plot(Valuation, price1, type = 'l', col = "blue",
+     xlab = "Valuation" , ylab = "Price")
+lines(Valuation, price2, type = 'l', col = "red")
+
+#legend
+legend("topleft", legend = c("Line 1", "Line 2"),
+       col = c("blue", "red"), lty = 1, cex = 0.5)
+
+```
+
+The two are parallel which would mean the interaction coefficient is 0?
+
+so the interaction terms [1] 0.00828 is significant and we would keep them in our model.
+
+The lines move at the same rate
