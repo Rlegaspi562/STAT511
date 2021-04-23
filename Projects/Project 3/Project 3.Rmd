@@ -32,6 +32,7 @@ library(lmtest)
 library(MASS)
 library(tidyverse)
 library(ggcorrplot)
+library(knitr)
 #Loading in the text data
 raw_data = read.table(file = "APPENC07.txt", header = FALSE, sep = "")
 
@@ -52,19 +53,26 @@ square_feet <- house_data %>% select(square_feet) #X1
 swimming_pool <- house_data %>% select(swimming_pool) #X2
 air_conditioning <- house_data %>% select(air_conditioning) #X3
 
+knitr::kable(house_data) %>% head(5)
+
+
 ```
 
 # Part 1 - Regression using a Dummy Variable
 
-## 1a. Estimated regression equation from regressing sales price on swimming pool only
+## 1a. Estimated regression equation from regressing sales price on swimming pool only.
 
 ```{r}
 #Regressing sales price only on swimming pool dummy variable
-pool_only <- lm(sales_price ~ swimming_pool, data = house_data)
+pool_only_lm <- lm(sales_price ~ swimming_pool, data = house_data)
 
 #summarizing linear model
-summary(pool_only)
+summary(pool_only_lm)
 ```
+
+Estimated Regression model:
+
+$\hat{Y}= 272396 + 79724X$
 
 ## 1b. Interpretation of estimated intercept and slope.
 
@@ -78,18 +86,111 @@ The slope of 79724 in our model indicates the change for the sales price of a pr
 
 The calculations of these coefficients can be represented in this table.
 
-+-------------------------------+------------------------------+-----------------------------+
-| $\hat{Y}= B_{0} + B_{1}X_{1}$ | Swimming Pool = No           | Swimming Pool = Yes         |
-+===============================+==============================+=============================+
-| $\hat{Y}= 77.375 + 8.750X$    | $\hat{Y}= 272396 + 79724(0)$ | $\hat{Y}= 272396+ 79724(1)$ |
-+-------------------------------+------------------------------+-----------------------------+
-|                               | = 272396                     | = 272396+ 79724             |
-+-------------------------------+------------------------------+-----------------------------+
-| Estimated Mean Sales Price    | **\$272,396**                | **\$352,120**               |
-+-------------------------------+------------------------------+-----------------------------+
++--------------------------------+------------------------------+-----------------------------+
+| $\hat{Y}= B_{0} + B_{1}X_{1}$  | Swimming Pool = No           | Swimming Pool = Yes         |
++================================+==============================+=============================+
+| $\hat{Y}= 77.375 + 8.750X$     | $\hat{Y}= 272396 + 79724(0)$ | $\hat{Y}= 272396+ 79724(1)$ |
++--------------------------------+------------------------------+-----------------------------+
+|                                | = 272396                     | = 272396+ 79724             |
++--------------------------------+------------------------------+-----------------------------+
+| **Estimated Mean Sales Price** | **\$272,396**                | **\$352,120**               |
++--------------------------------+------------------------------+-----------------------------+
 
 : Property Sales Price With & Without Swimming Pool
 
-# Part 2 - MLR with the Interaction Term of a Dummy and Continuous Variable
+## 1c. Hypothesis testing on the significance of the slope coefficient.
+
+Using a significance level of $\alpha=0.05$.
+
+Null Hypothesis: ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ is not linearly associated with Y, therefore the partial slope is not significant.
+
+Alternative Hypothesis: ${H_1}$: $\beta_{j} \neq 0$ (slopes are showing change), $X_{j}$ is linearly associated with Y, therefore the partial slope is significant.
+
+Testing the significance of a property **with** a swimming pool ($\hat{\beta_1} = 79724$)
+
+Conclusion and Decision Rule using p-value:
+
+Because the **p-value** for having a swimming pool is [1] 0.00078 and is significantly smaller than $\alpha=0.05$, we reject our NULL hypothesis and conclude that our partial slope, that a property **containing** a swimming pool in reference to one **without a swimming pool**, shows statistical significance in our model.
+
+```{r}
+
+```
+
+# Part 2 - Fitting a MLR model with the Interaction Term of a Dummy and Continuous Variable
+
+## 2a. Regressing sales price on the (1)swimming pool dummy variable, (2)area of residence, and the (3)interaction between these two variables.
+
+```{r}
+pool_sqft_only_lm <- lm(sales_price ~ swimming_pool + 
+                                      square_feet +
+                                      swimming_pool * square_feet,
+                                      data = house_data)
+summary(pool_sqft_only_lm)
+```
+
+Estimated regression equation for each kind of property:
+
+**$\hat{Y}= -88538.996 + 105909.972X + 161.910Y - 37.213(X*Y)$**
+
+*note variables:*
+
+**X** = Swimming pool
+
+**Y** = Square feet
+
+**X \* Y** = Interaction of swimming pool and square feet
+
+
+| $\hat{Y}= B_{0} + B_{1}X_{}+B_{2}Y+B_{3}(X*Y)$            | Swimming Pool = No                                          | Swimming Pool = Yes                                         |
+|-----------------------------------------------------------|-------------------------------------------------------------|-------------------------------------------------------------|
+| $\hat{Y}= -88538.996 + 105909.972X+161.910Y- 37.213(X*Y)$ | $\hat{Y}= -88538.996 + 105909.972(0)+161.910Y- 37.213(0*Y)$ | $\hat{Y}= -88538.996 + 105909.972(1)+161.910Y- 37.213(1*Y)$ |
+|                                                           |                                                             |                                                             |
+|                                                           | $= -88538.996 +161.910Y$                                    | $= -88538.996 + 105909.972+161.910Y- 37.213(Y)$             |
+|                                                           |                                                             | $= 17370.976 + 124.697Y$                                    |
+|                                                           |                                                             |                                                             |
+| **Estimated Regression Equations**                        | $= -88538.996 +161.910Y$                                    | $= 17370.976 + 124.697Y$                                    |
+
+: Calculating Estimated Regression Equations for Properties With and Without Pools
+
+## 2b. Plotting Fitted regression lines
+
+```{r}
+plot(pool_sqft_only_lm)
+abline(pool_sqft_only_lm)
+```
+
+
+```{r}
+#no_pool <- house_data %>%
+           #select(swimming_pool == 0)
+# Code to plot regression equations model:
+plot_coef <- house_data %>% 
+  
+  ggplot(aes(x = square_feet, y = sales_price, color = as.factor(swimming_pool))) +
+ 
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Square Feet", y = "Sales Price", color = "Swimming Pool")+
+  scale_y_continuous(labels = scales::dollar)
+
+
+plot_coef
+
+```
+To find the value at which these two lines intersect we can set equal to one another and do algebra
+```{r}
+17370.976 + 124.697Y
+-88538.996 +161.910Y
+```
+
+
+
+
+
+
+
+
+
+
+
 
 # Part 3 - MLR Only with the Interaction of Dummy Variables

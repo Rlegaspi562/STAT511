@@ -130,7 +130,7 @@ full_lm <- lm(Rating ~ cat_sweetness + Moisture + cat_sweetness*Moisture, data =
 summary(full_lm)
 ```
 
-## \*\*\*2b. Write down the estimated regression equation at each sweetness level
+## 2b. Write down the estimated regression equation at each sweetness level
 
 S = Sweetness
 
@@ -142,7 +142,7 @@ Sweetness level 2: $\hat{Y}= 42.90 + 4.925M$
 
 Sweetness level 4: $\hat{Y}= 58.68 + 3.925M$
 
-## \*\*\*2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
+## 2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
 
 $M$ = 4.925: The increase in mean Rating when sweetness is level 2 for a 1 unit increase the in Moisture content is 4.925.
 
@@ -259,6 +259,18 @@ lines(Valuation, price2, type = 'l', col = "red")
 #legend
 legend("topleft", legend = c("Line 1", "Line 2"),
        col = c("blue", "red"), lty = 1, cex = 0.5)
+
+plot_coef <- value_data %>% 
+  
+  ggplot(aes(x = Valuation, y = Price, color = as.factor(Corner_lot))) +
+ 
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "valuation", y = "Price", color = "corner lot")+
+  scale_y_continuous(labels = scales::dollar)
+
+
+plot_coef
+
 
 ```
 
