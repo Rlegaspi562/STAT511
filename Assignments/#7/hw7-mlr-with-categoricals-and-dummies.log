@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.4.19)  19 APR 2021 04:03
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.4.19)  22 APR 2021 21:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -934,31 +934,36 @@ tex-text;!
 
 [1
 
-] [2] [3]
+] [2] [3] [4]
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 14.4pt on input line 361.
+(Font)              scaled to size 14.4pt on input line 371.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 14.4013pt on input line 361.
+(Font)              scaled to size 14.4013pt on input line 371.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 14.39845pt on input line 361.
-[4]
+(Font)              scaled to size 14.39845pt on input line 371.
+[5]
 Missing character: There is no 𝛼 (U+1D6FC) in font [lmroman12-bold]:mapping=tex
 -text;!
-[5] [6] [7] (./hw7-mlr-with-categoricals-and-dummies.aux)
+[6] [7] [8]
+File: hw7-mlr-with-categoricals-and-dummies_files/figure-latex/unnamed-chunk-11
+-1.pdf Graphic file (type pdf)
+<use hw7-mlr-with-categoricals-and-dummies_files/figure-latex/unnamed-chunk-11-
+1.pdf>
+[9] [10] (./hw7-mlr-with-categoricals-and-dummies.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `hw7-mlr-with-categoricals-and-dummies.out' h
 as not changed.
-(rerunfilecheck)             Checksum: 5A324A9C491E584DA8A734B4601DF5DA;7569.
+(rerunfilecheck)             Checksum: EB32B3AD6D0DA13E5037F399B2D5E5A9;10233.
  ) 
 Here is how much of TeX's memory you used:
- 16788 strings out of 478918
- 299232 string characters out of 5865075
- 762871 words of memory out of 5000000
- 36418 multiletter control sequences out of 15000+600000
+ 16799 strings out of 478918
+ 300185 string characters out of 5865075
+ 767224 words of memory out of 5000000
+ 36426 multiletter control sequences out of 15000+600000
  410810 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 98i,7n,122p,835b,465s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 98i,7n,122p,1126b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on hw7-mlr-with-categoricals-and-dummies.pdf (7 pages).
+Output written on hw7-mlr-with-categoricals-and-dummies.pdf (10 pages).

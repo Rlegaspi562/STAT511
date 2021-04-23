@@ -97,7 +97,7 @@ After reading the summary we can now say the estimated means when Sweetness leve
 
 $B_{0}$ = 77.375
 
-The estimated mean Y-value when X = 0 which is our reference/baseline group. When put in context, this is the mean Rating when the brand's sweetness level is 2.
+The estimated mean Y-value when X = 0 (our reference/baseline group) is 77.375. When put in context, this represents the mean Rating when the brand's sweetness level is 2.
 
 # 1d. Interpret the slope coefficient.
 
