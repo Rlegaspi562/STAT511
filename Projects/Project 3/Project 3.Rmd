@@ -155,12 +155,6 @@ Estimated regression equation for each kind of property:
 ## 2b. Plotting Fitted regression lines
 
 ```{r}
-plot(pool_sqft_only_lm)
-abline(pool_sqft_only_lm)
-```
-
-
-```{r}
 #no_pool <- house_data %>%
            #select(swimming_pool == 0)
 # Code to plot regression equations model:
@@ -176,7 +170,9 @@ plot_coef <- house_data %>%
 plot_coef
 
 ```
-To find the value at which these two lines intersect we can set equal to one another and do algebra
+To find the value at which these two lines 
+intersect algebraically by can setting equal to one another, solving for one variable then plugging that back into the equation to get the other variable. In this case these variables are coordinates.
+
 ```{r}
 17370.976 + 124.697Y
 -88538.996 +161.910Y
@@ -184,7 +180,8 @@ To find the value at which these two lines intersect we can set equal to one ano
 
 
 
-
+We get when Square feet = 2846.047672
+and sales price =372264.582495, is the point of intersection.
 
 
 
