@@ -112,17 +112,14 @@ Conclusion and Decision Rule using p-value:
 
 Because the **p-value** for having a swimming pool is [1] 0.00078 and is significantly smaller than $\alpha=0.05$, we reject our NULL hypothesis and conclude that our partial slope, that a property **containing** a swimming pool in reference to one **without a swimming pool**, shows statistical significance in our model.
 
-```{}
-```
-
 # Part 2 - Fitting a MLR model with the Interaction Term of a Dummy and Continuous Variable
 
 ## 2a. Regressing sales price on the (1)swimming pool dummy variable, (2)area of residence, and the (3)interaction between these two variables.
 
 ```{r}
 pool_sqft_lm <- lm(sales_price ~ swimming_pool + 
-                                      square_feet +
-                                      swimming_pool * square_feet,
+                                square_feet +
+                              swimming_pool * square_feet,
                                       data = house_data)
 summary(pool_sqft_lm)
 ```
@@ -173,11 +170,11 @@ plot_coef <- house_data %>%
 
 
 plot_coef
+changes
 
 ```
 
 To find the value at which these two lines intersect algebraically by can setting equal to one another, solving for one variable then plugging that back into the equation to get the other variable to obtain the coordinates.
-
 
 The point of intersection of these two lines are when the values of: **Square feet is 2846.04 and sales price = 372264.58**.
 
@@ -213,18 +210,18 @@ pool_ac_lm <- lm(sales_price ~ swimming_pool +
 summary(pool_ac_lm)
 ```
 
-
 ```{r}
 #testing to see why interaction term is insignificant
 count_with_pools <- house_data %>% select(swimming_pool) %>%
                filter(swimming_pool == 1) %>%
                 count()
-count_with_pools
+
 
 count_no_pools <- house_data %>% select(swimming_pool) %>%
                filter(swimming_pool == 0 ) %>%
                 count()
 
+count_with_pools
 count_no_pools
 ```
 
@@ -257,8 +254,7 @@ reg_eq_1
 
 ```
 
-The estimated mean sales price of a property without a swimming pool and AC is $189,578.2.
-
+The estimated mean sales price of a property without a swimming pool and AC is \$189,578.2.
 
 -2. No swimming pool and has AC
 
@@ -274,8 +270,7 @@ reg_eq_2 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
 reg_eq_2
 ```
 
-The estimated mean sales price of a property without a swimming pool but has AC is $290,454.
-
+The estimated mean sales price of a property without a swimming pool but has AC is \$290,454.
 
 -3. Has swimming pool and no AC
 
@@ -290,7 +285,8 @@ reg_eq_3 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
 #printing
 reg_eq_3
 ```
-The estimated mean sales price of a property with a swimming pool and no AC is $190,000.
+
+The estimated mean sales price of a property with a swimming pool and no AC is \$190,000.
 
 -4. Has swimming pool and has AC
 
@@ -306,10 +302,4 @@ reg_eq_4 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
 reg_eq_4
 ```
 
-The estimated mean sales price of a property with a swimming pool and AC is $224,999.3.
-
-
-
-
-
-
+The estimated mean sales price of a property with a swimming pool and AC is \$224,999.3.
