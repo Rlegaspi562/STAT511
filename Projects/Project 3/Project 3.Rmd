@@ -10,7 +10,7 @@ toc: yes
 toc_depth: 2
 geometry: margin=1in
 header-includes:
- \usepackage{float} 
+ \usepackage{float}
 ---
 
 ```{r setup, include=FALSE}
@@ -25,7 +25,7 @@ Given that a city tax assessor is interested in predicting residential home sale
 
 #Setting up our work environment
 setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Project 2")
-
+("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/")
 library(nortest)
 library(olsrr)
 library(car)
@@ -35,7 +35,7 @@ library(tidyverse)
 library(ggcorrplot)
 library(knitr)
 #Loading in the text data
-raC:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Midterm/
+raw_data = read.table(file = "APPENC07.txt", header = FALSE, sep = "")
 
 #Converting into tibble data frame for easier data analysis
 house_data <- as_tibble(raw_data)
@@ -241,7 +241,7 @@ $\hat{Y}= 189578.2 + 421.8X + 100875.8Z - 65876.5(X*Z)$
 
 ## 3c. Calculating estimated mean sales prices for 4 types of properties:
 
--   1\. No swimming pool and no AC
+-1. No swimming pool and no AC
 
 ```{r}
 #Coding in our variables based on its absence or presence
@@ -258,7 +258,7 @@ reg_eq_1
 
 The estimated mean sales price of a property without a swimming pool and AC is \$189,578.2.
 
--   2\. No swimming pool and has AC
+-2. No swimming pool and has AC
 
 ```{r}
 #Coding in our variables based on its absence or presence
@@ -304,4 +304,4 @@ reg_eq_4 <- 189578.2 + 421.8*x + 100875.8*z + 65876.5*x*z
 reg_eq_4
 ```
 
-The estimated mean sales price of a property with a swimming pool and AC is \$356,752.3
+The estimated mean sales price of a property with a swimming pool and AC is $356,752.3.
