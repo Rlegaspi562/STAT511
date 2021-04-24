@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # **Background & Objective**
 
-Given that a city tax assessor is interested in predicting residential home sales prices in a midwestern city with various characteristics, we will be conducting a **multiple linear regression analysis** from the Real Estate Sales (APPENC07) dataset from 2002. We aim to observe and predict the relationship using the given features, ***square feet***, the absence or presence of a ***swimming pool*** and ***air conditioning***, and our response variable as ***house sales price***.
+Given that a city tax assessor is interested in predicting residential home sales prices in a midwestern city with various characteristics, we will be conducting a **multiple linear regression analysis (MLR)** from the Real Estate Sales (APPENC07) dataset from 2002. We aim to observe and predict the relationship using the given features, ***square feet***, the absence or presence of a ***swimming pool*** and ***air conditioning***, and our response variable as ***house sales price***.
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 
@@ -64,10 +64,10 @@ knitr::kable(house_data) %>% head(5)
 
 ```{r}
 #Regressing sales price only on swimming pool dummy variable
-pool_only_lm <- lm(sales_price ~ swimming_pool, data = house_data)
+pool_lm <- lm(sales_price ~ swimming_pool, data = house_data)
 
 #summarizing linear model
-summary(pool_only_lm)
+summary(pool_lm)
 ```
 
 Estimated Regression model:
@@ -98,7 +98,7 @@ The calculations of these coefficients can be represented in this table.
 
 : Property Sales Price With & Without Swimming Pool
 
-## 1c. Hypothesis testing on the significance of the slope coefficient.
+## 1c. Hypothesis test on the significance of the slope coefficient.
 
 Using a significance level of $\alpha=0.05$.
 
@@ -112,8 +112,7 @@ Conclusion and Decision Rule using p-value:
 
 Because the **p-value** for having a swimming pool is [1] 0.00078 and is significantly smaller than $\alpha=0.05$, we reject our NULL hypothesis and conclude that our partial slope, that a property **containing** a swimming pool in reference to one **without a swimming pool**, shows statistical significance in our model.
 
-```{r}
-
+```{}
 ```
 
 # Part 2 - Fitting a MLR model with the Interaction Term of a Dummy and Continuous Variable
@@ -121,16 +120,16 @@ Because the **p-value** for having a swimming pool is [1] 0.00078 and is signifi
 ## 2a. Regressing sales price on the (1)swimming pool dummy variable, (2)area of residence, and the (3)interaction between these two variables.
 
 ```{r}
-pool_sqft_only_lm <- lm(sales_price ~ swimming_pool + 
+pool_sqft_lm <- lm(sales_price ~ swimming_pool + 
                                       square_feet +
                                       swimming_pool * square_feet,
                                       data = house_data)
-summary(pool_sqft_only_lm)
+summary(pool_sqft_lm)
 ```
 
 Estimated regression equation for each kind of property:
 
-**$\hat{Y}= -88538.996 + 105909.972X + 161.910Y - 37.213(X*Y)$**
+$\hat{Y}= -88538.996 + 105909.972X + 161.910Y - 37.213(X*Y)$
 
 *note variables:*
 
@@ -140,15 +139,21 @@ Estimated regression equation for each kind of property:
 
 **X \* Y** = Interaction of swimming pool and square feet
 
-
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 | $\hat{Y}= B_{0} + B_{1}X_{}+B_{2}Y+B_{3}(X*Y)$            | Swimming Pool = No                                          | Swimming Pool = Yes                                         |
-|-----------------------------------------------------------|-------------------------------------------------------------|-------------------------------------------------------------|
++===========================================================+=============================================================+=============================================================+
 | $\hat{Y}= -88538.996 + 105909.972X+161.910Y- 37.213(X*Y)$ | $\hat{Y}= -88538.996 + 105909.972(0)+161.910Y- 37.213(0*Y)$ | $\hat{Y}= -88538.996 + 105909.972(1)+161.910Y- 37.213(1*Y)$ |
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 |                                                           |                                                             |                                                             |
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 |                                                           | $= -88538.996 +161.910Y$                                    | $= -88538.996 + 105909.972+161.910Y- 37.213(Y)$             |
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 |                                                           |                                                             | $= 17370.976 + 124.697Y$                                    |
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 |                                                           |                                                             |                                                             |
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 | **Estimated Regression Equations**                        | $= -88538.996 +161.910Y$                                    | $= 17370.976 + 124.697Y$                                    |
++-----------------------------------------------------------+-------------------------------------------------------------+-------------------------------------------------------------+
 
 : Calculating Estimated Regression Equations for Properties With and Without Pools
 
@@ -170,24 +175,141 @@ plot_coef <- house_data %>%
 plot_coef
 
 ```
-To find the value at which these two lines 
-intersect algebraically by can setting equal to one another, solving for one variable then plugging that back into the equation to get the other variable. In this case these variables are coordinates.
+
+To find the value at which these two lines intersect algebraically by can setting equal to one another, solving for one variable then plugging that back into the equation to get the other variable to obtain the coordinates.
+
+
+The point of intersection of these two lines are when the values of: **Square feet is 2846.04 and sales price = 372264.58**.
+
+## 2c. Testing if the two regression lines are parallel.
+
+\*\*\*Nested F-test?
+
+Using a significance level of $\alpha=0.05$.
+
+Null Hypothesis: ${H_0}$: $\beta_{c} = 0$ The coefficient of the interaction term is 0.
+
+Alternative Hypothesis: ${H_1}$: $\beta_{c} \neq 0$ The coefficient of the interaction term is nonzero.
+
+Testing the significance of a property **with** a swimming pool ($\hat{\beta_1} = 79724$)
+
+Conclusion and Decision Rule using p-value:
+
+Looking at our model summary, we see that the p-value of our interaction term is [1]0.0300 which means we **reject** NULL hypothesis and \*\*\*conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0)
+
+# Part 3 - MLR Only with the Interaction of Dummy Variables
+
+## 3a. Fitting a MLR on both Swimming Pool and AC dummy variables and the estimated regression equation.
 
 ```{r}
-17370.976 + 124.697Y
--88538.996 +161.910Y
+#Regressing house sales price on both dummy variables: swimming pool and AC, plus their interaction
+
+
+pool_ac_lm <- lm(sales_price ~ swimming_pool + 
+                              (air_conditioning) +
+                               swimming_pool * air_conditioning,
+                               data = house_data)
+
+summary(pool_ac_lm)
 ```
 
 
+```{r}
+#testing to see why interaction term is insignificant
+count_with_pools <- house_data %>% select(swimming_pool) %>%
+               filter(swimming_pool == 1) %>%
+                count()
+count_with_pools
 
-We get when Square feet = 2846.047672
-and sales price =372264.582495, is the point of intersection.
+count_no_pools <- house_data %>% select(swimming_pool) %>%
+               filter(swimming_pool == 0 ) %>%
+                count()
+
+count_no_pools
+```
+
+Estimated regression equation for each kind of property:
+
+$\hat{Y}= 189578.2 + 421.8X + 100875.8Z - 65876.5(X*Z)$
+
+*note variables:*
+
+**X** = Swimming pool
+
+**Z** = Air conditioning
+
+**X \* Z** = Interaction of swimming pool and air conditioning
+
+## 3c. Calculating estimated mean sales prices for 4 types of properties:
+
+-1. No swimming pool and no AC
+
+```{r}
+#Coding in our variables based on its absence or presence
+x = 0
+z = 0
+
+#Running our regression formula with our coded variables
+reg_eq_1 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
+
+#printing
+reg_eq_1
+
+```
+
+The estimated mean sales price of a property without a swimming pool and AC is $189,578.2.
+
+
+-2. No swimming pool and has AC
+
+```{r}
+#Coding in our variables based on its absence or presence
+x = 0
+z = 1
+
+#Running our regression formula with our coded variables
+reg_eq_2 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
+
+#printing
+reg_eq_2
+```
+
+The estimated mean sales price of a property without a swimming pool but has AC is $290,454.
+
+
+-3. Has swimming pool and no AC
+
+```{r}
+#Coding in our variables based on its absence or presence
+x = 1
+z = 0
+
+#Running our regression formula with our coded variables
+reg_eq_3 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
+
+#printing
+reg_eq_3
+```
+The estimated mean sales price of a property with a swimming pool and no AC is $190,000.
+
+-4. Has swimming pool and has AC
+
+```{r}
+#Coding in our variables based on its absence or presence
+x = 1
+z = 1
+
+#Running our regression formula with our coded variables
+reg_eq_4 <- 189578.2 + 421.8*x + 100875.8*z - 65876.5*x*z
+
+#printing
+reg_eq_4
+```
+
+The estimated mean sales price of a property with a swimming pool and AC is $224,999.3.
 
 
 
 
 
 
-
-
-# Part 3 - MLR Only with the Interaction of Dummy Variables
