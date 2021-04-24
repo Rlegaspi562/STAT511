@@ -2,8 +2,8 @@
 title: 'STAT 592: Project 3'
 author: 
 - Rumil Legaspi, Rumil.legaspi@gmail.com
-- Efe Umukoro, email
-- Solange Ebobisse Mapenya, email
+- Efe Umukoro, Eumukoro20@apu.edu
+- Solange Ebobisse Mapenya, bebobissemapenya20@apu.edu
 date: "4/28/2021"
 output: pdf_document
 toc: yes
@@ -14,7 +14,8 @@ header-includes:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=60), tidy = TRUE)
 ```
 
 # **Background & Objective**
@@ -22,20 +23,12 @@ knitr::opts_chunk$set(echo = TRUE)
 Given that a city tax assessor is interested in predicting residential home sales prices in a midwestern city with various characteristics, we will be conducting a **multiple linear regression analysis (MLR)** from the Real Estate Sales (APPENC07) dataset from 2002. We aim to observe and predict the relationship using the given features, ***square feet***, the absence or presence of a ***swimming pool*** and ***air conditioning***, and our response variable as ***house sales price***.
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
-
 #Setting up our work environment
-setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Project 2")
-("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/")
-library(nortest)
-library(olsrr)
-library(car)
-library(lmtest)
-library(MASS)
 library(tidyverse)
-library(ggcorrplot)
-library(knitr)
+library(formatR)
+
 #Loading in the text data
-raw_data = read.table(file = "APPENC07.txt", header = FALSE, sep = "")
+raw_data = read.table(file = "C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Project 2/APPENC07.txt", header = FALSE, sep = "")
 
 #Converting into tibble data frame for easier data analysis
 house_data <- as_tibble(raw_data)
@@ -53,11 +46,15 @@ sales_price <-  house_data %>% select(sales_price) #Y
 square_feet <- house_data %>% select(square_feet) #X1
 swimming_pool <- house_data %>% select(swimming_pool) #X2
 air_conditioning <- house_data %>% select(air_conditioning) #X3
-
-knitr::kable(house_data) %>% head(5)
-
-
 ```
+
+## Our dataset is comprised of *522 total transactions* from home sales during the year 2002.
+
+```{r}
+#Glimpse of our dataset
+glimpse(house_data)
+```
+
 
 # Part 1 - Regression using a Dummy Variable
 
@@ -171,7 +168,7 @@ plot_coef <- house_data %>%
 
 
 plot_coef
-changes
+
 
 ```
 
@@ -179,9 +176,7 @@ To find the value at which these two lines intersect algebraically by can settin
 
 The point of intersection of these two lines are when the values of: **Square feet is 2846.04 and sales price = 372264.58**.
 
-## 2c. Testing if the two regression lines are parallel.
-
-\*\*\*Nested F-test?
+## 2c. \*\*\*Testing if the two regression lines are parallel.
 
 Using a significance level of $\alpha=0.05$.
 
@@ -193,7 +188,7 @@ Testing the significance of a property **with** a swimming pool ($\hat{\beta_1} 
 
 Conclusion and Decision Rule using p-value:
 
-Looking at our model summary, we see that the p-value of our interaction term is [1]0.0300 which means we **reject** NULL hypothesis and \*\*\*conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0)
+Looking at our model summary, we see that the p-value of our interaction term is [1]0.0300 which means we **reject** NULL hypothesis and \*\*\*conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0).
 
 # Part 3 - MLR Only with the Interaction of Dummy Variables
 
@@ -241,7 +236,7 @@ $\hat{Y}= 189578.2 + 421.8X + 100875.8Z - 65876.5(X*Z)$
 
 ## 3c. Calculating estimated mean sales prices for 4 types of properties:
 
--1. No swimming pool and no AC
+1.  No swimming pool and no AC
 
 ```{r}
 #Coding in our variables based on its absence or presence
@@ -258,7 +253,7 @@ reg_eq_1
 
 The estimated mean sales price of a property without a swimming pool and AC is \$189,578.2.
 
--2. No swimming pool and has AC
+2.  No swimming pool and has AC
 
 ```{r}
 #Coding in our variables based on its absence or presence
@@ -274,7 +269,7 @@ reg_eq_2
 
 The estimated mean sales price of a property without a swimming pool but has AC is \$290,454.
 
--3. Has swimming pool and no AC
+3.  Has swimming pool and no AC
 
 ```{r}
 #Coding in our variables based on its absence or presence
@@ -290,7 +285,7 @@ reg_eq_3
 
 The estimated mean sales price of a property with a swimming pool and no AC is \$190,000.
 
--4. Has swimming pool and has AC
+4.  Has swimming pool and has AC
 
 ```{r}
 #Coding in our variables based on its absence or presence
@@ -304,4 +299,4 @@ reg_eq_4 <- 189578.2 + 421.8*x + 100875.8*z + 65876.5*x*z
 reg_eq_4
 ```
 
-The estimated mean sales price of a property with a swimming pool and AC is $356,752.3.
+The estimated mean sales price of a property with a swimming pool and AC is \$356,752.3.
