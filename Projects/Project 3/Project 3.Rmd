@@ -13,9 +13,9 @@ header-includes:
  \usepackage{float}
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 library(knitr)
-knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=60), tidy = TRUE)
+knitr::opts_chunk$set(echo = FALSE,tidy.opts=list(width.cutoff=60), tidy = TRUE)
 ```
 
 # **Background & Objective**
@@ -52,9 +52,8 @@ air_conditioning <- house_data %>% select(air_conditioning) #X3
 
 ```{r}
 #Glimpse of our dataset
-glimpse(house_data)
+head(house_data)
 ```
-
 
 # Part 1 - Regression using a Dummy Variable
 
@@ -184,7 +183,7 @@ Null Hypothesis: ${H_0}$: $\beta_{c} = 0$ The coefficient of the interaction ter
 
 Alternative Hypothesis: ${H_1}$: $\beta_{c} \neq 0$ The coefficient of the interaction term is nonzero.
 
-Testing the significance of a property **with** a swimming pool ($\hat{\beta_1} = 79724$)
+Testing the significance of a property **with** a swimming pool ($\hat{\beta_3} = -37.213$)
 
 Conclusion and Decision Rule using p-value:
 
