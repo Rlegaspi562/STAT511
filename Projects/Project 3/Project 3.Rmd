@@ -1,5 +1,5 @@
 ---
-title: 'STAT 592: Project 3'
+title: 'STAT 511: Analyzing Home Sales Prices Using Multiple Regression Analysis'
 author: 
 - Rumil Legaspi, Rumil.legaspi@gmail.com
 - Efe Umukoro, Eumukoro20@apu.edu
@@ -48,7 +48,7 @@ swimming_pool <- house_data %>% select(swimming_pool) #X2
 air_conditioning <- house_data %>% select(air_conditioning) #X3
 ```
 
-## Our dataset is comprised of *522 total transactions* from home sales during the year 2002.
+### Our dataset is comprised of *522 total transactions* from midwestern home sales during the year 2002.
 
 ```{r}
 #Glimpse of our dataset
@@ -67,7 +67,7 @@ pool_lm <- lm(sales_price ~ swimming_pool, data = house_data)
 summary(pool_lm)
 ```
 
-Estimated Regression model:
+### Estimated Regression model:
 
 $\hat{Y}= 272396 + 79724X$
 
@@ -109,9 +109,11 @@ Conclusion and Decision Rule using p-value:
 
 Because the **p-value** for having a swimming pool is [1] 0.00078 and is significantly smaller than $\alpha=0.05$, we reject our NULL hypothesis and conclude that our partial slope, that a property **containing** a swimming pool in reference to one **without a swimming pool**, shows statistical significance in our model.
 
-# Part 2 - Fitting a MLR model with the Interaction Term of a Dummy and Continuous Variable
+\newpage
 
-## 2a. Regressing sales price on the (1)swimming pool dummy variable, (2)area of residence, and the (3)interaction between these two variables.
+# Part 2 - Fitting a MLR model With the Interaction Term of a Dummy and Continuous Variable
+
+## 2a. Regressing sales price on the (1) swimming pool dummy variable, (2) area of residence, and the (3) interaction between these two variables.
 
 ```{r}
 pool_sqft_lm <- lm(sales_price ~ swimming_pool + 
@@ -125,7 +127,7 @@ Estimated regression equation for each kind of property:
 
 $\hat{Y}= -88538.996 + 105909.972X + 161.910Y - 37.213(X*Y)$
 
-*note variables:*
+*Variable Assignment:*
 
 **X** = Swimming pool
 
@@ -151,27 +153,29 @@ $\hat{Y}= -88538.996 + 105909.972X + 161.910Y - 37.213(X*Y)$
 
 : Calculating Estimated Regression Equations for Properties With and Without Pools
 
-## 2b. Plotting Fitted regression lines
+\newpage
+
+## 2b. Plotting fitted regression lines
 
 ```{r}
-#no_pool <- house_data %>%
-           #select(swimming_pool == 0)
 # Code to plot regression equations model:
 plot_coef <- house_data %>% 
   
   ggplot(aes(x = square_feet, y = sales_price, color = as.factor(swimming_pool))) +
  
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "Square Feet", y = "Sales Price", color = "Swimming Pool")+
+  labs(x = "Square Feet", 
+       y = "Sales Price", 
+       color = "Swimming Pool",
+       title = "Fitted Regression Lines Plotted",
+       subtitle = "Sales Prices of Properties With & Without Pools By Square Feet") +
   scale_y_continuous(labels = scales::dollar)
-
-
+  
 plot_coef
-
 
 ```
 
-To find the value at which these two lines intersect algebraically by can setting equal to one another, solving for one variable then plugging that back into the equation to get the other variable to obtain the coordinates.
+To find the value at which these two lines intersect algebraically we can set both equations equal to one another, solving for one variable, then plugging that back into the equation to get the other variable to obtain the coordinates.
 
 The point of intersection of these two lines are when the values of: **Square feet is 2846.04 and sales price = 372264.58**.
 
@@ -189,9 +193,9 @@ Conclusion and Decision Rule using p-value:
 
 Looking at our model summary, we see that the p-value of our interaction term is [1]0.0300 which means we **reject** NULL hypothesis and \*\*\*conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0).
 
-# Part 3 - MLR Only with the Interaction of Dummy Variables
+# Part 3 - MLR Only With the Interaction of Dummy Variables
 
-## 3a. Fitting a MLR on both Swimming Pool and AC dummy variables and find the estimated regression equation.
+## 3a. Fitting a MLR on both swimming pool and AC dummy variables and find the estimated regression equation.
 
 ```{r}
 #Regressing house sales price on both dummy variables: swimming pool and AC, plus their interaction
@@ -205,27 +209,11 @@ pool_ac_lm <- lm(sales_price ~ swimming_pool +
 summary(pool_ac_lm)
 ```
 
-```{r}
-#testing to see why interaction term is insignificant
-count_with_pools <- house_data %>% select(swimming_pool) %>%
-               filter(swimming_pool == 1) %>%
-                count()
-
-
-
-count_no_pools <- house_data %>% select(swimming_pool) %>%
-               filter(swimming_pool == 0 ) %>%
-                count()
-
-count_with_pools
-count_no_pools
-```
-
-Estimated regression equation for each kind of property:
+### Estimated regression equation for each kind of property:
 
 $\hat{Y}= 189578.2 + 421.8X + 100875.8Z - 65876.5(X*Z)$
 
-*note variables:*
+*Variable Assignment:*
 
 **X** = Swimming pool
 
@@ -233,7 +221,7 @@ $\hat{Y}= 189578.2 + 421.8X + 100875.8Z - 65876.5(X*Z)$
 
 **X \* Z** = Interaction of swimming pool and air conditioning
 
-## 3c. Calculating estimated mean sales prices for 4 types of properties:
+## 3c. Calculating estimated mean sales prices for 4 types of properties using estimated regression equation:
 
 1.  No swimming pool and no AC
 
@@ -299,3 +287,9 @@ reg_eq_4
 ```
 
 The estimated mean sales price of a property with a swimming pool and AC is \$356,752.3.
+
+# Conclusion
+
+Based on our regression analysis it is clear that a property with a swimming pool and air conditioning (\$356,752.3), cost significantly more than a property without (\$189,578.2.).
+
+For future reference we understand that our dataset is unbalanced with only about 7%, or 36 out of 522 observations owning swimming pools and 16%, or 88 out of 522 observations having air conditioning. Moving forward one way to correct this would be to collect more data from houses owning these features.
