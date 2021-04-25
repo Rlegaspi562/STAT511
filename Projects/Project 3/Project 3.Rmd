@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = FALSE,tidy.opts=list(width.cutoff=60), tidy = TRUE)
 
 # **Background & Objective**
 
-Given that a city tax assessor is interested in predicting residential home sales prices in a midwestern city with various characteristics, we will be conducting a **multiple linear regression analysis (MLR)** from the Real Estate Sales (APPENC07) dataset from 2002. We aim to observe and predict the relationship using the given features, ***square feet***, the absence or presence of a ***swimming pool*** and ***air conditioning***, and our response variable as ***house sales price***.
+Given that a city tax assessor is interested in predicting residential home sales prices in a midwestern city with various characteristics, we will be conducting a **multiple linear regression analysis (MLR)** from the Real Estate Sales (APPENC07) dataset from 2002. We aim to observe and predict the relationships using the given features, ***square feet***, the absence or presence of a ***swimming pool*** and ***air conditioning***, and our response variable as ***house sales price***.
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
 #Setting up our work environment
@@ -99,9 +99,9 @@ The calculations of these coefficients can be represented in this table.
 
 Using a significance level of $\alpha=0.05$.
 
-Null Hypothesis: ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ is not linearly associated with Y, therefore the partial slope is not significant.
+**Null Hypothesis:** ${H_0}$: $\beta_{j} = 0$ (slopes are showing no change), $X_{j}$ is not linearly associated with Y, therefore the partial slope is not significant.
 
-Alternative Hypothesis: ${H_1}$: $\beta_{j} \neq 0$ (slopes are showing change), $X_{j}$ is linearly associated with Y, therefore the partial slope is significant.
+**Alternative Hypothesis**: ${H_1}$: $\beta_{j} \neq 0$ (slopes are showing change), $X_{j}$ is linearly associated with Y, therefore the partial slope is significant.
 
 Testing the significance of a property **with** a swimming pool ($\hat{\beta_1} = 79724$)
 
@@ -175,13 +175,13 @@ To find the value at which these two lines intersect algebraically by can settin
 
 The point of intersection of these two lines are when the values of: **Square feet is 2846.04 and sales price = 372264.58**.
 
-## 2c. \*\*\*Testing if the two regression lines are parallel.
+## 2c. Testing if the two regression lines are parallel.
 
 Using a significance level of $\alpha=0.05$.
 
-Null Hypothesis: ${H_0}$: $\beta_{c} = 0$ The coefficient of the interaction term is 0.
+Null Hypothesis: ${H_0}$: $\beta_{c} = 0$ Partial slope of the interaction is 0.
 
-Alternative Hypothesis: ${H_1}$: $\beta_{c} \neq 0$ The coefficient of the interaction term is nonzero.
+Alternative Hypothesis: ${H_1}$: $\beta_{c} \neq 0$ Partial slope of the interaction is not 0.
 
 Testing the significance of a property **with** a swimming pool ($\hat{\beta_3} = -37.213$)
 
