@@ -115,10 +115,6 @@ The change in mean Rating for Sweetness level 4 relative to sweetness level 2 is
 
 Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance in our model.
 
-```{r}
-#***t.test(Sweetness, cat_sweetness_new)
-```
-
 # 2. Refer to the "Brand Preference" dataset. Code sweetness ($X_{2}$) as a dummy variable.
 
 ## 2a. Fit a multiple regression model with moisture content, sweetness, and their interaction.
@@ -144,7 +140,7 @@ Sweetness level 4: $\hat{Y}= 58.68 + 3.925M$
 
 ## 2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
 
-$M$ = 4.925: The increase in mean Rating when sweetness is level 2 for a 1 unit increase the in Moisture content is 4.925.
+$M$ = 4.925: The mean Rating when sweetness is level 2 for a 1 unit change in Moisture content increases by 4.925.
 
 $M$ = 3.925: The increase in mean Rating when sweetness is 4 for a 1 unit increase in Moisture content is 3.925.
 
@@ -152,11 +148,9 @@ $M$ = 3.925: The increase in mean Rating when sweetness is 4 for a 1 unit increa
 
 \*\*\*0.0975 . not significant fail to reject.
 
-Because the p-value for sweetness level 4 is [1] 0.13 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance in our model.
+Because the p-value for sweetness level 4 is [1] 0.0975 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance in our model.
 
-## \*\*\*2e. your answer is NO in Part (d), drop the interaction term and rerun the model. Write down
-
-the new estimated regression equation at each sweetness level.
+## 2e. your answer is NO in Part (d), drop the interaction term and rerun the model. Write down the new estimated regression equation at each sweetness level.
 
 ```{r}
 no_inter_lm <- lm(Rating ~ cat_sweetness + Moisture, data = brand_data)
@@ -165,6 +159,10 @@ summary(no_inter_lm)
 ```
 
 y = 46.4 + 8.75S + 4.425M
+
+lvl 2: y = 46.4 + 4.425M
+
+lvl 4: y = 55.15 + 4.425M
 
 # 3. Refer to the "Assessed Valuations" dataset (Value.txt)
 
