@@ -2,16 +2,16 @@
 title: Predicting Residential Home Sales Prices Using Regression Analysis
 author:
 - Rumil Legaspi, Rumil.legaspi@gmail.com
-- Nancy Huerta, Nhuerta20@apu.edu
+- Nancy Huerta, Email
 date: "11 April 2021"
 output:
-  word_document: default
-  html_notebook:
-    df_print: paged
   pdf_document:
     toc: yes
     toc_depth: 2
     latex_engine: xelatex
+  html_notebook:
+    df_print: paged
+  word_document: default
   theme: lumen
   html_document:
     toc: yes
@@ -103,7 +103,7 @@ $\hat{Y}= -45886.3 + 935.4X + 67818.9X + 67332.3X$
 
 The partial slopes in our summary indicate that when any one of the partial slopes **Increase by 1 unit** and other explanatory variables held constant and unchanged we can expect:
 
--   While holding our other explanatory variables Bathrooms and Garage Size constant and unchanged, when **Bedrooms** increase by 1 unit, we can expect our **house sales price** to increase by **roughly \$935.4**.
+-   While holding our other explanatory variables Bathrooms and Garage Size constant and unchanged, when **Bedrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$935.4**.
 
 -   While holding our other explanatory variables Bedrooms and Garage Size constant and unchanged, when **Bathrooms** increases by 1 unit, we can expect our **house sales price** to increase by **roughly \$67,818.9.**
 
@@ -137,7 +137,7 @@ ci_house
 
 This 95% confidence interval, when Bedrooms = 3, Bathrooms = 3, and Garage Size = 2, is from **74.84094 to 79.70906.**
 
-When Bedrooms = 3, Bathrooms = 3, and Garage Size = 2, with 95% confidence we can expect our confidence interval to capture the average of house sales prices (response variable).
+When Bedrooms = 3, Bathrooms = 3, and Garage Size = 2, with 95% confidence we can expect our confidence interval to capture the \*\*average(true mean)\*\* of house sales price (response variable).
 
 ## 2c. Calculating the 95% prediction interval
 
@@ -173,11 +173,11 @@ From the results we can predict with 95% confidence that when their are 3 bedroo
 
 **Bedroom variable:**
 
-The p-value of Bedroom is 0.8507 and is greater than our $\alpha$ (accepted error) of 0.05, so we **fail to reject** our NULL hypothesis and must conclude with our NULL hypothesis. Stating that our partial slope, **Bedrooms**, does not show significance in our model.
+The p-value of Bedroom is 0.8507 and is greater than our $\alpha$ (accepted error) of 0.05, so we **fail to reject** our NULL hypothesis and must conclude with our NULL hypothesis. Stating that our partial slope, **Bedrooms**, does not show overall significance in our model.
 
 **Bathroom & Garage Size variables:**
 
-On the other hand because the p-value of Bathroom and Garage size are both \<2e-16 and are incredibly smaller than our $\alpha$ (accepted error) of 0.05, so we **reject** our NULL hypothesis and conclude with our alternative hypothesis. Our alternative hypothesis states that our partial slopes, **Bathroom and Garage Size**, shows significance in our model.
+On the other hand because the p-value of Bathroom and Garage size are both \<2e-16 and are incredibly smaller than our $\alpha$ (accepted error) of 0.05, so we **reject** our NULL hypothesis and conclude with our alternative hypothesis. Our alternative hypothesis states that our partial slopes, **Bathroom and Garage Size**, shows overall significance in our model.
 
 ## 3b. Conducting an F-test to check overall model significance
 
@@ -237,7 +237,9 @@ anova(bed_lm, house_lm)
 
 ```
 
-Since the p-value is **2.2e-16** is less than our significance level of 0.05 we see that bathroom and garage size are both jointly significant and therefore we can reject the null hypothesis, indicating there is significance in keeping both bathroom and garage size in our model.
+Since the p-value is **2.2e-16** is less than our significance level of 0.05 we see that bathroom and garage size are both jointly significant and therefore reject the null hypothesis, indicating there is significance in keeping both bathroom and garage size in our model.
+
+\*\*extra is the variable that is being tested
 
 In effect, we are concluding that bathroom and garage size are predictors that do contribute information in the prediction of house sales price and therefore should be retained in the model.
 
@@ -273,14 +275,13 @@ ggcorr_matrix <- ggcorrplot(corr_matrix, hc.order = TRUE, type = "lower", lab = 
 scat_matrix
 ggcorr_matrix
 summary(house_lm)
-corr_matrix
 ```
 
 ## 4b. Removing Two Strongly Correlated Variables
 
 A way to combat this is by removing a highly correlated predictor. From the correlation matrix and by looking at our correlation coefficient, we can see moderately positive relationship between bedrooms and bathrooms which might be worth further investigating.
 
-We know there is some kind of multicolinearity issue with bed and baths, I am more interested in beds than baths. So I can remove baths from our model thereby correcting our multicolinearity issue.
+\*\* we keep the variable we are most interested in and remove the other. we know there is some kind of multicolinearity issue with bed and baths, I am more interested in beds than baths. So I can remove baths from our model thereby correcting our multicolinearity issue.
 
 ```{r}
 #summary of original predictor
@@ -290,7 +291,7 @@ summary(house_lm)
 We notice bedrooms is not a significant variable from looking at the p-value, when in fact, the reality is it **should** be significant. Knowing this, we can check to see how well our model performs when removing bathroom since there is a multicolinearity issue.
 
 ```{r}
-#removing beds**
+#removing beds
 nobeds_lm <- lm(house_price ~ baths + garage_size, data = house_data)
 summary(nobeds_lm)
 ```
