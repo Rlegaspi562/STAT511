@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.4.19)  25 APR 2021 19:35
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.4.19)  25 APR 2021 19:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -960,12 +960,12 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `hw7-mlr-with-categoricals-and-dummies.out' h
 as not changed.
-(rerunfilecheck)             Checksum: 24ECEFA8B1317A0A246C5BA222B88275;10203.
+(rerunfilecheck)             Checksum: E4B991BB10A4EA67A748E807EE106B6B;10530.
  ) 
 Here is how much of TeX's memory you used:
  16805 strings out of 478918
- 300630 string characters out of 5865075
- 767188 words of memory out of 5000000
+ 300693 string characters out of 5865075
+ 767574 words of memory out of 5000000
  36431 multiletter control sequences out of 15000+600000
  410810 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191

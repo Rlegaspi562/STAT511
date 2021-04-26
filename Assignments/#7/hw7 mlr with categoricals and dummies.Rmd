@@ -140,13 +140,11 @@ Sweetness level 4: $\hat{Y}= 58.68 + 3.925M$
 
 ## 2c. Interpret the slope coefficient in each estimated regression equation in Part (b).
 
-$M$ = 4.925: The mean Rating when sweetness is level 2 for a 1 unit change in Moisture content increases by 4.925.
+$M$ = 4.925: The mean Rating when sweetness is level 2 for a 1 unit change in Moisture content is an increases by 4.925.
 
-$M$ = 3.925: The increase in mean Rating when sweetness is 4 for a 1 unit increase in Moisture content is 3.925.
+$M$ = 3.925: The increase in mean Rating when sweetness is 4 for a 1 unit change in Moisture content is an increase by 3.925.
 
 ## 2d. Is the interaction coefficient significant at 𝛼 = 5%? State the null, alternative, decision rule, conclusion.
-
-\*\*\*0.0975 . not significant fail to reject.
 
 Because the p-value for sweetness level 4 is [1] 0.0975 and is greater than our alpha (accepted error/significance level) of 0.05 we **fail to reject** our NULL hypothesis and conclude that our partial slope, **Sweetness Level 4** in reference to Sweetness Level of 2, does not show significance in our model.
 
@@ -158,11 +156,11 @@ no_inter_lm <- lm(Rating ~ cat_sweetness + Moisture, data = brand_data)
 summary(no_inter_lm)
 ```
 
-y = 46.4 + 8.75S + 4.425M
+Full estimated regression equation: y = 46.4 + 8.75S + 4.425M
 
-lvl 2: y = 46.4 + 4.425M
+Sweetness level 2: y = 46.4 + 4.425M
 
-lvl 4: y = 55.15 + 4.425M
+Sweetness level 4: y = 55.15 + 4.425M
 
 # 3. Refer to the "Assessed Valuations" dataset (Value.txt)
 
@@ -197,9 +195,7 @@ summary(location_onlylm)
 
 y = 81.154 - 8.5C
 
-## \*\*\*3b. Based on your regression result in Part (a), what is the estimated mean selling price for corner lots? For non-corner lots?
-
-R uses alpha-numeric ordering as the reference group by default so either 'a' or '0' as the base reference group.
+## 3b. Based on your regression result in Part (a), what is the estimated mean selling price for corner lots? For non-corner lots?
 
 Estimated mean selling price for non-corner lots:
 
@@ -271,23 +267,3 @@ plot_coef
 
 
 ```
-
-The two are parallel which would mean the interaction coefficient is 0?
-
-so the interaction terms [1] 0.00828 is significant and we would keep them in our model because of the hierarchy principle.
-
-The lines move at the same rate
-
-insigifnicant means we fail to rejet the null, should be parallel. cnsidering interaction term is unecessary.
-
-the insignificant interactoin the regardless of using corner or non conrewr the valuation has the same effect on the price
-
-testing with interaction terms:
-
-we need to always include each of the single effects in ADDITION to the interaction term. ie) if we add X\*Y (second order) in the model we need to always include the 1st order term such as 3\*X + 2\*Y in our model. If the interaction is insignificant we can drop the highest order from the model.
-
-We should look at the first step and look at the significance then either keep or remove.
-
-WE remove in order from bottom up of the summary
-
-if the higghest order is significant, but the ones in lower order have some that are insiginfacnt or significant we keep them.
