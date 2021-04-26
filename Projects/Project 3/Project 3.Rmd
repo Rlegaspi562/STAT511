@@ -1,16 +1,17 @@
 ---
 title: 'STAT 511: Analyzing Home Sales Prices Using Multiple Regression Analysis'
-author: 
+author:
 - Rumil Legaspi, Rumil.legaspi@gmail.com
 - Efe Umukoro, Eumukoro20@apu.edu
 - Solange Ebobisse Mapenya, bebobissemapenya20@apu.edu
 date: "4/28/2021"
-output: pdf_document
+output:
+  word_document: default
+  pdf_document: default
 toc: yes
 toc_depth: 2
 geometry: margin=1in
-header-includes:
- \usepackage{float}
+header-includes: \usepackage{float}
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
