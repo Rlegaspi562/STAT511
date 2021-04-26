@@ -107,7 +107,7 @@ Testing the significance of a property **with** a swimming pool ($\hat{\beta_1} 
 
 Conclusion and Decision Rule using p-value:
 
-Because the **p-value** for having a swimming pool is [1] 0.00078 and is significantly smaller than $\alpha=0.05$, we reject our NULL hypothesis and conclude that our partial slope, that a property **containing** a swimming pool in reference to one **without a swimming pool**, shows statistical significance in our model.
+Looking at our model summary, we see that the **p-value** for owning a swimming pool is [1] 0.00078 which means we reject our NULL hypothesis and conclude with our alternative hypothesis. This means that the partial slope, or that a property **containing** a swimming pool in reference to one **without a swimming pool**, is statistically significant.
 
 \newpage
 
@@ -191,7 +191,7 @@ Testing the significance of a property **with** a swimming pool ($\hat{\beta_3} 
 
 Conclusion and Decision Rule using p-value:
 
-Looking at our model summary, we see that the p-value of our interaction term is [1]0.0300 which means we **reject** NULL hypothesis and \*\*\*conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0).
+Looking at our model summary, we see that the p-value of our interaction term is [1]0.0300 which means we **reject** NULL hypothesis and conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0).
 
 # Part 3 - MLR Only With the Interaction of Dummy Variables
 
@@ -292,4 +292,4 @@ The estimated mean sales price of a property with a swimming pool and AC is \$35
 
 Based on our regression analysis it is clear that a property with a swimming pool and air conditioning (\$356,752.3), cost significantly more than a property without (\$189,578.2.).
 
-For future reference we understand that our dataset is unbalanced with only about 7%, or 36 out of 522 observations owning swimming pools and 16%, or 88 out of 522 observations having air conditioning. Moving forward one way to correct this would be to collect more data from houses owning these features.
+For future reference we understand that our dataset is unbalanced with only about 7%, or 36 out of 522 observations owning swimming pools and 16%, or 88 out of 522 observations having air conditioning. Moving forward one way to correct this would be to collect more data from houses owning these features. Also, since the Interaction term between owning a swimming pool and having air conditioning is not significant we should remove this from the model.
