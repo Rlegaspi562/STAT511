@@ -1,0 +1,25 @@
+---
+title: 'STAT 511: Final Class Lecture'
+author: "Rumil Legaspi"
+date: "4/26/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Final Review (available online for download)
+(You can also rewatch lecture video)
+
+1. Multiple Linear Regression with COntinuous Prediction CH. (Read online)
+
+2: Interpretations:
+  -intercept bhat 0: estimate mean value of Y is bhat 0 units hwne x1,x2,..., are 0. The relvenancy of intercept
+ -  
+ f test: for adj r^2 interpretation so say something like: the proportion of the variation (or variatiion) in y jointly by the x variables (regression model)
+
+Partial F test:
+compared to overall we are testing which partial slope
+
+interpret the slope when either response variable or predicotr is in natural log. (check midterm review)
