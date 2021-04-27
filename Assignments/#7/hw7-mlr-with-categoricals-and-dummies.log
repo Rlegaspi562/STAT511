@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.4.19)  25 APR 2021 19:59
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.4.19)  26 APR 2021 17:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -934,41 +934,36 @@ tex-text;!
 
 [1
 
-] [2] [3] [4]
+] [2] [3]
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 14.4pt on input line 365.
+(Font)              scaled to size 14.4pt on input line 358.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 14.4013pt on input line 365.
+(Font)              scaled to size 14.4013pt on input line 358.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 14.39845pt on input line 365.
-[5]
+(Font)              scaled to size 14.39845pt on input line 358.
+[4]
 Missing character: There is no 𝛼 (U+1D6FC) in font [lmroman12-bold]:mapping=tex
 -text;!
-[6] [7] [8]
+[5] [6] [7] [8]
 File: hw7-mlr-with-categoricals-and-dummies_files/figure-latex/unnamed-chunk-10
 -1.pdf Graphic file (type pdf)
 <use hw7-mlr-with-categoricals-and-dummies_files/figure-latex/unnamed-chunk-10-
 1.pdf>
-[9]
-File: hw7-mlr-with-categoricals-and-dummies_files/figure-latex/unnamed-chunk-10
--2.pdf Graphic file (type pdf)
-<use hw7-mlr-with-categoricals-and-dummies_files/figure-latex/unnamed-chunk-10-
-2.pdf>
-[10] [11] (./hw7-mlr-with-categoricals-and-dummies.aux)
+[9] [10] (./hw7-mlr-with-categoricals-and-dummies.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
 Package rerunfilecheck Info: File `hw7-mlr-with-categoricals-and-dummies.out' h
 as not changed.
-(rerunfilecheck)             Checksum: E4B991BB10A4EA67A748E807EE106B6B;10530.
+(rerunfilecheck)             Checksum: CDAC22E3C34EB2F90F60D634F0BD4213;10515.
  ) 
 Here is how much of TeX's memory you used:
- 16805 strings out of 478918
- 300693 string characters out of 5865075
- 767574 words of memory out of 5000000
- 36431 multiletter control sequences out of 15000+600000
+ 16799 strings out of 478918
+ 300248 string characters out of 5865075
+ 766862 words of memory out of 5000000
+ 36426 multiletter control sequences out of 15000+600000
  410810 words of font info for 82 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  98i,7n,122p,1126b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on hw7-mlr-with-categoricals-and-dummies.pdf (11 pages).
+Output written on hw7-mlr-with-categoricals-and-dummies.pdf (10 pages).

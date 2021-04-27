@@ -1,7 +1,7 @@
 ---
-title: 'STAT 511: HW #7'
+title: 'STAT 511: HW #7 Multiple Linear Regression With Dummy Variables'
 author: "Rumil Legaspi"
-date: "4/19/2021"
+date: "4/26/2021"
 output:
   pdf_document:
     toc: yes
@@ -14,11 +14,6 @@ output:
 ### Setting up workspace
 
 ```{r, collapse = TRUE, warning = FALSE, message = FALSE}
-library(nortest)
-library(olsrr)
-library(car)
-library(lmtest)
-library(MASS)
 library(tidyverse)
 
 setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10/")
@@ -61,9 +56,7 @@ typeof(cat_sweetness)
 attributes(cat_sweetness)
 ```
 
-So in this case since sweetness is a category with only 2 levels (sweetness level 2 and sweetness level 4) we can think of our regression model like so:
-
-We will use sweetness level 2 as our reference group
+So in this case since sweetness is a category with only 2 levels (sweetness level 2 & sweetness level 4) We will use sweetness level 2 as our reference group
 
 ```{r}
 #the "2" indicates the level marked as "2" given from our level() function and now setting sweetness level 2 as our reference group
@@ -158,6 +151,12 @@ summary(no_inter_lm)
 
 Full estimated regression equation: y = 46.4 + 8.75S + 4.425M
 
+Variables Assignment:
+
+S = Sweetness Level
+
+M = Moisture Content
+
 Sweetness level 2: y = 46.4 + 4.425M
 
 Sweetness level 4: y = 55.15 + 4.425M
@@ -233,34 +232,38 @@ $\hat{Y}= -50.8837 + 1.67V$
 
 Plotting Fitted Regression Lines
 
-```{r}
+```{r, message = FALSE}
 #plot fitted regression lines
 #Save estimated coefficients
-Coef = val_lot_interlm$coefficients
-Coef
+#Coef = val_lot_interlm$coefficients
+#Coef
 
 #Non corner lots: When Corner lots takes value 0
-price1 = Coef[1] + Coef[3] * Valuation
+#price1 = Coef[1] + Coef[3] * Valuation
 
 #corner lots: When Corner lots takes value 1
-price2 = Coef[1] + Coef[3] * Valuation + Coef[2] +Coef[4] * Valuation
+#price2 = Coef[1] + Coef[3] * Valuation + Coef[2] +Coef[4] * Valuation
 
 #plottinf plot()
-plot(Valuation, price1, type = 'l', col = "blue",
-     xlab = "Valuation" , ylab = "Price")
-lines(Valuation, price2, type = 'l', col = "red")
+#plot(Valuation, price1, type = 'l', col = "blue",
+     #xlab = "Valuation" , ylab = "Price")
+#lines(Valuation, price2, type = 'l', col = "red")
 
 #legend
-legend("topleft", legend = c("Line 1", "Line 2"),
-       col = c("blue", "red"), lty = 1, cex = 0.5)
+#legend("topleft", legend = c("Line 1", "Line 2"),
+       #col = c("blue", "red"), lty = 1, cex = 0.5)
 
+#Plotting ggplot way with similar results
 plot_coef <- value_data %>% 
   
   ggplot(aes(x = Valuation, y = Price, color = as.factor(Corner_lot))) +
  
   geom_smooth(method = "lm", se = FALSE) +
-  labs(x = "valuation", y = "Price", color = "corner lot")+
-  scale_y_continuous(labels = scales::dollar)
+  labs(x = "Lot Valuation", y = "Lot Sales Price", color = "Corner Lot",
+        title = "Fitted Regression Lines Plotted",
+       subtitle = "Sales Prices of Lots Placed on Corners By Square Feet")+
+  scale_y_continuous(labels = scales::dollar) 
+  
 
 
 plot_coef
