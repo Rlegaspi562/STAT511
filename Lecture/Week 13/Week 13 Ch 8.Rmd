@@ -106,3 +106,10 @@ After changing the reference group from drug a to drug b
 ie. no matter whichever group is chosen for reference group, no matter how dummy variables are allocated to represent the groups or hwichever group to be the reference gorup, the estimation for eahc group should not change.
 
 interpretting p value:
+
+if slopes are the same/parallel we see that rate of chagne and marginal effect is not different
+
+```{r}
+library(lattice)
+plotlegend  = list(space="right", text = list(c("Line2", "Line1")), points = list(pch = c(1,3), col = c("red", "blue"))
+```

@@ -1,5 +1,5 @@
 ---
-title: 'STAT 511: Final Class Lecture'
+title: 'STAT 511: Final Class Lecture & CH. 9'
 author: "Rumil Legaspi"
 date: "4/26/2021"
 output: pdf_document
@@ -23,3 +23,247 @@ Partial F test:
 compared to overall we are testing which partial slope
 
 interpret the slope when either response variable or predicotr is in natural log. (check midterm review)
+
+
+- more exam details : 6pm 2hour 30minutes 05/03/21
+4big questions
+- no use of r, will either have models and sybmols already given
+- 1/3rd based on pure continuous variables with MLR and 2/3rd involving dummy in MLR
+- need to know how to find critical value and p value dont need to find/sear for t distribution critical value but will be given standard normal distribution (z critical value) check final review for notes to find 
+- to rejec tor w.e either compare with critical value or p value
+- results of exam will be given...
+- most important will be to read the question, none will be hypothetical and all will ahve realistic meanings
+- know what each variable represents
+
+- you can still type answers if you want. 
+-open book access to anything
+
+
+# CH. 9 
+## Textbnook
+```{r}
+library(tidyverse)
+library(olsrr)
+#setwd("C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week 10/Week 10/")
+
+#reading txt data
+hospital_data = read.table(file = "C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week last lecture/Surgical Unit.txt", header = FALSE, sep = "")
+
+hospital_data2 = read.table(file = "C:/Users/RUMIL/Desktop/APU/STAT 511 - Millie Mao (Applied Regression Analysis)/Week last lecture/Surgical Unit2.txt", header = FALSE, sep = "")
+
+View(hospital_data)
+#View(hosptial_data2)
+
+# #Adding headers
+#names(brand_data) <- c("Rating", "Moisture", "Sweetness")
+
+# names(bank_data) <- c("", "")
+
+
+#Defining and renaming our Explanatory(X) and Response(Y) variables
+hospital_data <- hospital_data %>% select(ClotScore = V1,
+                                    ProgInd = V2,
+                                    EnzTest = V3,
+                                    LivTest = V4,
+                                    lnSurv = V10)
+
+#Setting explanatory and response variables
+lnSurv <-  hospital_data %>% select(lnSurv) #Y
+ClotScore <- hospital_data %>% select(ClotScore) #X1
+ProgInd <- hospital_data %>% select(ProgInd) #X2
+EnzTest <- hospital_data %>% select(EnzTest) #X3
+LivTest <- hospital_data %>% select(LivTest) #X4
+```
+
+## Importing Data and Running Regression Models
+```{r}
+#regressing full model
+lm.full.4var <- lm(lnSurv ~ ClotScore +
+                     ProgInd +
+                     EnzTest +
+                     LivTest, data = hospital_data)
+
+#regressing only on 2 predictors
+lm.2var = lm(lnSurv ~ ClotScore + ProgInd, data = hospital_data)
+```
+
+## Using R functions to Compute Selection Criteria
+```{r}
+#Compute model selection criteria
+#Extract R2 and adjusted R2 from regression summary
+summary(lm.2var)$r.squared
+summary(lm.2var)$adj.r.squared
+
+#AIC and BIC
+extractAIC(lm.2var)
+extractAIC(lm.2var, k=log(54)) #Add k=log(n) for BIC
+
+#Compare with the 4-predictor model
+summary(lm.full.4var)$r.squared #R2
+summary(lm.full.4var)$adj.r.squared #Adj R2
+extractAIC(lm.full.4var) #AIC
+extractAIC(lm.full.4var, k = log(54)) #BIC
+```
+
+## Using "olsrr" Package
+ols_mallows_cp(subset-model, full-model): Computes the Mallow's Cp comparing a subset model with a full model.
+
+ols_aic(model, method =): Computes the AIC value based on a certain method. Valid method options include "R", "STATA" and "SAS".
+
+**AIC computed under "SAS" method has the same formula as in lecture**
+ols_press(model): Computes the value of a PRESS criteria for a model.
+```{r}
+library(olsrr)
+
+#Mallow's Cp: lm.full.4var as the "full" model for comparison
+ols_mallows_cp(lm.2var, lm.full.4var)
+
+#AIC and BIC: Use the default method in SAS
+ols_aic(lm.2var, method = "SAS") #AIC
+ols_sbc(lm.2var, method = "SAS") #BIC (same thing as SBC)
+
+#PRESS
+ols_press(lm.2var)
+
+#Compare with the 4 predictor model
+ols_mallows_cp(lm.full.4var, lm.full.4var)
+ols_aic(lm.full.4var, method = "SAS")
+ols_sbc(lm.full.4var, method = "SAS")
+ols_press(lm.full.4var)
+```
+## List All Subset Models and Comparison (automatic model procedure using ols_step_all_possible)
+
+```{r}
+#all subset models and their values
+#all possible R2, adjusted R2, Mallow's Cp
+ols_step_all_possible(lm.full.4var)
+#putting all possible possible
+allposs=ols_step_all_possible(lm.full.4var)
+
+allposs$predictors #List of models
+allposs$rsquare #R2 values
+allposs$adjr #adjusted R2
+allposs$cp #Mallow's cp
+allposs$aic #AIC
+allposs$snc #SBC(BIC)
+allposs$predrsq #Predicted R2
+
+plot(allposs)
+```
+#also note variables are listed from highest to lowest model in the output
+
+looking at the data.frame output:
+We see that all variabled included have desirable results witht he hieghest adj r^2 and Mallow's cp being the lowest.
+
+second best is when 3 predictors clot + progin + enztest
+looking at the plot:
+
+it is read as the models that are triangled are the models that are most prefered. the x axis
+refers to the number of predictors the y is the statistics value
+
+notice the criterias may not want to agree with each other.
+we will normally have multiple models as possible candidates for validation, not just having all x values
+necessarily will be the winner.
+
+
+
+
+
+# Automatic search procedures
+
+## best subset algorithms (ie what we did above (ols_stop_all_possible()))
+
+
+*o-predictor is the sample mean ( is the o predicotr model)
+
+What we obtain is the winner for a 1 predicor model, 2 predicotr model, 3 model mode, 4 predicot,, and so on... until all predicotr variables. Via the triangled in the plots
+
+##disadvantage of "best Subsets" algorithm
+
+issue: Even with 8 predictors "Best Subsets" algorithm has long ana;ysis. Imagine 20 or 40 predictors.
+
+Stepwise regression
+- leads to only 1 model
+- Disadvantage: some models have similar performance but not being selected
+
+forward selection (add variables only)
+backward elimination (remove variables only)
+biderection (stepwise regression) <- mostly used
+
+# Stepwise Regression Algorithm
+checkout steps in the ch9 slides
+
+in summary:
+we will start by checking the one predictor regression
+-setting t distribution crit value, or predetermined ......(read in notes couldnt type fast enough)
+-...read i nnotes
+
+
+Which variables to be kept and removed
+-one way is to use the p-value and AIC.
+
+R functions: 
+ols_step_both_p(model, pent=, perm =) # we parameterize on what p value or aic we want coming out with filtered models
+ols_step_both_aic(model) #this one involves less degree of subjectiveness compared to above. With aic we just compare wiht aic if we decide to add or remove a variable
+
+the "both" in the r function represents forward + backward which means stepwise.
+
+# 2 automatic subset feature is 
+1) "Best Subset Algorithm"
+  - gives us models (triangles) 
+      - i.e if we use like 9 predicotrs there will be 9 winner models
+
+2) "Stepwise regression"
+  - gives us only 1 winner, and if we change criteria there might not only be 1 winner.
+  - we need to consider multiple criteria, don't put all eggs in 1 basket, we should diversify and ahve several final models
+  
+# Finally Model Validation
+- we only need 1 model out of all these models and we need to validate our model with another dataset
+- Using another separate dataset we 
+
+## model validation methods
+ 1. use your model to predict new data (out-of-sample prediction)
+ 2. use the current sample for cross validation (in-sample validation) <- most common and widely used
+ 3. compare to related theory or studies to judge your model
+ 
+ we want to minimise the prediction error (MSPE) mena squared prediction error
+ the smaller  the MSPE the better
+ 
+ K-fold Cross Validation
+ - we can divide
+ 10-fold means data divided into 10 parts equally (10% each)
+ 
+ #in-sample cross validation
+ #"caret" package: classificatoin... dad..da..da read ch9 slides (SUper interesting)
+ library(caret) 
+ 
+ 
+ -----continue on data mining class, last part of STAT 511
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
