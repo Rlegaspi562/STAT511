@@ -1,13 +1,13 @@
 ---
-title: 'STAT 511: Analyzing Home Sales Prices Using Multiple Regression Analysis'
+title: 'STAT 511: Predicting Home Sales Prices Using Multiple Linear Regression'
 author:
 - Rumil Legaspi, Rumil.legaspi@gmail.com
 - Efe Umukoro, Eumukoro20@apu.edu
 - Solange Ebobisse Mapenya, bebobissemapenya20@apu.edu
 date: "4/28/2021"
 output:
-  word_document: default
   pdf_document: default
+  word_document: default
 toc: yes
 toc_depth: 2
 geometry: margin=1in
@@ -289,8 +289,56 @@ reg_eq_4
 
 The estimated mean sales price of a property with a swimming pool and AC is \$356,752.3.
 
-# Conclusion
+# Conclusion & Section Summary
 
-Based on our regression analysis it is clear that a property with a swimming pool and air conditioning (\$356,752.3), cost significantly more than a property without (\$189,578.2.).
+In analyzing home sale prices our goal was to establish
+whether the variables coupled with the interaction variables impacted the
+average sales price.  The variables
+studied, which were included in our model, include swimming pool, AC and swimming
+pool\*AC. In order to establish whether these variables had an impact on the
+average sale price we studied the regression utilizing the dummy variable,
+created a Multi-Linear model that contains the interaction term of a dummy
+variable and a continuous variable, and exploited the Multi-Linear regression
+model with only the interaction of dummy variables.
 
-For future reference we understand that our dataset is unbalanced with only about 7%, or 36 out of 522 observations owning swimming pools and 16%, or 88 out of 522 observations having air conditioning. Moving forward one way to correct this would be to collect more data from houses owning these features. Also, since the Interaction term between owning a swimming pool and having air conditioning is not significant we should remove this from the model.
+**Part 1**
+
+In the first part of our analytical study, a regression
+model that utilized the dummy variable was created.  Our goal was to establish whether the slope
+coefficient is significant. The slope of \$79724 in our model indicates that the
+estimated mean change for the sales price of a property containing a swimming
+pool, relative to a property without a swimming pool to be \$79,724.  Based on our two-sided hypothesis test, we
+concluded that the slope coefficient was in fact significant.  This tells us that a significant difference
+between the mean change in the sales prices comparing properties containing a
+swimming pool in reference to one without a swimming pool does in fact exist.
+
+**Part 2**
+
+In the second part of our analytical study, a multi-linear
+regression model that contains the interaction term of the dummy variable and
+the continuous variable was created.  The
+goal of this was to establish whether the different linear regression models
+that resulted when the home contained a pool or did not contain a pool.  We also looked at the effect that this would
+have dependent on the square footage of the property.  The model revealed that our regression lines
+are not parallel, and a relationship exists between the two lines.
+
+ 
+
+**Part 3**
+
+Our last analytical study included a multi-linear regression
+model that contained the dummy variable only. 
+The goal of this model was to establish the mean price of the property
+given that it may have contained or lacked a pool and an AC.  Based on our regression analysis it is clear
+that a property with a swimming pool and air conditioning (\$356,752.3), cost
+significantly more than a property without (\$189,578.2.).
+
+**Looking Forward**
+
+For future reference we understand that our dataset is
+unbalanced with only about 7%, or 36 out of 522 observations owning swimming
+pools and 16%, or 88 out of 522 observations having air conditioning. Moving
+forward one way to correct this would be to collect more data from houses containing
+these features. Also, since the Interaction term between owning a swimming pool
+and having air conditioning is not significant and therefore remove this from
+the model.
