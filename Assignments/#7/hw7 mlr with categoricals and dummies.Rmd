@@ -244,15 +244,15 @@ Plotting Fitted Regression Lines
 #corner lots: When Corner lots takes value 1
 #price2 = Coef[1] + Coef[3] * Valuation + Coef[2] +Coef[4] * Valuation
 
-#plottinf plot()
+#plotting plot()
 #plot(Valuation, price1, type = 'l', col = "blue",
-     #xlab = "Valuation" , ylab = "Price")
+    # xlab = "Valuation" , ylab = "Price")
 #lines(Valuation, price2, type = 'l', col = "red")
 
 #legend
 #legend("topleft", legend = c("Line 1", "Line 2"),
        #col = c("blue", "red"), lty = 1, cex = 0.5)
-
+#-------------------------------------------------------------
 #Plotting ggplot way with similar results
 plot_coef <- value_data %>% 
   
@@ -264,9 +264,20 @@ plot_coef <- value_data %>%
        subtitle = "Sales Prices of Lots Placed on Corners By Square Feet")+
   scale_y_continuous(labels = scales::dollar) 
   
-
-
 plot_coef
-
-
 ```
+
+## 3f. Testing if the two regression lines are parallel.
+
+Using a significance level of $\alpha=0.05$.
+
+Null Hypothesis: ${H_0}$: $\beta_{c} = 0$ Partial slope of the interaction is 0.
+
+Alternative Hypothesis: ${H_1}$: $\beta_{c} \neq 0$ Partial slope of the interaction is not 0.
+
+Testing the significance of the interaction term ($\hat{\beta_3} = -1.1075$)
+
+Conclusion and Decision Rule using p-value:
+
+Looking at our model summary, we see that the p-value of our interaction term is [1]0.00828 which means we reject NULL hypothesis and conclude with our alternative hypothesis and that our regression lines are not parallel and a relationship exists between the two lines (because the interaction coefficient is not 0).
+
